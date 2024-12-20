@@ -1,0 +1,16 @@
+{
+  "name": "mvbackend",
+  "version": "1.0.0",
+  "description": "backend MvProject",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
