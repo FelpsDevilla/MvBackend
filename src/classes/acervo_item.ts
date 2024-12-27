@@ -1,5 +1,5 @@
 class Acervo_item{
-
+    readonly id: number
     readonly thumbnailUrl: string;        // URL da miniatura
     readonly city: string;                // Cidade
     readonly objectName: string;          // Nome do objeto
@@ -19,6 +19,7 @@ class Acervo_item{
     readonly contextHistory: string;      // Histórico/contexto
     
     constructor(
+        id: number,
         thumbnailUrl: string,
         city: string,
         objectName: string,
@@ -37,6 +38,7 @@ class Acervo_item{
         fileSizeMB: number,
         contextHistory: string
     ) {
+        this.id = id;
         this.thumbnailUrl = thumbnailUrl;
         this.city = city;
         this.objectName = objectName;
