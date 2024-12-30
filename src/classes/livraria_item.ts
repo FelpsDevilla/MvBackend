@@ -1,46 +1,26 @@
-class livraria_item {
-    readonly urlMiniatura: string;
-    readonly cidade: string;
-    readonly nomeObjeto: string;
-    readonly dataCriacao: Date;
-    readonly legenda: string;
-    readonly autor: string;
-    readonly tecnicaDigitalizacao: string;
-    readonly colecao: string;
-    readonly doador: string;
-    readonly tamanhoArquivoMB: number;
-    readonly contextoHistorico: string;
-    readonly criadoEm: Date;
-    readonly atualizadoEm: Date;
+import { item } from "./super_item";
+
+class livraria_item extends item {
+    
+    digitalizationThecnique: string;
 
     constructor(
         id: number,
-        urlMiniatura: string,
-        cidade: string,
-        nomeObjeto: string,
-        dataCriacao: Date,
-        legenda: string,
-        autor: string,
-        tecnicaDigitalizacao: string,
-        colecao: string,
-        doador: string,
-        tamanhoArquivoMB: number,
-        contextoHistorico: string,
-        criadoEm: Date,
-        atualizadoEm: Date
+        thumbnailUrl: string,
+        city: string,
+        state: string,
+        objectName: string,
+        creationDate: Date,
+        legend: string,
+        author: string,
+        digitalizationThecnique: string,
+        colection: string,
+        donator: string,
+        historyContext: string,
+        createAt: Date,
+        updateAt: Date
     ) {
-        this.urlMiniatura = urlMiniatura;
-        this.cidade = cidade;
-        this.nomeObjeto = nomeObjeto;
-        this.dataCriacao = dataCriacao;
-        this.legenda = legenda;
-        this.autor = autor;
-        this.tecnicaDigitalizacao = tecnicaDigitalizacao;
-        this.colecao = colecao;
-        this.doador = doador;
-        this.tamanhoArquivoMB = tamanhoArquivoMB;
-        this.contextoHistorico = contextoHistorico;
-        this.criadoEm = criadoEm;
-        this.atualizadoEm = atualizadoEm;
+     super(id, thumbnailUrl, objectName, creationDate, legend, state, city, author, colection, donator, historyContext, createAt, updateAt);
+     this.digitalizationThecnique = digitalizationThecnique;
     }
 }

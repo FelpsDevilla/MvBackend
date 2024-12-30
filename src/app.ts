@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 // #region CRUD Acervo_Itens
 app.post("/acervo_itens", async(req, res) =>{
     const item: Acervo_item = req.body;
-    db.AdcionarItemAcervo(item)
+    db.Create("acervo_itens", )
 })
 
 app.get("/acervo_itens", async (req, res) => {
