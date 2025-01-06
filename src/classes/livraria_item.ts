@@ -1,46 +1,48 @@
 class livraria_item {
-    readonly urlMiniatura: string;
-    readonly cidade: string;
-    readonly nomeObjeto: string;
-    readonly dataCriacao: Date;
-    readonly legenda: string;
-    readonly autor: string;
-    readonly tecnicaDigitalizacao: string;
-    readonly colecao: string;
-    readonly doador: string;
-    readonly tamanhoArquivoMB: number;
-    readonly contextoHistorico: string;
-    readonly criadoEm: Date;
-    readonly atualizadoEm: Date;
+    readonly id: number;
+    readonly city: string;
+    readonly ObjectName: string;
+    readonly creationDate: Date;
+    readonly legend: string;
+    readonly stateOrigin: string;
+    readonly author: string;
+    readonly digitalizationTchenique: string;
+    readonly collection: string;
+    readonly donor: string;
+    readonly contextHistory: string;
+    readonly thubnailUrl: string;
+    readonly createAt: Date;
+    readonly updateAt: Date;
 
     constructor(
         id: number,
-        urlMiniatura: string,
-        cidade: string,
-        nomeObjeto: string,
-        dataCriacao: Date,
-        legenda: string,
-        autor: string,
-        tecnicaDigitalizacao: string,
-        colecao: string,
-        doador: string,
-        tamanhoArquivoMB: number,
-        contextoHistorico: string,
-        criadoEm: Date,
-        atualizadoEm: Date
+        thubnailUrl: string,
+        city: string,
+        ObjectName : string,
+        creationDate: Date,
+        stateOrigin: string,
+        legend: string,
+        author: string,
+        digitalizationTchenique: string,
+        collection: string,
+        donor: string,
+        contextHistory: string,
+        createAt: Date,
+        updateAt: Date
     ) {
-        this.urlMiniatura = urlMiniatura;
-        this.cidade = cidade;
-        this.nomeObjeto = nomeObjeto;
-        this.dataCriacao = dataCriacao;
-        this.legenda = legenda;
-        this.autor = autor;
-        this.tecnicaDigitalizacao = tecnicaDigitalizacao;
-        this.colecao = colecao;
-        this.doador = doador;
-        this.tamanhoArquivoMB = tamanhoArquivoMB;
-        this.contextoHistorico = contextoHistorico;
-        this.criadoEm = criadoEm;
-        this.atualizadoEm = atualizadoEm;
+        this.id = id;
+        this.thubnailUrl = thubnailUrl;
+        this.city = city;
+        this.ObjectName = ObjectName   ;
+        this.creationDate = creationDate;
+        this.legend = legend;
+        this.stateOrigin = stateOrigin;
+        this.author = author;
+        this.digitalizationTchenique = digitalizationTchenique;
+        this.collection = collection;
+        this.donor = donor;
+        this.contextHistory = contextHistory;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
     }
 }

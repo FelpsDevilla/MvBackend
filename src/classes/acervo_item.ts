@@ -1,26 +1,23 @@
 class Acervo_item{
     readonly id: number
-    readonly thumbnailUrl: string;        // URL da miniatura
-    readonly city: string;                // Cidade
-    readonly objectName: string;          // Nome do objeto
-    readonly creationDate: string;        // Data de criação inicial
-    readonly legend: string;              // Legenda
-    readonly technique: string;           // Técnica usada
-    readonly material: string;            // Material do objeto
-    readonly digitized: boolean;          // Se o item foi digitalizado
-    readonly bornDigital: boolean;        // Se é nativo digital
-    readonly registryNumber: string;      // Número de registro
-    readonly state: string;               // Estado
-    readonly author: string;              // Autoria da digitalização
-    readonly digitizationTechnique: string; // Técnica usada na digitalização
-    readonly collection: string;          // Coleção
-    readonly donor: string;               // Doador
-    readonly fileSizeMB: number;          // Tamanho do arquivo (MB)
-    readonly contextHistory: string;      // Histórico/contexto
+    readonly city: string;               
+    readonly objectName: string;          
+    readonly creationDate: string;        
+    readonly legend: string;              
+    readonly technique: string;           
+    readonly material: string;            
+    readonly digitized: boolean;          
+    readonly stateOrigin: string;              
+    readonly author: string;              
+    readonly collection: string;          
+    readonly donor: string;               
+    readonly contextHistory: string;      
+    readonly thumbnailUrl: string;
+    readonly createAt: Date;
+    readonly updateAt: Date;
     
     constructor(
         id: number,
-        thumbnailUrl: string,
         city: string,
         objectName: string,
         creationDate: string,
@@ -28,18 +25,16 @@ class Acervo_item{
         technique: string,
         material: string,
         digitized: boolean,
-        bornDigital: boolean,
-        registryNumber: string,
-        state: string,
+        stateOrigin: string,
         author: string,
-        digitizationTechnique: string,
         collection: string,
         donor: string,
-        fileSizeMB: number,
-        contextHistory: string
+        contextHistory: string,
+        thumbnailUrl: string,
+        createAt: Date,
+        updateAt: Date,
     ) {
         this.id = id;
-        this.thumbnailUrl = thumbnailUrl;
         this.city = city;
         this.objectName = objectName;
         this.creationDate = creationDate;
@@ -47,14 +42,13 @@ class Acervo_item{
         this.technique = technique;
         this.material = material;
         this.digitized = digitized;
-        this.bornDigital = bornDigital;
-        this.registryNumber = registryNumber;
-        this.state = state;
+        this.stateOrigin = stateOrigin;
         this.author = author;
-        this.digitizationTechnique = digitizationTechnique;
         this.collection = collection;
         this.donor = donor;
-        this.fileSizeMB = fileSizeMB;
         this.contextHistory = contextHistory;
+        this.thumbnailUrl = thumbnailUrl;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
     }
 }
