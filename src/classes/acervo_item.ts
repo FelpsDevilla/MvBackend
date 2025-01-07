@@ -1,17 +1,24 @@
-import { item } from "./super_item";
-
-class Acervo_item extends item{
+class Acervo_item{
+    readonly id: number
+    readonly city: string;               
+    readonly objectName: string;          
+    readonly creationDate: string;        
+    readonly legend: string;              
+    readonly technique: string;           
+    readonly material: string;            
+    readonly digitized: boolean;          
+    readonly stateOrigin: string;              
+    readonly author: string;              
+    readonly collection: string;          
+    readonly donor: string;               
+    readonly contextHistory: string;      
+    readonly thumbnailUrl: string;
+    readonly createAt: Date;
+    readonly updateAt: Date;
     
-    readonly technique: string;           // Técnica usada
-    readonly material: string;            // Material do objeto
-    readonly digitized: boolean;          // Se o item foi digitalizado
-    readonly bornDigital: boolean;        // Se é nativo digital
-    readonly digitizationTechnique: string; // Técnica usada na digitalização
-
     constructor(
         
         id: number,
-        thumbnailUrl: string,
         city: string,
         objectName: string,
         creationDate: Date,
@@ -19,21 +26,30 @@ class Acervo_item extends item{
         technique: string,
         material: string,
         digitized: boolean,
-        bornDigital: boolean,
-        state: string,
+        stateOrigin: string,
         author: string,
-        digitizationTechnique: string,
         collection: string,
         donor: string,
         contextHistory: string,
-        created: Date,
-        updated: Date
+        thumbnailUrl: string,
+        createAt: Date,
+        updateAt: Date,
     ) {
-        super(id, thumbnailUrl, objectName, creationDate, legend, state, city, author, collection, donor, contextHistory, created, updated);
+        this.id = id;
+        this.city = city;
+        this.objectName = objectName;
+        this.creationDate = creationDate;
+        this.legend = legend;
         this.technique = technique;
         this.material = material;
         this.digitized = digitized;
-        this.bornDigital = bornDigital;
-        this.digitizationTechnique = digitizationTechnique;
+        this.stateOrigin = stateOrigin;
+        this.author = author;
+        this.collection = collection;
+        this.donor = donor;
+        this.contextHistory = contextHistory;
+        this.thumbnailUrl = thumbnailUrl;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
     }
 }

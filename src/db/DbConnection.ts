@@ -1,11 +1,11 @@
-import pg from "pg"
+import { text } from "express";
+import { Client } from "pg"
 
 export class DbConnection { //alterar Client para Pool, testar carga de conectoes
 
-    readonly client: pg.Client;
+    readonly client: Client;
 
     constructor() {
-        const { Client } = pg;
         this.client = new Client({
             user: 'postgres',
             password: '300575Mi.',
