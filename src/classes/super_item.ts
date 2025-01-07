@@ -1,46 +1,17 @@
-export class item {
-    
-    readonly id: number
-    readonly thumbnailUrl: string;
-    readonly objectName: string;
-    readonly creationDate: Date;
-    readonly legend: string;
-    readonly state: string;
-    readonly city: string;
-    readonly author: string;
-    readonly collection: string;
-    readonly donor: string;
-    readonly contextHistory: string;
-    readonly created: Date;
-    readonly updated: Date;
-
+export class super_item {
     constructor(
-        id: number,
-        thumbnailUrl: string,
-        objectName: string,
-        creationDate: Date,
-        legend: string,
-        state: string,
-        city: string,
-        author: string,
-        collection: string,
-        donor: string,
-        contextHistory: string,
-        created: Date,
-        updated: Date
-    ) {
-        this.id = id;
-        this.thumbnailUrl = thumbnailUrl;
-        this.objectName = objectName;
-        this.creationDate = creationDate;
-        this.legend = legend;
-        this.state = state;
-        this.city = city;
-        this.author = author;
-        this.collection = collection;
-        this.donor = donor;
-        this.contextHistory = contextHistory;
-        this.created = created;
-        this.updated = updated;
-    }
+        public readonly id: number,
+        public readonly thumbnailUrl: string,
+        public readonly objectName: string,
+        public readonly creationDate: Date,
+        public readonly legend: string,
+        public readonly state: string,
+        public readonly city: string,
+        public readonly author: string,
+        public readonly collection: string,
+        public readonly donor: string,
+        public readonly contextHistory: string,
+        public readonly created: Date,
+        public readonly updated: Date
+    ) {}
 }

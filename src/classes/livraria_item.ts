@@ -1,48 +1,37 @@
-class livraria_item {
-    readonly id: number;
-    readonly city: string;
-    readonly ObjectName: string;
-    readonly creationDate: Date;
-    readonly legend: string;
-    readonly stateOrigin: string;
-    readonly author: string;
-    readonly digitalizationTchenique: string;
-    readonly collection: string;
-    readonly donor: string;
-    readonly contextHistory: string;
-    readonly thubnailUrl: string;
-    readonly createAt: Date;
-    readonly updateAt: Date;
+import { super_item } from "./super_item";
 
+export class livraria_item extends super_item {
+    
     constructor(
         id: number,
-        thubnailUrl: string,
-        city: string,
-        ObjectName : string,
+        thumbnailUrl: string,
+        objectName: string,
         creationDate: Date,
-        stateOrigin: string,
         legend: string,
+        state: string,
+        city: string,
         author: string,
-        digitalizationTchenique: string,
         collection: string,
         donor: string,
         contextHistory: string,
-        createAt: Date,
-        updateAt: Date
+        created: Date,
+        updated: Date,
+        public readonly digitalizationTechnique: string
     ) {
-        this.id = id;
-        this.thubnailUrl = thubnailUrl;
-        this.city = city;
-        this.ObjectName = ObjectName   ;
-        this.creationDate = creationDate;
-        this.legend = legend;
-        this.stateOrigin = stateOrigin;
-        this.author = author;
-        this.digitalizationTchenique = digitalizationTchenique;
-        this.collection = collection;
-        this.donor = donor;
-        this.contextHistory = contextHistory;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
+        super(
+            id,
+            thumbnailUrl,
+            objectName,
+            creationDate,
+            legend,
+            state,
+            city,
+            author,
+            collection,
+            donor,
+            contextHistory,
+            created,
+            updated
+        );
     }
 }
