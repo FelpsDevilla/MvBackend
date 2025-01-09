@@ -1,61 +1,62 @@
-import { Pool } from "pg";
+import pg from "pg";
 
 export class DbConnection {
 
     constructor(
-        private pool: Pool = new Pool ({ 
+        private client: pg.Client = new pg.Client ({ 
             user: process.env.DB_USER,
             password: process.env.DB_USER_PASS,
             host: process.env.DB_IP,
-            port: Number(process.env.DB_PORT),
             database:  process.env.DB_NAME
          })
     ){}
     
-    async Create(tabela: string, params: string, values: string) {
-        const client = await this.pool.connect();
-        const query = {
-            text: `INSERT INTO $1 $2 VALUES $3`,
-            values: [tabela, params, values]
-        };
-        await client.query(query);
-        client.release();
-    };
+    async Create(table: string, params: string, values: string[]) { //Corrigir Query
+        await this.client.connect();
+        const query =  `INSERT INTO ${table} ${params} VALUES ${values.toString()}`;
+        await this.client.query(query);
+        await this.client.end();
+    }
 
-    async Read(tabela: string, params: string, filters?: string): Promise<any[]> {
-        const client = await this.pool.connect();
+    async Read(table: string, params: string, filter?: string, value?: string): Promise<any[]> { //OK
+        await this.client.connect();
 
         let query;
 
-        if (filters?.length! > 0) {
-            query = `SELECT ${params} FROM ${tabela} WHERE ${filters}`;
+        if (filter?.length! > 0) {
+            query = {
+                text: `SELECT ${params} FROM ${table} WHERE ${filter} = $1`,
+                values: [value],
+            }
         } else {
-            query = `SELECT ${params} FROM ${tabela}`;
+            query = {
+                text: `SELECT ${params} FROM ${table}`,
+            }
         }
 
-        const res = await client.query(query);
-        client.release();
+        const res = await this.client.query(query);
+        await this.client.end();
         return res.rows;
     };
 
 
-    async Update(tabela: string, params: string, filters: string) {
-        const client = await this.pool.connect();
+    async Update(table: string, params: string, filters: string) { //Corrigir Query
+        await this.client.connect();
         const query = {
             text: `UPDATE $1 SET $2  WHERE $3`,
-            values: [tabela, params, filters]
+            values: [table, params, filters]
         }
-        await client.query(query);
-        client.release();
+        await this.client.query(query);
+        await this.client.end();
     };
 
-    async Delete(tabela: string, filters: string){
-        const client = await this.pool.connect();
+    async Delete(table: string, filters: string){ //Corrigir Query
+        await this.client.connect();
         const query = {
             text: `DELETE FROM $1 WHERE $3`,
-            values: [tabela, filters]
+            values: [table, filters]
         }
-        await client.query(query);
-        await this.pool.end();
+        await this.client.query(query);
+        await this.client.end();
     };
-}
+};
