@@ -20,11 +20,12 @@ app.get("/", (req, res) => {
 
 // #region CRUD Acervo_Itens
 app.post(endpoints[0].endpoint, async (req, res) => {
-  const db = new DbConnection();
-  const item: acervo_item = req.body;
-
+  
   try {
-    db.Create(
+    const db = new DbConnection();
+    const item: acervo_item = req.body;
+
+    db.insert(
       endpoints[0].table,
       `(
                 city, object_name, creation_date, legend, technique, material, digitalized, state_origin, 
@@ -57,7 +58,7 @@ app.post(endpoints[0].endpoint, async (req, res) => {
 app.get(`${endpoints[0].endpoint}`, async (req, res) => {
     try{
         const db = new DbConnection();
-        const json = await db.Read(endpoints[0].table, '*');
+        const json = await db.select(endpoints[0].table, '*');
         res.status(200).json(json);
     }catch(error){
         res.status(400);
@@ -68,13 +69,13 @@ app.get(`${endpoints[0].endpoint}`, async (req, res) => {
 
 app.get(`${endpoints[0].endpoint}/:id`, async (req, res) => {
   const db = new DbConnection();
-  const json = await db.Read(endpoints[0].table, '*', "id", req.params.id);
+  const json = await db.select(endpoints[0].table, '*', "id", req.params.id);
   res.status(200).json(json);
 });
 
 app.put(`${endpoints[0].endpoint}/:id`, async (req, res) => {
   const db = new DbConnection();
-  const json = await db.Read(req.params.id, endpoints[0].table);
+  const json = await db.select(req.params.id, endpoints[0].table);
   res.status(200).json(json);
 });
 
@@ -82,7 +83,7 @@ app.delete(`${endpoints[0].endpoint}/:id`, async (req, res) => {
   const db = new DbConnection();
   const index = req.params.id;
   //Adcionar validação
-  await db.Delete(endpoints[0].table, `WHERE ID = ${req.params.id}`);
+  await db.delete(endpoints[0].table, `WHERE ID = ${req.params.id}`);
   res.status(200).send("Deleted");
 });
 

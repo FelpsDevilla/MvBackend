@@ -11,26 +11,25 @@ export class DbConnection {
          })
     ){}
     
-    async Create(table: string, params: string, values: string[]) { //Corrigir Query
+    async insert(table: string, columns: string, values: string[]) { //Corrigir Query
         await this.client.connect();
-        const query =  `INSERT INTO ${table} ${params} VALUES ${values.toString()}`;
+        const query =  `INSERT INTO ${table} ${columns} VALUES ${values.toString()}`;
         await this.client.query(query);
         await this.client.end();
     }
 
-    async Read(table: string, params: string, filter?: string, value?: string): Promise<any[]> { //OK
+    async select(table: string, columns: string, filters?: string[]): Promise<any[]> { //OK
         await this.client.connect();
 
         let query;
 
-        if (filter?.length! > 0) {
+        if (filters?.length! > 0) {
             query = {
-                text: `SELECT ${params} FROM ${table} WHERE ${filter} = $1`,
-                values: [value],
+                text: `SELECT ${columns} FROM ${table} WHERE ${filters?.toString()}`
             }
         } else {
             query = {
-                text: `SELECT ${params} FROM ${table}`,
+                text: `SELECT ${columns} FROM ${table}`,
             }
         }
 
@@ -40,17 +39,17 @@ export class DbConnection {
     };
 
 
-    async Update(table: string, params: string, filters: string) { //Corrigir Query
+    async update(table: string, columns: string, filters: string) { //Corrigir Query
         await this.client.connect();
         const query = {
             text: `UPDATE $1 SET $2  WHERE $3`,
-            values: [table, params, filters]
+            values: [table, columns, filters]
         }
         await this.client.query(query);
         await this.client.end();
     };
 
-    async Delete(table: string, filters: string){ //Corrigir Query
+    async delete(table: string, filters: string){ //Corrigir Query
         await this.client.connect();
         const query = {
             text: `DELETE FROM $1 WHERE $3`,
