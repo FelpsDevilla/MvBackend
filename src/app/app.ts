@@ -20,12 +20,12 @@ app.get("/", (req, res) => {
 
 // #region CRUD Acervo_Itens
 app.post(endpoints[0].endpoint, async (req, res) => {
-  
+
   try {
     const db = new DbConnection();
     const item: acervo_item = req.body;
 
-    db.insert(
+    await db.insert(
       endpoints[0].table,
       `(
                 city, object_name, creation_date, legend, technique, material, digitalized, state_origin, 
@@ -51,32 +51,60 @@ app.post(endpoints[0].endpoint, async (req, res) => {
     );
     res.status(200).send("Adcionado ");
   } catch (error) {
-    res.status(500).send(error)
+    console.log(error)
+    res.status(500).send("Error")
   }
 });
 
 app.get(`${endpoints[0].endpoint}`, async (req, res) => {
-    try{
-        const db = new DbConnection();
-        const json = await db.select(endpoints[0].table, '*');
-        res.status(200).json(json);
-    }catch(error){
-        res.status(400);
-    }
+  try {
+    const db = new DbConnection();
+    const json = await db.select(endpoints[0].table, '*');
+    res.status(200).json(json);
+  } catch (error) {
+    res.status(400);
+  }
 
 
 });
 
 app.get(`${endpoints[0].endpoint}/:id`, async (req, res) => {
   const db = new DbConnection();
-  const json = await db.select(endpoints[0].table, '*', "id", req.params.id);
+  const json = await db.select(endpoints[0].table, '*', [`ID = ${req.params.id}`]);
+
+  //adcionar validacao caso string vier vazia
+
   res.status(200).json(json);
 });
 
 app.put(`${endpoints[0].endpoint}/:id`, async (req, res) => {
   const db = new DbConnection();
-  const json = await db.select(req.params.id, endpoints[0].table);
-  res.status(200).json(json);
+  
+  await db.update(endpoints[0].table,
+    `(
+      city, object_name, creation_date, legend, technique, material, digitalized, state_origin, 
+      author_id, collection_id, donor, context_history, thumbnail_url, created_at, updated_at
+    )`,
+    [
+      item.city,
+      item.objectName,
+      item.creationDate.toString(),
+      item.legend,
+      item.technique,
+      item.material,
+      item.digitized.toString(),
+      item.state,
+      item.author,
+      item.collection,
+      item.donor,
+      item.contextHistory,
+      item.thumbnailUrl,
+      item.created.toString(),
+      item.updated.toString(),
+    ]
+  );
+  );
+res.status(200).json(json);
 });
 
 app.delete(`${endpoints[0].endpoint}/:id`, async (req, res) => {

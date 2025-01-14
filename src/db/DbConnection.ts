@@ -11,11 +11,27 @@ export class DbConnection {
          })
     ){}
     
-    async insert(table: string, columns: string, values: string[]) { //Corrigir Query
+    async insert(table: string, columns: string, values: string[]) {
         await this.client.connect();
-        const query =  `INSERT INTO ${table} ${columns} VALUES ${values.toString()}`;
-        await this.client.query(query);
-        await this.client.end();
+
+        try {
+            const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
+
+            const query =  {
+            text: `INSERT INTO ${table} ${columns} VALUES (${placeholders})`,
+            values: values
+            };
+    
+            await this.client.query(query);
+           
+        } catch (error) {
+            throw new Error("SQL error: " + error);
+            
+        }finally{
+
+            await this.client.end();
+        }
+
     }
 
     async select(table: string, columns: string, filters?: string[]): Promise<any[]> { //OK
@@ -42,8 +58,8 @@ export class DbConnection {
     async update(table: string, columns: string, filters: string) { //Corrigir Query
         await this.client.connect();
         const query = {
-            text: `UPDATE $1 SET $2  WHERE $3`,
-            values: [table, columns, filters]
+            text: `UPDATE ${table} SET $2  WHERE $3`,
+            values: [columns, filters]
         }
         await this.client.query(query);
         await this.client.end();
