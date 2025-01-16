@@ -2,6 +2,7 @@ import { super_item } from "./super_item";
 
 export class acervo_item extends super_item {
     
+    
     constructor(
         id: number,
         thumbnailUrl: string,
@@ -35,5 +36,9 @@ export class acervo_item extends super_item {
             created,
             updated
         );
+    }
+    
+    constructor(json: obj){
+        
     }
 }

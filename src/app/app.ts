@@ -1,4 +1,5 @@
 import express from "express";
+import { util } from "classes/util.js";
 import { DbConnection } from "../db/DbConnection.js";
 import { acervo_item } from "classes/acervo_item.js";
 
@@ -78,8 +79,11 @@ app.get(`${endpoints[0].endpoint}/:id`, async (req, res) => {
 });
 
 app.put(`${endpoints[0].endpoint}/:id`, async (req, res) => {
+
   const db = new DbConnection();
-  
+  const json = await db.select(endpoints[0].endpoint, "*", [`ID = ${req.params.id}`])
+  const item: acervo_item = util.serializeClass(acervo_item, json)
+
   await db.update(endpoints[0].table,
     `(
       city, object_name, creation_date, legend, technique, material, digitalized, state_origin, 
