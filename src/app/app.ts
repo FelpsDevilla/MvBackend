@@ -1,7 +1,7 @@
 import express from "express";
-import { util } from "classes/util.js";
 import { DbConnection } from "../db/DbConnection.js";
 import { acervo_item } from "classes/acervo_item.js";
+import { plainToInstance } from "class-transformer";
 
 
 const app = express();
@@ -82,33 +82,11 @@ app.put(`${endpoints[0].endpoint}/:id`, async (req, res) => {
 
   const db = new DbConnection();
   const json = await db.select(endpoints[0].endpoint, "*", [`ID = ${req.params.id}`])
-  const item: acervo_item = util.serializeClass(acervo_item, json)
+  const item: acervo_item = (plainToInstance(acervo_item, json))[0];
 
-  await db.update(endpoints[0].table,
-    `(
-      city, object_name, creation_date, legend, technique, material, digitalized, state_origin, 
-      author_id, collection_id, donor, context_history, thumbnail_url, created_at, updated_at
-    )`,
-    [
-      item.city,
-      item.objectName,
-      item.creationDate.toString(),
-      item.legend,
-      item.technique,
-      item.material,
-      item.digitized.toString(),
-      item.state,
-      item.author,
-      item.collection,
-      item.donor,
-      item.contextHistory,
-      item.thumbnailUrl,
-      item.created.toString(),
-      item.updated.toString(),
-    ]
-  );
-  );
-res.status(200).json(json);
+  await db.update(endpoints[0].table, item, item.id.toString());
+
+  res.status(200).json(json);
 });
 
 app.delete(`${endpoints[0].endpoint}/:id`, async (req, res) => {

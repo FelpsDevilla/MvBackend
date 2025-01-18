@@ -38,7 +38,4 @@ export class acervo_item extends super_item {
         );
     }
     
-    constructor(json: obj){
-        
-    }
 }

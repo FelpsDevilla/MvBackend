@@ -34,44 +34,60 @@ export class DbConnection {
 
     }
 
-    async select(table: string, columns: string, filters?: string[]): Promise<any[]> { //OK
-        await this.client.connect();
-
-        let query;
-
-        if (filters?.length! > 0) {
-            query = {
-                text: `SELECT ${columns} FROM ${table} WHERE ${filters?.toString()}`
+    async select(table: string, columns: string, filters?: string[]): Promise<any[]> {
+        try {
+            await this.client.connect();
+    
+            let query;
+    
+            if (filters?.length! > 0) {
+                query = {
+                    text: `SELECT ${columns} FROM ${table} WHERE ${filters?.toString()}`
+                }
+            } else {
+                query = {
+                    text: `SELECT ${columns} FROM ${table}`,
+                }
             }
-        } else {
-            query = {
-                text: `SELECT ${columns} FROM ${table}`,
-            }
+    
+            const res = await this.client.query(query);
+            await this.client.end();
+            return res.rows;
+            
+        } catch (error) {
+            throw new Error("SQL Error" + error)
         }
-
-        const res = await this.client.query(query);
-        await this.client.end();
-        return res.rows;
     };
 
 
-    async update(table: string, columns: string, filters: string) { //Corrigir Query
+    async update(table: string, updatedItem: object, filter: string) { //Corrigir Query
         await this.client.connect();
+
+        const columns = Object.keys(updatedItem);
+        const values = Object.values(updatedItem);
+
+        const setClause = columns.map((column, i) => `${column} = $${i + 1}`).join(', ')
+
         const query = {
-            text: `UPDATE ${table} SET $2  WHERE $3`,
-            values: [columns, filters]
+            text: `UPDATE ${table} SET ${setClause} WHERE $${values.length + 1}`,
+            values: [values.toString(), filter]
         }
         await this.client.query(query);
         await this.client.end();
     };
 
-    async delete(table: string, filters: string){ //Corrigir Query
-        await this.client.connect();
-        const query = {
-            text: `DELETE FROM $1 WHERE $3`,
-            values: [table, filters]
+    async delete(table: string, filter: string){
+        try{
+
+            await this.client.connect();
+            const query = {
+                text: `DELETE FROM ${table} WHERE $3`,
+                values: [filter]
+            }
+            await this.client.query(query);
+            await this.client.end();
+        }catch(error){
+            throw new Error("SQL Error: " + error)
         }
-        await this.client.query(query);
-        await this.client.end();
     };
 };
