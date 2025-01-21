@@ -7,7 +7,8 @@
   "scripts": {
     "compile": "tsc",
     "watch": "tsc -w",
-    "start": "concurrently  \"nodemon dist/js/server.js\" \"tsc -w\"",
+    "dev": "concurrently  \"nodemon dist/js/server.js\" \"tsc -w\"",
+    "start": "tsc && node dist/js/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

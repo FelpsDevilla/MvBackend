@@ -1,6 +1,6 @@
 import express from "express";
 import { DbConnection } from "../db/DbConnection.js";
-import { acervo_item } from "classes/acervo_item.js";
+import { acervo_item } from "../classes/acervo_item.js";
 import { plainToInstance } from "class-transformer";
 
 
@@ -97,4 +97,4 @@ app.delete(`${endpoints[0].endpoint}/:id`, async (req, res) => {
   res.status(200).send("Deleted");
 });
 
-export default app;
+export default app

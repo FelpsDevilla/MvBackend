@@ -1,4 +1,4 @@
-import { super_item } from "./super_item";
+import { super_item } from "./super_item.js";
 
 export class acervo_item extends super_item {
     
