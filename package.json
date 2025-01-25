@@ -7,16 +7,19 @@
   "scripts": {
     "compile": "tsc",
     "watch": "tsc -w",
-    "start": "concurrently  \"nodemon dist/js/server.js\" \"tsc -w\"",
+    "dev": "concurrently  \"nodemon dist/js/server.js\" \"tsc -w\"",
+    "start": "tsc && node dist/js/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "class-transformer": "^0.5.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "pg": "^8.13.1",
-    "pg-pool": "^3.7.0"
+    "pg-pool": "^3.7.0",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

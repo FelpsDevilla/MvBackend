@@ -1,6 +1,7 @@
 import express from "express";
 import { DbConnection } from "../db/DbConnection.js";
-import { acervo_item } from "classes/acervo_item.js";
+import { acervo_item } from "../classes/acervo_item.js";
+import { plainToInstance } from "class-transformer";
 
 
 const app = express();
@@ -20,11 +21,12 @@ app.get("/", (req, res) => {
 
 // #region CRUD Acervo_Itens
 app.post(endpoints[0].endpoint, async (req, res) => {
-  const db = new DbConnection();
-  const item: acervo_item = req.body;
 
   try {
-    db.Create(
+    const db = new DbConnection();
+    const item: acervo_item = req.body;
+
+    await db.insert(
       endpoints[0].table,
       `(
                 city, object_name, creation_date, legend, technique, material, digitalized, state_origin, 
@@ -50,31 +52,40 @@ app.post(endpoints[0].endpoint, async (req, res) => {
     );
     res.status(200).send("Adcionado ");
   } catch (error) {
-    res.status(500).send(error)
+    console.log(error)
+    res.status(500).send("Error")
   }
 });
 
 app.get(`${endpoints[0].endpoint}`, async (req, res) => {
-    try{
-        const db = new DbConnection();
-        const json = await db.Read(endpoints[0].table, '*');
-        res.status(200).json(json);
-    }catch(error){
-        res.status(400);
-    }
+  try {
+    const db = new DbConnection();
+    const json = await db.select(endpoints[0].table, '*');
+    res.status(200).json(json);
+  } catch (error) {
+    res.status(400);
+  }
 
 
 });
 
 app.get(`${endpoints[0].endpoint}/:id`, async (req, res) => {
   const db = new DbConnection();
-  const json = await db.Read(endpoints[0].table, '*', "id", req.params.id);
+  const json = await db.select(endpoints[0].table, '*', [`ID = ${req.params.id}`]);
+
+  //adcionar validacao caso string vier vazia
+
   res.status(200).json(json);
 });
 
 app.put(`${endpoints[0].endpoint}/:id`, async (req, res) => {
+
   const db = new DbConnection();
-  const json = await db.Read(req.params.id, endpoints[0].table);
+  const json = await db.select(endpoints[0].endpoint, "*", [`ID = ${req.params.id}`])
+  const item: acervo_item = (plainToInstance(acervo_item, json))[0];
+
+  await db.update(endpoints[0].table, item, item.id.toString());
+
   res.status(200).json(json);
 });
 
@@ -82,8 +93,8 @@ app.delete(`${endpoints[0].endpoint}/:id`, async (req, res) => {
   const db = new DbConnection();
   const index = req.params.id;
   //Adcionar validação
-  await db.Delete(endpoints[0].table, `WHERE ID = ${req.params.id}`);
+  await db.delete(endpoints[0].table, `WHERE ID = ${req.params.id}`);
   res.status(200).send("Deleted");
 });
 
-export default app;
+export default app

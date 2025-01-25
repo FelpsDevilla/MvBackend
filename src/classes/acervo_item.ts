@@ -1,6 +1,7 @@
-import { super_item } from "./super_item";
+import { super_item } from "./super_item.js";
 
 export class acervo_item extends super_item {
+    
     
     constructor(
         id: number,
@@ -36,4 +37,5 @@ export class acervo_item extends super_item {
             updated
         );
     }
+    
 }

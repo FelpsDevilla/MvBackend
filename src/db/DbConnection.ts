@@ -11,52 +11,83 @@ export class DbConnection {
          })
     ){}
     
-    async Create(table: string, params: string, values: string[]) { //Corrigir Query
+    async insert(table: string, columns: string, values: string[]) {
         await this.client.connect();
-        const query =  `INSERT INTO ${table} ${params} VALUES ${values.toString()}`;
-        await this.client.query(query);
-        await this.client.end();
+
+        try {
+            const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
+
+            const query =  {
+            text: `INSERT INTO ${table} ${columns} VALUES (${placeholders})`,
+            values: values
+            };
+    
+            await this.client.query(query);
+           
+        } catch (error) {
+            throw new Error("SQL error: " + error);
+            
+        }finally{
+
+            await this.client.end();
+        }
+
     }
 
-    async Read(table: string, params: string, filter?: string, value?: string): Promise<any[]> { //OK
-        await this.client.connect();
-
-        let query;
-
-        if (filter?.length! > 0) {
-            query = {
-                text: `SELECT ${params} FROM ${table} WHERE ${filter} = $1`,
-                values: [value],
+    async select(table: string, columns: string, filters?: string[]): Promise<any[]> {
+        try {
+            await this.client.connect();
+    
+            let query;
+    
+            if (filters?.length! > 0) {
+                query = {
+                    text: `SELECT ${columns} FROM ${table} WHERE ${filters?.toString()}`
+                }
+            } else {
+                query = {
+                    text: `SELECT ${columns} FROM ${table}`,
+                }
             }
-        } else {
-            query = {
-                text: `SELECT ${params} FROM ${table}`,
-            }
+    
+            const res = await this.client.query(query);
+            await this.client.end();
+            return res.rows;
+            
+        } catch (error) {
+            throw new Error("SQL Error" + error)
         }
-
-        const res = await this.client.query(query);
-        await this.client.end();
-        return res.rows;
     };
 
 
-    async Update(table: string, params: string, filters: string) { //Corrigir Query
+    async update(table: string, updatedItem: object, filter: string) { //Corrigir Query
         await this.client.connect();
+
+        const columns = Object.keys(updatedItem);
+        const values = Object.values(updatedItem);
+
+        const setClause = columns.map((column, i) => `${column} = $${i + 1}`).join(', ')
+
         const query = {
-            text: `UPDATE $1 SET $2  WHERE $3`,
-            values: [table, params, filters]
+            text: `UPDATE ${table} SET ${setClause} WHERE $${values.length + 1}`,
+            values: [values.toString(), filter]
         }
         await this.client.query(query);
         await this.client.end();
     };
 
-    async Delete(table: string, filters: string){ //Corrigir Query
-        await this.client.connect();
-        const query = {
-            text: `DELETE FROM $1 WHERE $3`,
-            values: [table, filters]
+    async delete(table: string, filter: string){
+        try{
+
+            await this.client.connect();
+            const query = {
+                text: `DELETE FROM ${table} WHERE $3`,
+                values: [filter]
+            }
+            await this.client.query(query);
+            await this.client.end();
+        }catch(error){
+            throw new Error("SQL Error: " + error)
         }
-        await this.client.query(query);
-        await this.client.end();
     };
 };
