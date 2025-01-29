@@ -80,13 +80,33 @@ app.get(`${endpoints[0].endpoint}/:id`, async (req, res) => {
 
 app.put(`${endpoints[0].endpoint}/:id`, async (req, res) => {
 
-  const db = new DbConnection();
-  const json = await db.select(endpoints[0].endpoint, "*", [`ID = ${req.params.id}`])
-  const item: acervo_item = (plainToInstance(acervo_item, json))[0];
+  // const db = new DbConnection();
+  // const json = await db.select(endpoints[0].table, "*", [`ID = ${req.params.id}`])
 
-  await db.update(endpoints[0].table, item, item.id.toString());
+  const item: acervo_item = (plainToInstance(acervo_item, req.body))[0];
+  console.log(item)
+  const db2 = new DbConnection();
+  const columns: string[] = [
+    "id",
+    "city",
+    "object_name",
+    "creation_date",
+    "legend",
+    "technique",
+    "material",
+    "digitalized",
+    "state_origin",
+    "author_id",
+    "collection_id",
+    "donor",
+    "context_history",
+    "thumbnail_url",
+    "created_at",
+    "updated_at"
+];
+  await db2.update(endpoints[0].table, item, columns, `ID = ${req.params.id}`);
 
-  res.status(200).json(json);
+  res.status(200).json();
 });
 
 app.delete(`${endpoints[0].endpoint}/:id`, async (req, res) => {

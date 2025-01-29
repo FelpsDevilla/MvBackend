@@ -15,7 +15,7 @@ export class DbConnection {
         await this.client.connect();
 
         try {
-            const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
+            const placeholders = values.map((_, i) => `$${i + 1}`).join(", ");
 
             const query =  {
             text: `INSERT INTO ${table} ${columns} VALUES (${placeholders})`,
@@ -60,13 +60,15 @@ export class DbConnection {
     };
 
 
-    async update(table: string, updatedItem: object, filter: string) { //Corrigir Query
+    async update(table: string, updatedItem: object, columns: string[], filter: string) { //Corrigir Query
         await this.client.connect();
 
-        const columns = Object.keys(updatedItem);
         const values = Object.values(updatedItem);
 
         const setClause = columns.map((column, i) => `${column} = $${i + 1}`).join(', ')
+
+        // console.log(setClause)
+        // console.log(values.toString())
 
         const query = {
             text: `UPDATE ${table} SET ${setClause} WHERE $${values.length + 1}`,
@@ -81,7 +83,7 @@ export class DbConnection {
 
             await this.client.connect();
             const query = {
-                text: `DELETE FROM ${table} WHERE $3`,
+                text: `DELETE FROM ${table} WHERE $1`,
                 values: [filter]
             }
             await this.client.query(query);
