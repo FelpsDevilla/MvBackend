@@ -1,6 +1,11 @@
+import { Expose } from "class-transformer";
 import { super_item } from "./super_item";
 
+
 export class livraria_item extends super_item {
+    
+    @Expose()
+    digitalizationTechnique: string
     
     constructor(
         id: number,
@@ -16,7 +21,7 @@ export class livraria_item extends super_item {
         contextHistory: string,
         created: Date,
         updated: Date,
-        public readonly digitalizationTechnique: string
+        digitalizationTechnique: string
     ) {
         super(
             id,
@@ -33,5 +38,6 @@ export class livraria_item extends super_item {
             created,
             updated
         );
+        this.digitalizationTechnique = digitalizationTechnique
     }
 }

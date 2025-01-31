@@ -1,7 +1,16 @@
+import { Expose, plainToInstance } from "class-transformer";
 import { super_item } from "./super_item.js";
 
-export class acervo_item extends super_item {
+export class acervo_item extends super_item{
     
+    @Expose()
+    technique: string;
+
+    @Expose()
+    material: string;
+    
+    @Expose()
+    digitized: boolean;
     
     constructor(
         id: number,
@@ -17,9 +26,9 @@ export class acervo_item extends super_item {
         contextHistory: string,
         created: Date,
         updated: Date,
-        public readonly technique: string,
-        public readonly material: string,
-        public readonly digitized: boolean
+        technique: string,
+        material: string,
+        digitized: boolean
     ) {
         super(
             id,
@@ -36,6 +45,12 @@ export class acervo_item extends super_item {
             created,
             updated
         );
+        this.technique = technique,
+        this.material = material,
+        this.digitized = digitized
     }
     
+    static fromJson(json: any): acervo_item {
+        return plainToInstance(acervo_item, json)[0];
+    }
 }

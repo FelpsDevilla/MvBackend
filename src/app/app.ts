@@ -82,10 +82,12 @@ app.put(`${endpoints[0].endpoint}/:id`, async (req, res) => {
 
   // const db = new DbConnection();
   // const json = await db.select(endpoints[0].table, "*", [`ID = ${req.params.id}`])
-
-  const item: acervo_item = (plainToInstance(acervo_item, req.body))[0];
+  //console.log(req.body);
+  //console.log(req.body);
+  
+  const item: acervo_item | acervo_item[] = plainToInstance(acervo_item, req.body);
   console.log(item)
-  const db2 = new DbConnection();
+  const db = new DbConnection();
   const columns: string[] = [
     "id",
     "city",
@@ -104,7 +106,7 @@ app.put(`${endpoints[0].endpoint}/:id`, async (req, res) => {
     "created_at",
     "updated_at"
 ];
-  await db2.update(endpoints[0].table, item, columns, `ID = ${req.params.id}`);
+  //await db.update(endpoints[0].table, item, columns, `ID = ${req.params.id}`);
 
   res.status(200).json();
 });
