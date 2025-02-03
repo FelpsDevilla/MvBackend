@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS acervo_table (
     technique VARCHAR,
     material VARCHAR,
     digitalized BOOLEAN,
-    state_origin VARCHAR,
+    state VARCHAR,
     author_id INT,
     collection_id INT,
     donor VARCHAR,

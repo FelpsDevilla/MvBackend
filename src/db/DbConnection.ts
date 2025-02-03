@@ -11,21 +11,26 @@ export class DbConnection {
          })
     ){}
     
-    async insert(table: string, columns: string, values: string[]) {
+    async insert(table: string, newItem: Object) {
         await this.client.connect();
 
         try {
+
+            const columns = Object.keys(newItem).map(this.camelCaseToSnakeCase)
+            const values = Object.values(newItem)
             const placeholders = values.map((_, i) => `$${i + 1}`).join(", ");
 
             const query =  {
-            text: `INSERT INTO ${table} ${columns} VALUES (${placeholders})`,
+            text: `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`,
             values: values
             };
-    
+            
+            console.log(query)
+
             await this.client.query(query);
            
         } catch (error) {
-            throw new Error("SQL error: " + error);
+            throw new Error("SQL Service error: " + error);
             
         }finally{
 
@@ -34,7 +39,7 @@ export class DbConnection {
 
     }
 
-    async select(table: string, columns: string, filters?: string[]): Promise<any[]> {
+    async select(table: string, columns: string, filters?: string[]): Promise<any[]> { //Ajustar
         try {
             await this.client.connect();
     
@@ -51,45 +56,52 @@ export class DbConnection {
             }
     
             const res = await this.client.query(query);
-            await this.client.end();
             return res.rows;
             
         } catch (error) {
-            throw new Error("SQL Error" + error)
+            throw new Error("SQL Service Error" + error)
+        }finally{
+            await this.client.end();
         }
     };
 
 
-    async update(table: string, updatedItem: object, columns: string[], filter: string) { //Corrigir Query
-        await this.client.connect();
-
-        const values = Object.values(updatedItem);
-
-        const setClause = columns.map((column, i) => `${column} = $${i + 1}`).join(', ')
-
-        // console.log(setClause)
-        // console.log(values.toString())
-
-        const query = {
-            text: `UPDATE ${table} SET ${setClause} WHERE $${values.length + 1}`,
-            values: [values.toString(), filter]
+    async update(table: string, updatedItem: Object, id: string) {
+        try {
+            await this.client.connect();
+            const filtredEntries = Object.entries(updatedItem).filter(([_, value]) => value !== undefined);
+            const columns = filtredEntries.map(([key]) => this.camelCaseToSnakeCase(key));
+            const values = filtredEntries.map(([_, value]) => value);
+            const setClause = columns.map((column, i) => `${column} = $${i + 1}`).join(', ');
+            values.push(id);
+            const query = {
+                text: `UPDATE ${table} SET ${setClause} WHERE id = $${values.length}`,
+                values: values
+            };
+            await this.client.query(query);
+        } catch (error) {
+            throw new Error("SQL Service Error: " + error);
+        } finally {
+            await this.client.end();
         }
-        await this.client.query(query);
-        await this.client.end();
-    };
+    }
 
-    async delete(table: string, filter: string){
-        try{
-
+    async delete(table: string, id: string) {
+        try {
             await this.client.connect();
             const query = {
-                text: `DELETE FROM ${table} WHERE $1`,
-                values: [filter]
-            }
+                text: `DELETE FROM ${table} WHERE id = $1`,
+                values: [id]
+            };
             await this.client.query(query);
+        } catch (error) {
+            throw new Error("SQL Service Error: " + error);
+        } finally {
             await this.client.end();
-        }catch(error){
-            throw new Error("SQL Error: " + error)
         }
-    };
+    }
+
+    private camelCaseToSnakeCase(camel: string): string {
+        return camel.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+    }
 };

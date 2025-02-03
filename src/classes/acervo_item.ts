@@ -10,7 +10,7 @@ export class acervo_item extends super_item{
     material: string;
     
     @Expose()
-    digitized: boolean;
+    digitalized: boolean;
     
     constructor(
         id: number,
@@ -20,15 +20,15 @@ export class acervo_item extends super_item{
         legend: string,
         state: string,
         city: string,
-        author: string,
-        collection: string,
+        author: number,
+        collection: number,
         donor: string,
         contextHistory: string,
         created: Date,
         updated: Date,
         technique: string,
         material: string,
-        digitized: boolean
+        digitalized: boolean
     ) {
         super(
             id,
@@ -47,7 +47,7 @@ export class acervo_item extends super_item{
         );
         this.technique = technique,
         this.material = material,
-        this.digitized = digitized
+        this.digitalized = digitalized
     }
     
     static fromJson(json: any): acervo_item {

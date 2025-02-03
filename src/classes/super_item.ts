@@ -4,30 +4,30 @@ export abstract class super_item {
    
     @Expose()
     id: number;
-
+    
     @Expose()
-    thumbnailUrl: string;
+    city: string;
 
     @Expose()
     objectName: string;
-
+    
     @Expose()
     creationDate: Date;
 
     @Expose()
     legend: string;
+    
+    @Expose()
+    thumbnailUrl: string;
 
     @Expose()
     state: string;
 
     @Expose()
-    city: string;
+    authorId: number;
 
     @Expose()
-    author: string;
-
-    @Expose()
-    collection: string;
+    collectionId: number;
 
     @Expose()
     donor: string;
@@ -36,10 +36,10 @@ export abstract class super_item {
     contextHistory: string;
 
     @Expose()
-    created: Date;
+    createdAt: Date;
 
     @Expose()
-    updated: Date;
+    updatedAt: Date;
 
     constructor(
         id: number,
@@ -49,12 +49,12 @@ export abstract class super_item {
         legend: string,
         state: string,
         city: string,
-        author: string,
-        collection: string,
+        authorId: number,
+        collectionId: number,
         donor: string,
         contextHistory: string,
-        created: Date,
-        updated: Date
+        createdAt: Date,
+        updatedAt: Date
     ) {
         this.id = id;
         this.thumbnailUrl = thumbnailUrl;
@@ -63,12 +63,12 @@ export abstract class super_item {
         this.legend = legend;
         this.state = state;
         this.city = city;
-        this.author = author;
-        this.collection = collection;
+        this.authorId = authorId;
+        this.collectionId = collectionId;
         this.donor = donor;
         this.contextHistory = contextHistory;
-        this.created = created;
-        this.updated = updated;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
 }
