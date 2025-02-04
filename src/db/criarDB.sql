@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS livraria_table (
     object_name VARCHAR,
     creation_date DATE,
     legend TEXT,
-    state_origin VARCHAR,
+    state VARCHAR,
     author_id INT,
     digitalization_technique VARCHAR,
     collection_id INT,

@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer";
-import { super_item } from "./super_item";
+import { super_item } from "./super_item.js";
 
 
 export class livraria_item extends super_item {
@@ -19,8 +19,8 @@ export class livraria_item extends super_item {
         collectionId: number,
         donor: string,
         contextHistory: string,
-        created: Date,
-        updated: Date,
+        createdAt: Date,
+        updatedAt: Date,
         digitalizationTechnique: string
     ) {
         super(
@@ -35,8 +35,8 @@ export class livraria_item extends super_item {
             collectionId,
             donor,
             contextHistory,
-            created,
-            updated
+            createdAt,
+            updatedAt
         );
         this.digitalizationTechnique = digitalizationTechnique
     }
