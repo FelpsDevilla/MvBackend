@@ -100,8 +100,4 @@ export class DbConnection {
             await this.client.end();
         }
     }
-
-    private camelCaseToSnakeCase(camel: string): string {
-        return camel.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
-    }
 };

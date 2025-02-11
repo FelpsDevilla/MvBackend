@@ -1,11 +1,15 @@
-class Usuario {
+import { Expose } from "class-transformer";
 
-    constructor(
-        readonly cpf:number, 
-        readonly name:string, 
-        readonly passwrd:string, 
-        readonly active:boolean, 
-        readonly isAdmin:boolean
-    ){}
+class Usuario {
+    @Expose()
+    readonly cpf: number;
+    @Expose()
+    readonly name: string;
+    @Expose() 
+    readonly passwrd: string;
+    @Expose() 
+    readonly active: boolean;
+    @Expose() 
+    readonly isAdmin: boolean;
 
 }
