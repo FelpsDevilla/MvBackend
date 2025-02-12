@@ -1,24 +1,39 @@
-import { acervo_item } from "classes/acervo_item";
-import { uteis } from "classes/uteis";
-import dbPool from "db/Database";
-import { DbConnection } from "db/DbConnection";
+import dbPool from "db/Database.js";
 
 export class AcervoModel {
   private static table = "acervo_table";
 
-  static async create(newItem: acervo_item): Promise<void> {
-
-    const columns = uteis.ObjectKeysToDbCollums(acervo_item);
-    const values = Object.values(acervo_item);
-    const placeholders = uteis.placeHolderBuilder(values);
-
+  static async insertItem(columns: string, placeholders: string, values: any[]): Promise<void> {
     const query = {
       text: `INSERT INTO ${this.table} (${columns}) VALUES (${placeholders})`,
       values: values,
     };
+    await dbPool.query(query);
+  }
 
+  static async getAllItens(): Promise<any[]> {
+    const res = await dbPool.query(`SELECT * FROM ${this.table}`);
+    return res.rows;
+  }
+
+  static async getItemById(id: number): Promise<any[]> {
+    const res = await dbPool.query(`SELECT * FROM ${this.table} WHERE ID = ${id}`);
+    return res.rows;
+  }
+
+  static async updateItem(id: number, setClause: string, values: string): Promise<void> {
+    const query = {
+      text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
+      values: [values]
+    };
     await dbPool.query(query)
   }
 
-  
+  static async deleteItemById(id: number): Promise<void> {
+    const query = {
+      text: `DELETE FROM ${this.table} WHERE id = $1`,
+      values: [id]
+    }
+    await dbPool.query(query);
+  }
 }
