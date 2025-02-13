@@ -1,8 +1,8 @@
 import { Expose } from "class-transformer";
-import { super_item } from "./super_item.js";
+import { SuperItem } from "./SuperItem.js";
 
 
-export class livraria_item extends super_item {
+export class LivrariaItem extends SuperItem {
     
     @Expose()
     digitalizationTechnique: string

@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
 
-export class authors{
+export class Author{
 
     @Expose()
     id: number

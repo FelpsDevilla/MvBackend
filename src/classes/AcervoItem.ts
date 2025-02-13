@@ -1,7 +1,7 @@
 import { Expose, plainToInstance } from "class-transformer";
-import { super_item } from "./super_item.js";
+import { SuperItem } from "./SuperItem.js";
 
-export class acervo_item extends super_item{
+export class AcervoItem extends SuperItem{
     
     @Expose()
     technique: string;
@@ -48,9 +48,5 @@ export class acervo_item extends super_item{
         this.technique = technique,
         this.material = material,
         this.digitalized = digitalized
-    }
-    
-    static fromJson(json: any): acervo_item {
-        return plainToInstance(acervo_item, json)[0];
     }
 }

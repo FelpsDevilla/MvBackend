@@ -1,13 +1,13 @@
 import { plainToInstance } from "class-transformer";
-import { AcervoItem } from "../classes/AcervoItem.js";
+import { LivrariaItem } from "../classes/LivrariaItem.js";
 import { Util } from "../classes/Util.js";
 import { Request, Response } from "express";
-import { AcervoModel } from "../models/AcervoModel.js";
+import { LivrariaModel } from "../models/LivrariaModel.js";
 
-export class AcervoController {
+export class LivrariaController {
   static async getAllItens(req: Request, res: Response) {
     try {
-      const items = await AcervoModel.getAllItens();
+      const items = await LivrariaModel.getAllItens();
       res.status(200).json(items);
     } catch (error) {
       res.status(500).json({ error: "Erro ao buscar itens" });
@@ -17,7 +17,7 @@ export class AcervoController {
   static async getItemById(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
-      const item = await AcervoModel.getItemById(id);
+      const item = await LivrariaModel.getItemById(id);
 
       res.status(200).json(item);
     } catch (error) {
@@ -27,11 +27,11 @@ export class AcervoController {
 
   static async insertItem(req: Request, res: Response) {
     try {
-      const item = plainToInstance(AcervoItem, req.body)[0];
+      const item = plainToInstance(LivrariaItem, req.body)[0];
       const columns = Util.objectKeysToDbColumns(item);
       const values = Object.values(item);
       const placeholders = Util.buildPlaceholders(values);
-      await AcervoModel.insertItem(columns.toString(), placeholders, values);
+      await LivrariaModel.insertItem(columns.toString(), placeholders, values);
 
       res.status(200).send("Adcionado ");
     } catch (error) {
@@ -42,14 +42,14 @@ export class AcervoController {
 
   static async updateItem(req: Request, res: Response) {
     try {
-      const updatedItem: AcervoItem = plainToInstance(
-        AcervoItem,
+      const updatedItem: LivrariaItem = plainToInstance(
+        LivrariaItem,
         req.body
       )[0];
       const id = Number(req.params.id);
       const values = Util.buildUpdateSetClause(updatedItem).values.toString();
       const setClause = Util.buildUpdateSetClause(updatedItem).setClause;
-      await AcervoModel.updateItem(id, setClause, values);
+      await LivrariaModel.updateItem(id, setClause, values);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -59,7 +59,7 @@ export class AcervoController {
   static async deleteItem(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      await AcervoModel.deleteItemById(id);
+      await LivrariaModel.deleteItemById(id);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

@@ -1,11 +1,13 @@
-import { AcervoController } from "controllers/AcervoController";
+import { AcervoController } from "../controllers/AcervoController.js";
 import  express, { Router }  from "express";
 
-const router: Router = express.Router();
-const url: string = "/acervo_itens";
+const acervoRouter: Router = express.Router();
+const url: string = "/acervo";
 
-router.post(url, AcervoController.insertItem);
-router.get(url, AcervoController.getAllItens)
-router.get(`${url}/:id`, AcervoController.getItemByID)
-router.put(url, AcervoController.updateItem)
-router.delete(url, AcervoController.deleteItem)
+acervoRouter.post(url, AcervoController.insertItem);
+acervoRouter.get(url, AcervoController.getAllItens)
+acervoRouter.get(`${url}/:id`, AcervoController.getItemById)
+acervoRouter.put(`${url}/:id`, AcervoController.updateItem)
+acervoRouter.delete(`${url}/:id`, AcervoController.deleteItem)
+
+export default acervoRouter

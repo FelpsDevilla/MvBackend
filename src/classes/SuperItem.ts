@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
 
-export abstract class super_item {
+export abstract class SuperItem {
    
     @Expose()
     id: number;

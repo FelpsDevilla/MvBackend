@@ -1,7 +1,7 @@
 import dbPool from "../db/Database.js";
 
-export class AcervoModel {
-  private static table = "acervo_table";
+export class UserModel {
+  private static table = "users_table";
 
   static async insertItem(columns: string, placeholders: string, values: any[]): Promise<void> {
     const query = {

@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
 
-class Usuario {
+export class User {
     @Expose()
     readonly cpf: number;
     @Expose()

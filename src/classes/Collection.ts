@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
 
-export class collections {
+export class Collection {
     
     @Expose()
     readonly id: number;
