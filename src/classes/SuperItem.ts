@@ -70,5 +70,4 @@ export abstract class SuperItem {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
 }

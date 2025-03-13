@@ -27,11 +27,11 @@ export class CollectionController {
 
   static async insertItem(req: Request, res: Response) {
     try {
-      const item = plainToInstance(Collection, req.body);
-      const columns = Util.objectKeysToDbColumns(item);
-      const values = Object.values(item);
-      const placeholders = Util.buildPlaceholders(values);
-      await CollectionModel.insertItem(columns.toString(), placeholders, values);
+      // const item = plainToInstance(Collection, req.body);
+      // const columns = Util.objectKeysToDbColumns(item);
+      // const values = Object.values(item);
+      // const placeholders = Util.buildPlaceholders(values);
+      // await CollectionModel.insertItem(columns.toString(), placeholders, values);
 
       res.status(200).send("Adcionado ");
     } catch (error) {

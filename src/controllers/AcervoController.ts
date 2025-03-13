@@ -27,10 +27,15 @@ export class AcervoController {
 
   static async insertItem(req: Request, res: Response) {
     try {
-      const item = plainToInstance(AcervoItem, req.body)[0];
-      const columns = Util.objectKeysToDbColumns(item);
-      const values = Object.values(item);
+      const item: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem)
+
+      const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item)      
+      const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
+      const values: string[]= filtredEntries.map(([_, value]) => value);
+
       const placeholders = Util.buildPlaceholders(values);
+
+      console.log(columns.toString(), values, placeholders)
       await AcervoModel.insertItem(columns.toString(), placeholders, values);
 
       res.status(200).send("Adcionado ");

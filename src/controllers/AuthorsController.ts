@@ -27,13 +27,13 @@ export class AuthorController {
 
   static async insertItem(req: Request, res: Response) {
     try {
-      const item = plainToInstance(Author, req.body);
-      const columns = Util.objectKeysToDbColumns(item);
-      const values = Object.values(item);
-      const placeholders = Util.buildPlaceholders(values);
-      await AuthorModel.insertItem(columns.toString(), placeholders, values);
+      // const item = plainToInstance(Author, req.body);
+      // const columns = Util.objectKeysToDbColumns(item);
+      // const values = Object.values(item);
+      // const placeholders = Util.buildPlaceholders(values);
+      // await AuthorModel.insertItem(columns.toString(), placeholders, values);
 
-      res.status(200).send("Adcionado ");
+      // res.status(200).send("Adcionado ");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
