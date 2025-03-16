@@ -1,6 +1,5 @@
 import { plainToInstance } from "class-transformer";
 import { AcervoItem } from "../classes/AcervoItem.js";
-import { Util } from "../classes/Util.js";
 import { Request, Response } from "express";
 import { AcervoModel } from "../models/AcervoModel.js";
 
@@ -28,15 +27,7 @@ export class AcervoController {
   static async insertItem(req: Request, res: Response) {
     try {
       const item: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem)
-
-      const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item)      
-      const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
-      const values: string[]= filtredEntries.map(([_, value]) => value);
-
-      const placeholders = Util.buildPlaceholders(values);
-
-      console.log(columns.toString(), values, placeholders)
-      await AcervoModel.insertItem(columns.toString(), placeholders, values);
+      await AcervoModel.insertItem(item);
 
       res.status(200).send("Adcionado ");
     } catch (error) {
@@ -52,9 +43,7 @@ export class AcervoController {
         req.body
       )[0];
       const id = Number(req.params.id);
-      const values = Util.buildUpdateSetClause(updatedItem).values.toString();
-      const setClause = Util.buildUpdateSetClause(updatedItem).setClause;
-      await AcervoModel.updateItem(id, setClause, values);
+      await AcervoModel.updateItem(id, updatedItem);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

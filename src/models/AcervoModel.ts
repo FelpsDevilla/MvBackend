@@ -1,13 +1,22 @@
+import { Util } from "classes/Util.js";
 import dbPool from "../db/Database.js";
+import { AcervoItem } from "classes/AcervoItem.js";
 
 export class AcervoModel {
   private static table = "acervo_table";
 
-  static async insertItem(columns: string, placeholders: string, values: any[]): Promise<void> {
+  static async insertItem(item: AcervoItem): Promise<void> {
+
+    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);
+    const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
+    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+    const placeholders = Util.buildPlaceholders(values);
+
     const query = {
-      text: `INSERT INTO ${this.table} (${columns}) VALUES (${placeholders})`,
+      text: `INSERT INTO ${this.table} (${columns.toString()}) VALUES (${placeholders})`,
       values: values,
     };
+
     await dbPool.query(query);
   }
 
@@ -21,7 +30,10 @@ export class AcervoModel {
     return res.rows;
   }
 
-  static async updateItem(id: number, setClause: string, values: string): Promise<void> {
+  static async updateItem(id: number, item: AcervoItem): Promise<void> {
+
+    const values = Util.buildUpdateSetClause(item).values.toString();
+    const setClause = Util.buildUpdateSetClause(item).setClause;
     const query = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
       values: [values]

@@ -9,6 +9,10 @@ export class Util {
         return entries.map(([key]) => this.camelCaseToSnakeCase(key));
     }
 
+    static objectValuestoDbValues(entries: [string, any][]): string[]{
+        return entries.map(([_, value]) => value)
+    }
+
     static buildPlaceholders(values: string[]): string {
         return values.map((_, i) => `$${i + 1}`).join(", ");
     }
