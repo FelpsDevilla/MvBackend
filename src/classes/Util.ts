@@ -17,11 +17,9 @@ export class Util {
         return values.map((_, i) => `$${i + 1}`).join(", ");
     }
 
-    static buildUpdateSetClause(updatedItem: object): string {
-        const filteredEntries = this.getNonUndefinedEntries(updatedItem)
+    static buildUpdateSetClause(filteredEntries: [string, any][]): string {
         const columns = filteredEntries.map(([key]) => this.camelCaseToSnakeCase(key));
         const setClause = columns.map((column, i) => `${column} = $${i + 1}`).join(', ');
-
         return setClause;
     }
 

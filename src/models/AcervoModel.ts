@@ -32,13 +32,13 @@ export class AcervoModel {
 
   static async updateItem(id: number, item: AcervoItem): Promise<void> {
 
-    const values: string = Util.buildUpdateSetClause(item);
-    console.log(values)
-    const setClause = Util.buildUpdateSetClause(item);
-    console.log(setClause)
+    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);
+    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+    const setClause = Util.buildUpdateSetClause(filtredEntries);
+    
     const query = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
-      values: [values]
+      values: values
     };
     await dbPool.query(query)
   }

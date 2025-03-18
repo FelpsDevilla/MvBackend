@@ -1,11 +1,10 @@
 import { plainToInstance } from "class-transformer";
 import { Collection } from "../classes/Collection.js";
-import { Util } from "../classes/Util.js";
 import { Request, Response } from "express";
 import { CollectionModel } from "../models/CollectionModel.js";
 
 export class CollectionController {
-  static async getAllItens(req: Request, res: Response) {
+  static async getAllItens(req: Request, res: Response): Promise<void> {
     try {
       const items = await CollectionModel.getAllItens();
       res.status(200).json(items);
@@ -18,48 +17,41 @@ export class CollectionController {
     try {
       const id = Number(req.params.id);
       const item = await CollectionModel.getItemById(id);
-
       res.status(200).json(item);
     } catch (error) {
       res.status(500).json({ error: "Id incorreto" });
     }
   }
 
-  static async insertItem(req: Request, res: Response) {
+  static async insertItem(req: Request, res: Response): Promise<void> {
     try {
-      // const item = plainToInstance(Collection, req.body);
-      // const columns = Util.objectKeysToDbColumns(item);
-      // const values = Object.values(item);
-      // const placeholders = Util.buildPlaceholders(values);
-      // await CollectionModel.insertItem(columns.toString(), placeholders, values);
-
-      res.status(200).send("Adcionado ");
+      const item: Collection = plainToInstance(Collection, req.body as Collection);
+      await CollectionModel.insertItem(item);
+      res.status(200).send("Adicionado");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   }
 
-  static async updateItem(req: Request, res: Response) {
+  static async updateItem(req: Request, res: Response): Promise<void> {
     try {
-      const updatedItem: Collection = plainToInstance(
-        Collection,
-        req.body
-      );
+      const updatedItem: Collection = plainToInstance(Collection, req.body as Collection);
       const id = Number(req.params.id);
-      const values = Util.buildUpdateSetClause(updatedItem).values.toString();
-      const setClause = Util.buildUpdateSetClause(updatedItem).setClause;
-      await CollectionModel.updateItem(id, setClause, values);
+      await CollectionModel.updateItem(id, updatedItem);
+      res.status(200).send("Item Atualizado!");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   }
 
-  static async deleteItem(req: Request, res: Response) {
+  static async deleteItem(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
+      console.log(id);
       await CollectionModel.deleteItemById(id);
+      res.status(200).send("Item deletado!");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
