@@ -1,6 +1,6 @@
-import { Util } from "classes/Util.js";
+import { Util } from "../classes/Util.js";
 import dbPool from "../db/Database.js";
-import { AcervoItem } from "classes/AcervoItem.js";
+import { AcervoItem } from "../classes/AcervoItem.js";
 
 export class AcervoModel {
   private static table = "acervo_table";
@@ -32,8 +32,10 @@ export class AcervoModel {
 
   static async updateItem(id: number, item: AcervoItem): Promise<void> {
 
-    const values = Util.buildUpdateSetClause(item).values.toString();
-    const setClause = Util.buildUpdateSetClause(item).setClause;
+    const values: string = Util.buildUpdateSetClause(item);
+    console.log(values)
+    const setClause = Util.buildUpdateSetClause(item);
+    console.log(setClause)
     const query = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
       values: [values]
@@ -43,7 +45,7 @@ export class AcervoModel {
 
   static async deleteItemById(id: number): Promise<void> {
     const query = {
-      text: `DELETE FROM ${this.table} WHERE id = $1`,
+      text: `DELETE FROM ${this.table} WHERE ID = $1`,
       values: [id]
     }
     await dbPool.query(query);

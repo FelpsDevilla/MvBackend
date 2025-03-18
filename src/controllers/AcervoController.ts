@@ -17,7 +17,6 @@ export class AcervoController {
     try {
       const id = Number(req.params.id);
       const item = await AcervoModel.getItemById(id);
-
       res.status(200).json(item);
     } catch (error) {
       res.status(500).json({ error: "Id incorreto" });
@@ -28,7 +27,6 @@ export class AcervoController {
     try {
       const item: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem)
       await AcervoModel.insertItem(item);
-
       res.status(200).send("Adcionado ");
     } catch (error) {
       console.error(error);
@@ -38,12 +36,10 @@ export class AcervoController {
 
   static async updateItem(req: Request, res: Response) {
     try {
-      const updatedItem: AcervoItem = plainToInstance(
-        AcervoItem,
-        req.body
-      )[0];
+      const updatedItem: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem);
       const id = Number(req.params.id);
       await AcervoModel.updateItem(id, updatedItem);
+      res.status(200).send("Item Item Atualizado!")
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -53,7 +49,9 @@ export class AcervoController {
   static async deleteItem(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
+      console.log(id)
       await AcervoModel.deleteItemById(id);
+      res.status(200).send("Item deleteado!")
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

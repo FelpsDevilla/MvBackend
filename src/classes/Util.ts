@@ -17,18 +17,17 @@ export class Util {
         return values.map((_, i) => `$${i + 1}`).join(", ");
     }
 
-    static buildUpdateSetClause(updatedItem: object): { setClause: string; values: any[] } {
+    static buildUpdateSetClause(updatedItem: object): string {
         const filteredEntries = this.getNonUndefinedEntries(updatedItem)
         const columns = filteredEntries.map(([key]) => this.camelCaseToSnakeCase(key));
-        const values = filteredEntries.map(([_, value]) => value);
         const setClause = columns.map((column, i) => `${column} = $${i + 1}`).join(', ');
 
-        return { setClause, values };
+        return setClause;
     }
 
     static getNonUndefinedEntries(obj: object): [string, any][]{
-        const filteredEntries = Object.entries(obj).filter(([_, value]) => value !== undefined || value !== null);
-        return filteredEntries
+        const filteredEntries = Object.entries(obj).filter(([_, value]) => value !== undefined);
+        return filteredEntries;
     }
 
     static deserializeToInstance<T>(cls: new () => T, data: object | object[]): T {
