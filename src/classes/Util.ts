@@ -9,7 +9,7 @@ export class Util {
         return entries.map(([key]) => this.camelCaseToSnakeCase(key));
     }
 
-    static objectValuestoDbValues(entries: [string, any][]): string[]{
+    static objectValuestoDbValues(entries: [string, any][]): string[] {
         return entries.map(([_, value]) => value)
     }
 
@@ -23,13 +23,20 @@ export class Util {
         return setClause;
     }
 
-    static getNonUndefinedEntries(obj: object): [string, any][]{
+    static getNonUndefinedEntries(obj: object): [string, any][] {
         const filteredEntries = Object.entries(obj).filter(([_, value]) => value !== undefined);
         return filteredEntries;
     }
 
-    static deserializeToInstance<T>(cls: new () => T, data: object | object[]): T {
-      const instances = plainToInstance(cls, data);
-      return Array.isArray(instances) ? instances[0] : instances;
+    static transformDbArrayResponseToClassArray<T>(dbResponse: any[], classType: new () => T): T[] {
+        const itens: T[] = []
+
+        dbResponse.forEach((element) => {
+            const item: T = plainToInstance(classType, element as T)
+            itens.push(item)
+        });
+
+        return itens
     }
+
 }

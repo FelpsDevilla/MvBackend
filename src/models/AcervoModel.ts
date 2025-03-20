@@ -1,6 +1,7 @@
 import { Util } from "../classes/Util.js";
 import dbPool from "../db/Database.js";
 import { AcervoItem } from "../classes/AcervoItem.js";
+import { plainToInstance } from "class-transformer";
 
 export class AcervoModel {
   private static table = "acervo_table";
@@ -20,14 +21,18 @@ export class AcervoModel {
     await dbPool.query(query);
   }
 
-  static async getAllItens(): Promise<any[]> {
+  static async getAllItens(): Promise<AcervoItem[]> {
+
     const res = await dbPool.query(`SELECT * FROM ${this.table}`);
-    return res.rows;
+    const itens: AcervoItem[] = Util.transformDbArrayResponseToClassArray<AcervoItem>(res.rows, AcervoItem)
+
+    return itens;
   }
 
-  static async getItemById(id: number): Promise<any[]> {
+  static async getItemById(id: number): Promise<AcervoItem> {
     const res = await dbPool.query(`SELECT * FROM ${this.table} WHERE ID = ${id}`);
-    return res.rows;
+    const item: AcervoItem = Util.transformDbArrayResponseToClassArray<AcervoItem>(res.rows, AcervoItem)[0]
+    return item;
   }
 
   static async updateItem(id: number, item: AcervoItem): Promise<void> {

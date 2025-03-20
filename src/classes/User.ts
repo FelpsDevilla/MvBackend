@@ -6,10 +6,10 @@ export class User {
     @Expose()
     readonly name: string;
     @Expose() 
-    readonly passwrd: string;
+    readonly password: string;
     @Expose() 
     readonly active: boolean;
-    @Expose() 
+    @Expose({ name: 'is_admin'}) 
     readonly isAdmin: boolean;
 
 }
