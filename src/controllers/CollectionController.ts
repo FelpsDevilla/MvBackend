@@ -1,11 +1,10 @@
 import { plainToInstance } from "class-transformer";
 import { Collection } from "../classes/Collection.js";
-import { Util } from "../classes/Util.js";
 import { Request, Response } from "express";
 import { CollectionModel } from "../models/CollectionModel.js";
 
 export class CollectionController {
-  static async getAllCollections(req: Request, res: Response) {
+  static async getAllCollections(req: Request, res: Response): Promise<void> {
     try {
       const items = await CollectionModel.getAllCollections();
       res.status(200).json(items);
@@ -25,7 +24,7 @@ export class CollectionController {
     }
   }
 
-  static async insertCollection(req: Request, res: Response) {
+  static async insertCollection(req: Request, res: Response): Promise<void> {
     try {
       const collection: Collection = plainToInstance(Collection, req.body as Collection)
       const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(collection)
@@ -41,12 +40,9 @@ export class CollectionController {
     }
   }
 
-  static async updateCollection(req: Request, res: Response) {
+  static async updateCollection(req: Request, res: Response): Promise<void> {
     try {
-      const updatedItem: Collection = plainToInstance(
-        Collection,
-        req.body
-      );
+      const updatedItem: Collection = plainToInstance(Collection, req.body as Collection);
       const id = Number(req.params.id);
       const values: string[] = Util.buildUpdateSetClause(updatedItem).values;
       const setClause: string = Util.buildUpdateSetClause(updatedItem).setClause;
@@ -57,7 +53,7 @@ export class CollectionController {
     }
   }
 
-  static async deleteCollection(req: Request, res: Response) {
+  static async deleteCollection(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
       await CollectionModel.deleteCollectionById(id);

@@ -1,11 +1,10 @@
 import { plainToInstance } from "class-transformer";
 import { LivrariaItem } from "../classes/LivrariaItem.js";
-import { Util } from "../classes/Util.js";
 import { Request, Response } from "express";
 import { LivrariaModel } from "../models/LivrariaModel.js";
 
 export class LivrariaController {
-  static async getAllItens(req: Request, res: Response) {
+  static async getAllItens(req: Request, res: Response): Promise<void> {
     try {
       const items = await LivrariaModel.getAllItens();
       res.status(200).json(items);
@@ -18,14 +17,13 @@ export class LivrariaController {
     try {
       const id = Number(req.params.id);
       const item = await LivrariaModel.getItemById(id);
-
       res.status(200).json(item);
     } catch (error) {
       res.status(500).json({ error: "Id incorreto" });
     }
   }
 
-  static async insertItem(req: Request, res: Response) {
+  static async insertItem(req: Request, res: Response): Promise<void> {
     try {
       const item: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem)
       const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item)
@@ -41,8 +39,9 @@ export class LivrariaController {
     }
   }
 
-  static async updateItem(req: Request, res: Response) {
+  static async updateItem(req: Request, res: Response): Promise<void> {
     try {
+      const updatedItem: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem);
       const updatedItem: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem);
       const id = Number(req.params.id);
       const values: string[] = Util.buildUpdateSetClause(updatedItem).values;
@@ -56,10 +55,11 @@ export class LivrariaController {
     }
   }
 
-  static async deleteItem(req: Request, res: Response) {
+  static async deleteItem(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
       await LivrariaModel.deleteItemById(id);
+      res.status(200).send("Item deletado!");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

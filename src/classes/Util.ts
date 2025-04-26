@@ -9,26 +9,34 @@ export class Util {
         return entries.map(([key]) => this.camelCaseToSnakeCase(key));
     }
 
+    static objectValuestoDbValues(entries: [string, any][]): string[] {
+        return entries.map(([_, value]) => value)
+    }
+
     static buildPlaceholders(values: string[]): string {
         return values.map((_, i) => `$${i + 1}`).join(", ");
     }
 
-    static buildUpdateSetClause(updatedItem: object): { setClause: string; values: any[] } {
-        const filteredEntries = this.getNonUndefinedEntries(updatedItem)
+    static buildUpdateSetClause(filteredEntries: [string, any][]): string {
         const columns = filteredEntries.map(([key]) => this.camelCaseToSnakeCase(key));
-        const values = filteredEntries.map(([_, value]) => value);
         const setClause = columns.map((column, i) => `${column} = $${i + 1}`).join(', ');
-
-        return { setClause, values };
+        return setClause;
     }
 
-    static getNonUndefinedEntries(obj: object): [string, any][]{
+    static getNonUndefinedEntries(obj: object): [string, any][] {
         const filteredEntries = Object.entries(obj).filter(([_, value]) => value != undefined || value != null);
         return filteredEntries
     }
 
-    static deserializeToInstance<T>(cls: new () => T, data: object | object[]): T {
-      const instances = plainToInstance(cls, data);
-      return Array.isArray(instances) ? instances[0] : instances;
+    static transformDbArrayResponseToClassArray<T>(dbResponse: any[], classType: new () => T): T[] {
+        const itens: T[] = []
+
+        dbResponse.forEach((element) => {
+            const item: T = plainToInstance(classType, element as T)
+            itens.push(item)
+        });
+
+        return itens
     }
+
 }

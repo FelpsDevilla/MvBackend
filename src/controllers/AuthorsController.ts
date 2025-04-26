@@ -1,11 +1,10 @@
 import { plainToInstance } from "class-transformer";
 import { Author } from "../classes/Author.js";
-import { Util } from "../classes/Util.js";
 import { Request, Response } from "express";
 import { AuthorModel } from "../models/AuthorModel.js";
 
 export class AuthorController {
-  static async getAllAuthors(req: Request, res: Response) {
+  static async getAllAuthors(req: Request, res: Response): Promise<void> {
     try {
       const Authors = await AuthorModel.getAllAuthors();
       res.status(200).json(Authors);
@@ -41,7 +40,7 @@ export class AuthorController {
     }
   }
 
-  static async updateAuthor(req: Request, res: Response) {
+  static async updateAuthor(req: Request, res: Response): Promise<void> {
     try {
       const updatedItem: Author = plainToInstance(Author, req.body as Author);
       const id = Number(req.params.id);
@@ -56,7 +55,7 @@ export class AuthorController {
     }
   }
 
-  static async deleteAuthor(req: Request, res: Response) {
+  static async deleteAuthor(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
       await AuthorModel.deleteAuthorById(id);

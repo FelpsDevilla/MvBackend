@@ -6,12 +6,12 @@ export class Collection {
     readonly id: number;
     @Expose()
     readonly name: string;
-    @Expose()
+    @Expose({ name:'author_id'})
     readonly authorId: number;
     @Expose()
     readonly description: string;
-    @Expose()
-    readonly createAt: Date;
-    @Expose()
-    readonly updateAt: Date;
+    @Expose({ name:'created_at'})
+    readonly createdAt: Date;
+    @Expose({ name: 'updated_at' })
+    readonly updatedAt: Date;
 }

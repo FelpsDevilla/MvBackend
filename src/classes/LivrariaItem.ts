@@ -1,43 +1,46 @@
 import { Expose } from "class-transformer";
-import { SuperItem } from "./SuperItem.js";
 
-
-export class LivrariaItem extends SuperItem {
+export class LivrariaItem {
+    @Expose()
+    id: number;
     
     @Expose()
-    digitalizationTechnique: string
+    city: string;
+
+    @Expose({ name: 'object_name' })
+    objectName: string;
     
-    constructor(
-        id: number,
-        thumbnailUrl: string,
-        objectName: string,
-        creationDate: Date,
-        legend: string,
-        state: string,
-        city: string,
-        authorId: number,
-        collectionId: number,
-        donor: string,
-        contextHistory: string,
-        createdAt: Date,
-        updatedAt: Date,
-        digitalizationTechnique: string
-    ) {
-        super(
-            id,
-            thumbnailUrl,
-            objectName,
-            creationDate,
-            legend,
-            state,
-            city,
-            authorId,
-            collectionId,
-            donor,
-            contextHistory,
-            createdAt,
-            updatedAt
-        );
-        this.digitalizationTechnique = digitalizationTechnique
-    }
+    @Expose({ name: 'creation_date' })
+    creationDate: Date;
+
+    @Expose()
+    legend: string;
+    
+    @Expose({ name: 'thumbnail_url' })
+    thumbnailUrl: string;
+
+    @Expose()
+    state: string;
+
+    @Expose({ name: 'author_id' })
+    authorId: number;
+
+    @Expose({ name: 'collection_id' })
+    collectionId: number;
+
+    @Expose()
+    donor: string;
+
+    @Expose({ name: 'context_history' })
+    contextHistory: string;
+
+    @Expose({ name: 'created_at' })
+    createdAt: Date;
+
+    @Expose({ name: 'updated_at'})
+    updatedAt: Date;
+    
+    @Expose({ name:'digitalization_technique'})
+    digitalizationTechnique: string
+
 }

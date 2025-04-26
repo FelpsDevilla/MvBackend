@@ -1,9 +1,17 @@
+import { LivrariaItem } from "../classes/LivrariaItem.js";
 import dbPool from "../db/Database.js";
+import { Util } from "../classes/Util.js";
 
 export class LivrariaModel {
   private static table = "livraria_table";
 
-  static async insertItem(columns: string, placeholders: string, values: any[]): Promise<void> {
+  static async insertItem(item: LivrariaItem): Promise<void> {
+
+    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);
+    const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
+    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+    const placeholders = Util.buildPlaceholders(values);
+
     const query = {
       text: `INSERT INTO ${this.table} (${columns}) VALUES (${placeholders})`,
       values: values,

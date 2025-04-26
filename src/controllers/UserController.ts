@@ -1,11 +1,10 @@
 import { plainToInstance } from "class-transformer";
 import { User } from "../classes/User.js";
-import { Util } from "../classes/Util.js";
 import { Request, Response } from "express";
 import { UserModel } from "../models/UserModel.js";
 
 export class UserController {
-  static async getAllItens(req: Request, res: Response) {
+  static async getAllItens(req: Request, res: Response): Promise<void> {
     try {
       const Users = await UserModel.getAllUsers();
       res.status(200).json(Users);
@@ -25,7 +24,7 @@ export class UserController {
     }
   }
 
-  static async insertUser(req: Request, res: Response) {
+  static async insertUser(req: Request, res: Response): Promise<void> {
     try {
       const user = plainToInstance(User, req.body as User);
       const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(user)    
@@ -38,11 +37,11 @@ export class UserController {
       res.status(201).send("Adcionado ");
     } catch (error) {
       console.error(error);
-      res.status(500).send(error);
+      res.status(500).json({ error: "Erro ao adicionar usuário" });
     }
   }
 
-  static async updateUser(req: Request, res: Response) {
+  static async updateUser(req: Request, res: Response): Promise<void> {
     try {
       const updatedUser: User = plainToInstance(
         User,
@@ -55,17 +54,18 @@ export class UserController {
       await UserModel.updateUser(id, setClause, values);
     } catch (error) {
       console.error(error);
-      res.status(500).send(error);
+      res.status(500).json({ error: "Erro ao atualizar usuário" });
     }
   }
 
-  static async deleteUser(req: Request, res: Response) {
+  static async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
       await UserModel.deleteUserById(id);
+      res.status(200).json({ message: "Usuário removido com sucesso" });
     } catch (error) {
       console.error(error);
-      res.status(500).send(error);
+      res.status(500).json({ error: "Erro ao remover usuário" });
     }
   }
 }
