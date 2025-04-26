@@ -21,10 +21,10 @@ export class LivrariaModel {
     return res.rows;
   }
 
-  static async updateItem(id: number, setClause: string, values: string): Promise<void> {
+  static async updateItem(id: number, setClause: string, values: string[]): Promise<void> {
     const query = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
-      values: [values]
+      values: values
     };
     await dbPool.query(query)
   }

@@ -1,9 +1,9 @@
 import dbPool from "../db/Database.js";
 
 export class UserModel {
-  private static table = "users_table";
+  private static table = "user_table";
 
-  static async insertItem(columns: string, placeholders: string, values: any[]): Promise<void> {
+  static async insertUser(columns: string, placeholders: string, values: any[]): Promise<void> {
     const query = {
       text: `INSERT INTO ${this.table} (${columns}) VALUES (${placeholders})`,
       values: values,
@@ -11,25 +11,25 @@ export class UserModel {
     await dbPool.query(query);
   }
 
-  static async getAllItens(): Promise<any[]> {
+  static async getAllUsers(): Promise<any[]> {
     const res = await dbPool.query(`SELECT * FROM ${this.table}`);
     return res.rows;
   }
 
-  static async getItemById(id: number): Promise<any[]> {
+  static async getUserById(id: number): Promise<any[]> {
     const res = await dbPool.query(`SELECT * FROM ${this.table} WHERE ID = ${id}`);
     return res.rows;
   }
 
-  static async updateItem(id: number, setClause: string, values: string): Promise<void> {
+  static async updateUser(id: number, setClause: string, values: string[]): Promise<void> {
     const query = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
-      values: [values]
+      values: values
     };
     await dbPool.query(query)
   }
 
-  static async deleteItemById(id: number): Promise<void> {
+  static async deleteUserById(id: number): Promise<void> {
     const query = {
       text: `DELETE FROM ${this.table} WHERE id = $1`,
       values: [id]

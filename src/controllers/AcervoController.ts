@@ -8,6 +8,7 @@ export class AcervoController {
   static async getAllItens(req: Request, res: Response) {
     try {
       const items = await AcervoModel.getAllItens();
+      
       res.status(200).json(items);
     } catch (error) {
       res.status(500).json({ error: "Erro ao buscar itens" });
@@ -28,17 +29,13 @@ export class AcervoController {
   static async insertItem(req: Request, res: Response) {
     try {
       const item: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem)
-
-      const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item)      
+      const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item)
       const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
-      const values: string[]= filtredEntries.map(([_, value]) => value);
-
+      const values: string[] = filtredEntries.map(([_, value]) => value);
       const placeholders = Util.buildPlaceholders(values);
 
-      console.log(columns.toString(), values, placeholders)
       await AcervoModel.insertItem(columns.toString(), placeholders, values);
-
-      res.status(200).send("Adcionado ");
+      res.status(201).send("Adcionado item!");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -47,14 +44,13 @@ export class AcervoController {
 
   static async updateItem(req: Request, res: Response) {
     try {
-      const updatedItem: AcervoItem = plainToInstance(
-        AcervoItem,
-        req.body
-      )[0];
+      const updatedItem: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem);
       const id = Number(req.params.id);
-      const values = Util.buildUpdateSetClause(updatedItem).values.toString();
-      const setClause = Util.buildUpdateSetClause(updatedItem).setClause;
+      const values: string[] = Util.buildUpdateSetClause(updatedItem).values;
+      const setClause: string = Util.buildUpdateSetClause(updatedItem).setClause;
+
       await AcervoModel.updateItem(id, setClause, values);
+      res.status(200).send("Alterado Item id: " + id);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -65,6 +61,8 @@ export class AcervoController {
     try {
       const id = Number(req.params.id);
       await AcervoModel.deleteItemById(id);
+
+      res.status(200).send("Item deletado id " + id);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

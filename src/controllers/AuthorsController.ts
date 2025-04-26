@@ -5,61 +5,63 @@ import { Request, Response } from "express";
 import { AuthorModel } from "../models/AuthorModel.js";
 
 export class AuthorController {
-  static async getAllItens(req: Request, res: Response) {
+  static async getAllAuthors(req: Request, res: Response) {
     try {
-      const items = await AuthorModel.getAllItens();
-      res.status(200).json(items);
+      const Authors = await AuthorModel.getAllAuthors();
+      res.status(200).json(Authors);
     } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar itens" });
+      res.status(500).json({ error: "Erro ao buscar Autores" });
     }
   }
 
-  static async getItemById(req: Request, res: Response): Promise<void> {
+  static async getAuthorById(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
-      const item = await AuthorModel.getItemById(id);
+      const Author = await AuthorModel.getAuthorById(id);
 
-      res.status(200).json(item);
+      res.status(200).json(Author);
     } catch (error) {
       res.status(500).json({ error: "Id incorreto" });
     }
   }
 
-  static async insertItem(req: Request, res: Response) {
+  static async insertAuthor(req: Request, res: Response) {
     try {
-      // const item = plainToInstance(Author, req.body);
-      // const columns = Util.objectKeysToDbColumns(item);
-      // const values = Object.values(item);
-      // const placeholders = Util.buildPlaceholders(values);
-      // await AuthorModel.insertItem(columns.toString(), placeholders, values);
+      const author: Author = plainToInstance(Author, req.body as Author);
+      const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(author)
+      const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
+      const values: string[] = filtredEntries.map(([_, value]) => value);
+      const placeholders = Util.buildPlaceholders(values);
 
-      // res.status(200).send("Adcionado ");
+      await AuthorModel.insertAuthor(columns.toString(), placeholders, values);
+      res.status(201).send("Adcionado Autor!");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   }
 
-  static async updateItem(req: Request, res: Response) {
+  static async updateAuthor(req: Request, res: Response) {
     try {
-      const updatedItem: Author = plainToInstance(
-        Author,
-        req.body
-      );
+      const updatedItem: Author = plainToInstance(Author, req.body as Author);
       const id = Number(req.params.id);
-      const values = Util.buildUpdateSetClause(updatedItem).values.toString();
-      const setClause = Util.buildUpdateSetClause(updatedItem).setClause;
-      await AuthorModel.updateItem(id, setClause, values);
+      const values: string[] = Util.buildUpdateSetClause(updatedItem).values;
+      const setClause: string = Util.buildUpdateSetClause(updatedItem).setClause;
+
+      await AuthorModel.updateAuthor(id, setClause, values);
+      res.status(200).send("Alterado Autor id: " + id);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   }
 
-  static async deleteItem(req: Request, res: Response) {
+  static async deleteAuthor(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      await AuthorModel.deleteItemById(id);
+      await AuthorModel.deleteAuthorById(id);
+
+      res.status(200).send("Author deletado id" + id);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

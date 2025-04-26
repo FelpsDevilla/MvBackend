@@ -23,7 +23,7 @@ export class Util {
     }
 
     static getNonUndefinedEntries(obj: object): [string, any][]{
-        const filteredEntries = Object.entries(obj).filter(([_, value]) => value !== undefined || value !== null);
+        const filteredEntries = Object.entries(obj).filter(([_, value]) => value != undefined || value != null);
         return filteredEntries
     }
 

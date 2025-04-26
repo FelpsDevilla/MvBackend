@@ -27,13 +27,14 @@ export class LivrariaController {
 
   static async insertItem(req: Request, res: Response) {
     try {
-      // const item = plainToInstance(LivrariaItem, req.body)[0];
-      // const columns = Util.objectKeysToDbColumns(item);
-      // const values = Object.values(item);
-      // const placeholders = Util.buildPlaceholders(values);
-      // await LivrariaModel.insertItem(columns.toString(), placeholders, values);
+      const item: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem)
+      const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item)
+      const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
+      const values: string[] = filtredEntries.map(([_, value]) => value);
+      const placeholders = Util.buildPlaceholders(values);
 
-      res.status(200).send("Adcionado ");
+      await LivrariaModel.insertItem(columns.toString(), placeholders, values);
+      res.status(201).send("Adcionado item!");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -42,14 +43,13 @@ export class LivrariaController {
 
   static async updateItem(req: Request, res: Response) {
     try {
-      const updatedItem: LivrariaItem = plainToInstance(
-        LivrariaItem,
-        req.body
-      )[0];
+      const updatedItem: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem);
       const id = Number(req.params.id);
-      const values = Util.buildUpdateSetClause(updatedItem).values.toString();
-      const setClause = Util.buildUpdateSetClause(updatedItem).setClause;
+      const values: string[] = Util.buildUpdateSetClause(updatedItem).values;
+      const setClause: string = Util.buildUpdateSetClause(updatedItem).setClause;
+
       await LivrariaModel.updateItem(id, setClause, values);
+      res.status(200).send("Alterado Item id: " + id);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

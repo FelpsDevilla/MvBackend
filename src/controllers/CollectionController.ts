@@ -5,19 +5,19 @@ import { Request, Response } from "express";
 import { CollectionModel } from "../models/CollectionModel.js";
 
 export class CollectionController {
-  static async getAllItens(req: Request, res: Response) {
+  static async getAllCollections(req: Request, res: Response) {
     try {
-      const items = await CollectionModel.getAllItens();
+      const items = await CollectionModel.getAllCollections();
       res.status(200).json(items);
     } catch (error) {
       res.status(500).json({ error: "Erro ao buscar itens" });
     }
   }
 
-  static async getItemById(req: Request, res: Response): Promise<void> {
+  static async getCollectionById(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
-      const item = await CollectionModel.getItemById(id);
+      const item = await CollectionModel.getCollectionById(id);
 
       res.status(200).json(item);
     } catch (error) {
@@ -25,41 +25,42 @@ export class CollectionController {
     }
   }
 
-  static async insertItem(req: Request, res: Response) {
+  static async insertCollection(req: Request, res: Response) {
     try {
-      // const item = plainToInstance(Collection, req.body);
-      // const columns = Util.objectKeysToDbColumns(item);
-      // const values = Object.values(item);
-      // const placeholders = Util.buildPlaceholders(values);
-      // await CollectionModel.insertItem(columns.toString(), placeholders, values);
+      const collection: Collection = plainToInstance(Collection, req.body as Collection)
+      const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(collection)
+      const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
+      const values: string[] = filtredEntries.map(([_, value]) => value);
+      const placeholders = Util.buildPlaceholders(values);
 
-      res.status(200).send("Adcionado ");
+      await CollectionModel.insertCollection(columns.toString(), placeholders, values);
+      res.status(201).send("Adcionado ");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   }
 
-  static async updateItem(req: Request, res: Response) {
+  static async updateCollection(req: Request, res: Response) {
     try {
       const updatedItem: Collection = plainToInstance(
         Collection,
         req.body
       );
       const id = Number(req.params.id);
-      const values = Util.buildUpdateSetClause(updatedItem).values.toString();
-      const setClause = Util.buildUpdateSetClause(updatedItem).setClause;
-      await CollectionModel.updateItem(id, setClause, values);
+      const values: string[] = Util.buildUpdateSetClause(updatedItem).values;
+      const setClause: string = Util.buildUpdateSetClause(updatedItem).setClause;
+      await CollectionModel.updateCollection(id, setClause, values);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   }
 
-  static async deleteItem(req: Request, res: Response) {
+  static async deleteCollection(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      await CollectionModel.deleteItemById(id);
+      await CollectionModel.deleteCollectionById(id);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

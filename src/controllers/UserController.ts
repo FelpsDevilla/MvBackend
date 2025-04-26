@@ -7,59 +7,62 @@ import { UserModel } from "../models/UserModel.js";
 export class UserController {
   static async getAllItens(req: Request, res: Response) {
     try {
-      const items = await UserModel.getAllItens();
-      res.status(200).json(items);
+      const Users = await UserModel.getAllUsers();
+      res.status(200).json(Users);
     } catch (error) {
       res.status(500).json({ error: "Erro ao buscar itens" });
     }
   }
 
-  static async getItemById(req: Request, res: Response): Promise<void> {
+  static async getUserById(req: Request, res: Response): Promise<void> {
     try {
       const id = Number(req.params.id);
-      const item = await UserModel.getItemById(id);
+      const User = await UserModel.getUserById(id);
 
-      res.status(200).json(item);
+      res.status(200).json(User);
     } catch (error) {
       res.status(500).json({ error: "Id incorreto" });
     }
   }
 
-  static async insertItem(req: Request, res: Response) {
+  static async insertUser(req: Request, res: Response) {
     try {
-      // const item = plainToInstance(User, req.body);
-      // const columns = Util.objectKeysToDbColumns(item);
-      // const values = Object.values(item);
-      // const placeholders = Util.buildPlaceholders(values);
-      // await UserModel.insertItem(columns.toString(), placeholders, values);
+      const user = plainToInstance(User, req.body as User);
+      const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(user)    
+      const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
+      const values: string[]= filtredEntries.map(([_, value]) => value);
+      const placeholders = Util.buildPlaceholders(values);
 
-      res.status(200).send("Adcionado ");
+      await UserModel.insertUser(columns.toString(), placeholders, values);
+
+      res.status(201).send("Adcionado ");
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   }
 
-  static async updateItem(req: Request, res: Response) {
+  static async updateUser(req: Request, res: Response) {
     try {
-      const updatedItem: User = plainToInstance(
+      const updatedUser: User = plainToInstance(
         User,
         req.body
       );
       const id = Number(req.params.id);
-      const values = Util.buildUpdateSetClause(updatedItem).values.toString();
-      const setClause = Util.buildUpdateSetClause(updatedItem).setClause;
-      await UserModel.updateItem(id, setClause, values);
+      const values: string[] = Util.buildUpdateSetClause(updatedUser).values;
+      const setClause: string = Util.buildUpdateSetClause(updatedUser).setClause;
+      console.log(values, setClause)
+      await UserModel.updateUser(id, setClause, values);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
     }
   }
 
-  static async deleteItem(req: Request, res: Response) {
+  static async deleteUser(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      await UserModel.deleteItemById(id);
+      await UserModel.deleteUserById(id);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
