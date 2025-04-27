@@ -7,10 +7,10 @@ Este projeto foi desenvolvido em **Node.js** + **TypeScript**, utilizando arquit
 ---
 
 ## 📂 Estrutura do Projeto
-
+```
 src/
 ├── app/
-│   └── app.ts          # Configuração principal do servidor Express
+│   └── app.ts        # Configuração principal do servidor Express
 ├── controllers/      # Lógica de controle para lidar com as requisições
 ├── db/               # Script para criar o DB e Classe que gerencia o DB
 ├── services/         # Camada de serviços contendo a lógica de negócio
@@ -18,20 +18,18 @@ src/
 ├── routes/           # Definição das rotas da aplicação
 ├── config/           # Arquivos de configuração geral
 └── server.ts         # Ponto de entrada para inicializar o servidor
-
+```
 ---
 
 ## 🚀 Tecnologias Utilizadas
 
-- **Node.js** v22 (versão utilizada no desenvolvimento)
-- **TypeScript** (linguagem para desenvolvimento)
-- **Express** (framework web para Node.js)
-- **tsx** (executor para desenvolvimento com TypeScript)
-- **tsconfig-paths** (para resolução de paths definidos no `tsconfig.json`)
-- **Docker** (para containerização da aplicação)
-- **dotenv** (para carregar variáveis de ambiente de um arquivo `.env`)
-- **reflect-metadata** (necessário para algumas funcionalidades de frameworks como TypeORM/Inversify)
-
+- **Node.js** v22
+- **TypeScript** 
+- **Express** 
+- **tsx**
+- **tsconfig-paths**
+- **Docker**
+- **dotenv**
 ---
 
 ## 🛠️ Scripts Disponíveis
@@ -50,9 +48,9 @@ Os seguintes scripts podem ser executados usando `npm run <comando>`:
 
 Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-PORT=8000
-DB_USER= <Usuario_do_db>
-DB_USER_PASS= <Senha_do_usario_db>
-DB_IP= <Ip_do_DB>
-DB_PORT= <Porta_do_DB>
-DB_NAME= <Nome_do_DB>
+- PORT=8000
+- DB_USER= <Usuario_do_db>
+- DB_USER_PASS= <Senha_do_usario_db>
+- DB_IP= <Ip_do_DB>
+- DB_PORT= <Porta_do_DB>
+- DB_NAME= <Nome_do_DB>
