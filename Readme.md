@@ -10,7 +10,7 @@ Este projeto foi desenvolvido em **Node.js** + **TypeScript**, utilizando arquit
 
 src/
 ├── app/
-│   └── app.ts        # Configuração principal do servidor Express
+│   └── app.ts          # Configuração principal do servidor Express
 ├── controllers/      # Lógica de controle para lidar com as requisições
 ├── db/               # Script para criar o DB e Classe que gerencia o DB
 ├── services/         # Camada de serviços contendo a lógica de negócio
