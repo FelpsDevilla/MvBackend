@@ -1,6 +1,6 @@
 import { Author } from "@/classes/Author.js";
 import { Util } from "@/classes/Util.js";
-import dbPool from "@/db/Database.js";
+import { dbPool }  from "@/server.js";
 
 export class AuthorModel {
   private static table = "authors_table";

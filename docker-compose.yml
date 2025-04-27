@@ -1,13 +1,33 @@
 services:
-  MvBackend:
+  mvbackend:
     build: .
     ports:
       - "8000:8000"
     environment:
-      - NODE_ENV=prod
-      - PORT=8000
-      - DB_USER=<usuario>
-      - DB_USER_PASS=<senha_super_secreta>
-      - DB_IP=<ip_do_seu_DB>
-      - DB_PORT=5432
-      - DB_NAME=MvDB
+      - NODE_ENV=${NODE_ENV}
+      - PORT_APP_SERVER=${PORT_APP_SERVER}
+      - DB_USER=${DB_USER}
+      - DB_USER_PASS=${DB_USER_PASS}
+      - DB_NAME=${DB_NAME}
+      - DB_IP=${DB_IP}
+    depends_on:
+      mvdb:
+        condition: service_healthy
+  mvdb:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=${DB_USER_PASS}
+      - DB_USER=${DB_USER}
+    volumes:
+    - mvdb_data:/var/lib/postgresql/data
+    - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+volumes:
+  mvdb_data:

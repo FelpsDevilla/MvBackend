@@ -1,6 +1,6 @@
 import { Util } from "@/classes/Util.js";
 import { AcervoItem } from "@/classes/AcervoItem.js";
-import dbPool  from "@/db/Database.js";
+import { dbPool }  from "@/server.js";
 
 export class AcervoModel {
   private static table = "acervo_table";

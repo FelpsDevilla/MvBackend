@@ -1,6 +1,6 @@
 import { Collection } from "@/classes/Collection";
 import { Util } from "@/classes/Util";
-import dbPool from "@/db/Database.js";
+import { dbPool }  from "@/server.js";
 
 export class CollectionModel {
   private static table = "collections_table";

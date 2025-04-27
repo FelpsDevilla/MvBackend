@@ -1,6 +1,6 @@
 import { User } from "@/classes/User";
 import { Util } from "@/classes/Util";
-import dbPool from "@/db/Database";
+import { dbPool }  from "@/server.js";
 
 export class UserModel {
   private static table = "user_table";

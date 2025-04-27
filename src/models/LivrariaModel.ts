@@ -1,6 +1,6 @@
 import { LivrariaItem } from "@/classes/LivrariaItem.js";
 import { Util } from "@/classes/Util.js";
-import dbPool from "@/db/Database.js";
+import { dbPool }  from "@/server.js";
 
 export class LivrariaModel {
   private static table = "livraria_table";
