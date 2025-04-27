@@ -6,8 +6,8 @@ services:
     environment:
       - NODE_ENV=prod
       - PORT=8000
-      - DB_USER=casaos
-      - DB_USER_PASS=casaos
-      - DB_IP=100.113.65.65
+      - DB_USER=<usuario>
+      - DB_USER_PASS=<senha_super_secreta>
+      - DB_IP=<ip_do_seu_DB>
       - DB_PORT=5432
       - DB_NAME=MvDB

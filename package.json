@@ -9,7 +9,7 @@
     "build": "tsc && resolve-tspaths",
     "start": "node dist/server.js"
   },
-  "author": "",
+  "author": "Felipe Devilla",
   "license": "ISC",
   "dependencies": {
     "@types/cors": "^2.8.17",
