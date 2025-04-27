@@ -11,13 +11,4 @@ const dbPool = new Pool({
     database: process.env.DB_NAME
 });
 
-dbPool.on('connect', () => {
-    console.log('✅ Conectado ao PostgreSQL');
-});
-
-dbPool.on('error', (err) => {
-    console.error('❌ Erro no pool de conexões:', err);
-});
-
-
 export default dbPool;

@@ -1,13 +1,11 @@
-import { Util } from "../classes/Util.js";
-import dbPool from "../db/Database.js";
-import { AcervoItem } from "../classes/AcervoItem.js";
-import { plainToInstance } from "class-transformer";
+import { Util } from "@/classes/Util.js";
+import { AcervoItem } from "@/classes/AcervoItem.js";
+import dbPool  from "@/db/Database.js";
 
 export class AcervoModel {
   private static table = "acervo_table";
 
   static async insertItem(item: AcervoItem): Promise<void> {
-
     const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);
     const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
     const values: string[] = Util.objectValuestoDbValues(filtredEntries);
@@ -17,30 +15,30 @@ export class AcervoModel {
       text: `INSERT INTO ${this.table} (${columns.toString()}) VALUES (${placeholders})`,
       values: values,
     };
-
     await dbPool.query(query);
   }
 
-  static async getAllItens(): Promise<AcervoItem[]> {
-
+  static async getAllItens(): Promise<any[]> {
     const res = await dbPool.query(`SELECT * FROM ${this.table}`);
-    const itens: AcervoItem[] = Util.transformDbArrayResponseToClassArray<AcervoItem>(res.rows, AcervoItem)
-
-    return itens;
+    
+    return res.rows;
   }
 
-  static async getItemById(id: number): Promise<AcervoItem> {
+  static async getItemById(id: number): Promise<any[]> {
     const res = await dbPool.query(`SELECT * FROM ${this.table} WHERE ID = ${id}`);
-    const item: AcervoItem = Util.transformDbArrayResponseToClassArray<AcervoItem>(res.rows, AcervoItem)[0]
-    return item;
+    
+    return res.rows;
   }
 
-  static async updateItem(id: number, setClause: string, values: string[]): Promise<void> {
+  static async updateItem(id: number, updatedItem: AcervoItem): Promise<void> {
+    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updatedItem);
+    const setClause: string = Util.buildUpdateSetClause(filtredEntries);
+    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
     const query = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
       values: values
     };
-    await dbPool.query(query)
+    await dbPool.query(query);
   }
 
   static async deleteItemById(id: number): Promise<void> {

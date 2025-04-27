@@ -2,14 +2,12 @@
   "name": "mvbackend",
   "version": "1.0.0",
   "description": "backend MvProject",
-  "main": "index.js",
+  "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "compile": "tsc",
-    "watch": "tsc -w",
-    "dev": "concurrently  \"nodemon dist/js/server.js\" \"tsc -w\"",
-    "start": "tsc && node dist/js/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --watch src --ext ts --delay 200ms --exec \"tsx src/server.ts\"",
+    "build": "tsc && resolve-tspaths",
+    "start": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -26,8 +24,11 @@
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/pg": "^8.11.10",
-    "concurrently": "^9.1.0",
-    "nodemon": "^3.1.9",
-    "typescript": "^5.7.2"
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.10",
+    "resolve-tspaths": "^0.8.23",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
   }
 }

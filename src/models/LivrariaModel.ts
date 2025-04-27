@@ -1,6 +1,6 @@
-import { LivrariaItem } from "../classes/LivrariaItem.js";
-import dbPool from "../db/Database.js";
-import { Util } from "../classes/Util.js";
+import { LivrariaItem } from "@/classes/LivrariaItem.js";
+import { Util } from "@/classes/Util.js";
+import dbPool from "@/db/Database.js";
 
 export class LivrariaModel {
   private static table = "livraria_table";
@@ -9,13 +9,14 @@ export class LivrariaModel {
 
     const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);
     const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
-    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+    const values: string[] = filtredEntries.map(([_, value]) => value);
     const placeholders = Util.buildPlaceholders(values);
 
     const query = {
       text: `INSERT INTO ${this.table} (${columns}) VALUES (${placeholders})`,
       values: values,
     };
+
     await dbPool.query(query);
   }
 
@@ -29,12 +30,18 @@ export class LivrariaModel {
     return res.rows;
   }
 
-  static async updateItem(id: number, setClause: string, values: string[]): Promise<void> {
+  static async updateItem(id: number, updatedItem: LivrariaItem): Promise<void> {
+
+    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updatedItem);
+    const setClause: string = Util.buildUpdateSetClause(filtredEntries);
+    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+
     const query = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
       values: values
     };
-    await dbPool.query(query)
+
+    await dbPool.query(query);
   }
 
   static async deleteItemById(id: number): Promise<void> {

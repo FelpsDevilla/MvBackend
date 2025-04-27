@@ -1,15 +1,23 @@
-import { Collection } from "../classes/Collection.js";
-import dbPool from "../db/Database.js";
-import { Util } from "../classes/Util.js";
+import { Collection } from "@/classes/Collection";
+import { Util } from "@/classes/Util";
+import dbPool from "@/db/Database.js";
 
 export class CollectionModel {
   private static table = "collections_table";
 
-  static async insertCollection(columns: string, placeholders: string, values: any[]): Promise<void> {
+  static async insertCollection(collection: Collection): Promise<void> {
+
+    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(collection);
+    console.log(filtredEntries)
+    const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
+    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+    const placeholders = Util.buildPlaceholders(values);
+
     const query = {
       text: `INSERT INTO ${this.table} (${columns}) VALUES (${placeholders})`,
       values: values,
     };
+
     await dbPool.query(query);
   }
 
@@ -23,19 +31,27 @@ export class CollectionModel {
     return res.rows;
   }
 
-  static async updateCollection(id: number, setClause: string, values: string[]): Promise<void> {
+  static async updateCollection(id: Number, updateCollection: Collection): Promise<void> {
+
+    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updateCollection);
+    const setClause: string = Util.buildUpdateSetClause(filtredEntries);
+    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+
     const query = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
       values: values
     };
-    await dbPool.query(query)
+    
+    await dbPool.query(query);
   }
 
   static async deleteCollectionById(id: number): Promise<void> {
+
     const query = {
       text: `DELETE FROM ${this.table} WHERE id = $1`,
       values: [id]
     }
+
     await dbPool.query(query);
   }
 }
