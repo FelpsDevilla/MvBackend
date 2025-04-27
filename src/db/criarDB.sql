@@ -62,9 +62,10 @@ CREATE TABLE IF NOT EXISTS livraria_table (
 );
 
 CREATE TABLE IF NOT EXISTS users_table (
-    cpf INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY
+    cpf VARCHAR(11),
     name VARCHAR,
-    passwrd VARCHAR,
-    active BOOLEAN,
+    password VARCHAR,
+    is_active BOOLEAN,
     is_admin BOOLEAN
 );

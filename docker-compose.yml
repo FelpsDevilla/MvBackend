@@ -1,0 +1,13 @@
+services:
+  MvBackend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=prod
+      - PORT=8000
+      - DB_USER=casaos
+      - DB_USER_PASS=casaos
+      - DB_IP=100.113.65.65
+      - DB_PORT=5432
+      - DB_NAME=MvDB

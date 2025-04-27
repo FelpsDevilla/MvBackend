@@ -2,7 +2,9 @@ import dotenv from "dotenv";
 import pkg from "pg";
 const { Pool } = pkg;
 
-dotenv.config();
+if(process.env.NODE_ENV != "prod"){
+    dotenv.config();
+}
 
 const dbPool = new Pool({
     user: process.env.DB_USER,
@@ -11,4 +13,4 @@ const dbPool = new Pool({
     database: process.env.DB_NAME
 });
 
-export default dbPool;
+export default dbPool
