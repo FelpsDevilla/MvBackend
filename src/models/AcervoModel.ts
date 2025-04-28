@@ -11,7 +11,7 @@ export class AcervoModel {
     const values: string[] = Util.objectValuestoDbValues(filtredEntries);
     const placeholders = Util.buildPlaceholders(values);
 
-    const query = {
+    const query: {text: string, values: string[]} = {
       text: `INSERT INTO ${this.table} (${columns.toString()}) VALUES (${placeholders})`,
       values: values,
     };
@@ -34,7 +34,8 @@ export class AcervoModel {
     const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updatedItem);
     const setClause: string = Util.buildUpdateSetClause(filtredEntries);
     const values: string[] = Util.objectValuestoDbValues(filtredEntries);
-    const query = {
+
+    const query: {text: string, values: string[]} = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
       values: values
     };

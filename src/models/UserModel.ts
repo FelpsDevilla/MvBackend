@@ -2,7 +2,6 @@ import { User } from "@/classes/User";
 import { Util } from "@/classes/Util";
 import { dbPool }  from "@/server.js";
 import { plainToInstance } from "class-transformer";
-import { QueryResult } from "pg";
 
 export class UserModel {
   private static table = "users";
@@ -14,7 +13,7 @@ export class UserModel {
     const values: string[]= filtredEntries.map(([_, value]) => value);
     const placeholders = Util.buildPlaceholders(values);
 
-    const query = {
+    const query: {text: string, values: string[]} = {
       text: `INSERT INTO ${this.table} (${columns}) VALUES (${placeholders})`,
       values: values,
     };
@@ -36,7 +35,7 @@ export class UserModel {
 
   static async getUserBycpf(cpf: number): Promise<User> {
 
-    const query = {
+    const query: {text: string, values: Number[]} = {
       text: 'SELECT * FROM users WHERE cpf = $1',
       values: [cpf]
     };
@@ -52,7 +51,7 @@ export class UserModel {
     const setClause: string = Util.buildUpdateSetClause(filtredEntries);
     const values: string[] = Util.objectValuestoDbValues(filtredEntries);
 
-    const query = {
+    const query: {text: string, values: string[]} = {
       text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
       values: values
     };

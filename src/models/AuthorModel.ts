@@ -12,7 +12,7 @@ export class AuthorModel {
     const values: string[] = filtredEntries.map(([_, value]) => value);
     const placeholders = Util.buildPlaceholders(values);
 
-    const query = {
+    const query: {text: string, values: string[]} = {
       text: `INSERT INTO ${this.table} (${columns}) VALUES (${placeholders})`,
       values: values,
     };
@@ -47,7 +47,7 @@ export class AuthorModel {
 
   static async deleteAuthorById(id: number): Promise<void> {
 
-    const query = {
+    const query: {text: string, values: number[]} = {
       text: `DELETE FROM ${this.table} WHERE id = $1`,
       values: [id]
     }
