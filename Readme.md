@@ -50,13 +50,13 @@ Após clonar o projeto para a máquina executar ações na seguinte ordem:
 
 
 1. `npm install`
-2. Criar arquivo `.env.development.local` conforme orientado em [Variáveis de Ambiente](#variáveis-de-ambiente)
+2. Criar arquivo `.env.development.local` conforme orientado em [Variáveis de Ambiente](#gear-variáveis-de-ambiente)
 3. Se tudo der certo `npm run dev` deve iniciar a aplicação
 
 > [!NOTE]
 > Esses comandos servem apenas para rodar o servidor, para configurar o Banco de Dados o script `init.sql` possue todas as configurações necessárias para as tabelas.
 ---
-## ⚙️ Variáveis de Ambiente
+## :gear: Variáveis de Ambiente
 
 ### Produção
 Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
