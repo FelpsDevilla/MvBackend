@@ -25,12 +25,25 @@ export class AuthControler {
                 return
             }
 
-            const token = jwt.sign({userId: userdb.id}, jwtSecret, { expiresIn: 300 });
+            const token = jwt.sign({userId: userdb.id, isAdmin: userdb.isAdmin}, jwtSecret, { expiresIn: 300 });
 
-            res.status(200).send(token);
+            res.status(200).json({auth: true, token: token});
         }catch(error){
             console.error(error);
             res.status(500).json({ error: "Erro de login", message: error });
         }
     }
+
+    static async testeJWT(req: Request, res: Response): Promise<void>{ //Func criada apenas para ver como manipular o token jtw
+        try{
+            const jwtSecret: string = process.env.JWT_SECRET as string;
+            const token: string = req.headers["x-acess-token"] as string;
+            const decodedToken = jwt.verify(token, jwtSecret)
+            console.log(decodedToken)
+            res.status(200).end()
+        }catch(error){
+            res.status(500).send(error)
+        }
+    }
+
 }

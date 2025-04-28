@@ -1,3 +1,6 @@
+import { Request, Response } from "express";
+import jwt, { decode } from "jsonwebtoken";
+
 export class Util {
     private static camelCaseToSnakeCase(camel: string): string {
         return camel.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
@@ -26,4 +29,11 @@ export class Util {
         return filteredEntries
     }
 
+    static async verifyJWT(req: Request, res: Response, next: Function){
+        const jwtSecret: string = process.env.JWT_SECRET as string;
+        const token: string = req.headers["x-acess-token"] as string;
+        const decoded = jwt.verify(token, jwtSecret)
+        
+        next();
+    }
 }
