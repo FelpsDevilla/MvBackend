@@ -3,7 +3,7 @@ import { Util } from "@/classes/Util.js";
 import { dbPool }  from "@/server.js";
 
 export class LivrariaModel {
-  private static table = "livraria_table";
+  private static table = "livraria";
 
   static async insertItem(item: LivrariaItem): Promise<void> {
 

@@ -3,7 +3,7 @@ import { AcervoItem } from "@/classes/AcervoItem.js";
 import { dbPool }  from "@/server.js";
 
 export class AcervoModel {
-  private static table = "acervo_table";
+  private static table = "acervo";
 
   static async insertItem(item: AcervoItem): Promise<void> {
     const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);

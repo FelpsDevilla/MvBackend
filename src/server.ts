@@ -15,6 +15,8 @@ const dbConfig = {
     database: process.env.DB_NAME, 
   };
 
+const jwtSecret: string = process.env.JWT_SECRET as string;
+
 const PORT = process.env.PORT_APP_SERVER;
 const dbPool = createDatabasePool(dbConfig);
 

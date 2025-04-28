@@ -3,7 +3,7 @@ import { Util } from "@/classes/Util";
 import { dbPool }  from "@/server.js";
 
 export class CollectionModel {
-  private static table = "collections_table";
+  private static table = "collections";
 
   static async insertCollection(collection: Collection): Promise<void> {
 

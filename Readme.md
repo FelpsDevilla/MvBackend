@@ -48,9 +48,9 @@ Os seguintes scripts podem ser executados usando `npm run <comando>`:
 
 Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-- PORT=8000
+- PORT_APP_SERVER=8000
 - DB_USER= <Usuario_do_db>
 - DB_USER_PASS= <Senha_do_usario_db>
-- DB_IP= <Ip_do_DB>
-- DB_PORT= <Porta_do_DB>
 - DB_NAME= <Nome_do_DB>
+- DB_IP= <Ip_do_DB>
+- JWT_SECRET= <Crie_um_secret>

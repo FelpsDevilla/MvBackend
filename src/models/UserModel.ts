@@ -1,9 +1,11 @@
 import { User } from "@/classes/User";
 import { Util } from "@/classes/Util";
 import { dbPool }  from "@/server.js";
+import { plainToInstance } from "class-transformer";
+import { QueryResult } from "pg";
 
 export class UserModel {
-  private static table = "user_table";
+  private static table = "users";
 
   static async insertUser(user: User): Promise<void> {
 
@@ -20,16 +22,28 @@ export class UserModel {
     await dbPool.query(query);
   }
 
-  static async getAllUsers(): Promise<any[]> {
+  static async getAllUsers(): Promise<User[]> {
     const res = await dbPool.query(`SELECT * FROM ${this.table}`);
-
-    return res.rows;
+    const users: User[] = plainToInstance(User, res.rows)
+    return users;
   }
 
-  static async getUserById(id: number): Promise<any[]> {
+  static async getUserById(id: number): Promise<User> {
     const res = await dbPool.query(`SELECT * FROM ${this.table} WHERE ID = ${id}`);
+    const user: User = plainToInstance(User, res.rows[0] as User);
+    return user;
+  }
 
-    return res.rows;
+  static async getUserBycpf(cpf: number): Promise<User> {
+
+    const query = {
+      text: 'SELECT * FROM users WHERE cpf = $1',
+      values: [cpf]
+    };
+
+    const res = await dbPool.query(query);
+    const user: User = plainToInstance(User, res.rows[0] as User);
+    return user;
   }
 
   static async updateUser(id: number, updatedUser: User): Promise<void> {

@@ -2,12 +2,17 @@ import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { User } from "@/classes/User.js";
 import { UserModel } from "@/models/UserModel.js";
+import bcrypt from "bcryptjs";
 
 export class UserController {
 
   static async insertUser(req: Request, res: Response): Promise<void> {
     try {
       const user = plainToInstance(User, req.body as User);
+
+      const salt = await bcrypt.genSalt();
+      const hash = await bcrypt.hash(user.getPassword(), salt);
+      user.setPassword(hash);
       await UserModel.insertUser(user);
 
       res.status(201).send("Adcionado ");
@@ -17,7 +22,7 @@ export class UserController {
     }
   }
 
-  static async getAllItens(req: Request, res: Response): Promise<void> {
+  static async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       const Users = await UserModel.getAllUsers();
       

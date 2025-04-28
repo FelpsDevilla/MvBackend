@@ -5,6 +5,7 @@ import authorRouter from "@/routes/AuthorRoute.js";
 import collectionRouter from "@/routes/CollectionsRoute.js";
 import livrariaRouter from "@/routes/LivrariaRoute.js";
 import userRouter from "@/routes/UsersRoute.js";
+import authRouter from "@/routes/AuthRoute";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cors({
 ))
 const url = "/"
 
+app.use(url, authRouter)
 app.use(url, acervoRouter)
 app.use(url, authorRouter)
 app.use(url, collectionRouter)

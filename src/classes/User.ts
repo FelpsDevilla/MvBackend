@@ -8,10 +8,17 @@ export class User {
     @Expose()
     readonly name: string;
     @Expose() 
-    readonly password: string;
-    @Expose() 
+    private password: string;
+    @Expose({ name: 'is_active' }) 
     readonly isActive: boolean;
-    @Expose() 
+    @Expose({ name: 'is_admin' }) 
     readonly isAdmin: boolean;
 
+    public setPassword(newPassword: string): void{
+        this.password = newPassword
+    }
+
+    public getPassword(): string{
+        return this.password
+    }
 }
