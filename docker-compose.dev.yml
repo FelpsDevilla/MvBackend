@@ -1,8 +1,8 @@
 services:
-  mvbackend:
-    image: felpsdevilla/mvbackend:latest
+  mvbackend_dev:
+    build: .
     ports:
-      - "8001:80"
+      - "8000:80"
     environment:
       - DB_USER_PASS= MySecretPassword
       - JWT_SECRET= MySuperSecret
@@ -10,7 +10,7 @@ services:
     depends_on:
       mvdb:
         condition: service_healthy
-  mvdb:
+  mvdb_dev:
     image: postgres:latest
     restart: always
     ports:
@@ -26,4 +26,4 @@ services:
       timeout: 5s
       retries: 10
 volumes:
-  mvdb_data:
+  mvdb_data_dev:

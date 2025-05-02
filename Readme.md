@@ -4,6 +4,11 @@ Backend oficial do **MvProject**.
 
 Este projeto foi desenvolvido em **Node.js** + **TypeScript**, utilizando arquitetura modular, suporte a variáveis de ambiente e preparado para execução via **Docker**.
 
+### 🚀 Executando em Produção
+
+Para rodar o **MvBackend** em ambiente de produção, utilize a imagem publicada no Docker Hub. Certifique-se de alterar as variáveis de ambiente estejam corretamente definidas.
+Utilize esse Docker Compose [Docker Compose](docker-compose.yml)
+
 ---
 
 ## 📂 Estrutura do Projeto
@@ -29,6 +34,7 @@ src/
 - **tsx**
 - **tsconfig-paths**
 - **Docker**
+- **Docker Compose**
 - **dotenv**
 - **jsonwebtoken**
 - **bcryptjs**
@@ -43,45 +49,56 @@ Os seguintes scripts podem ser executados usando `npm run <comando>`:
 | `dev`         | Inicia o servidor em modo de desenvolvimento com recarregamento automático usando **tsx** e **nodemon**. |
 | `build`       | Compila o código TypeScript para JavaScript e armazena os arquivos em `dist`. |
 | `start`       | Executa a aplicação a partir dos arquivos JavaScript compilados em `dist`. |
+| `docker`      | Builda e executa os containers da aplicação e do banco de dados usando **Docker** e **Docker Compose**. |
 
 ---
 ## :technologist: Desenvolvimento
+
+### Desenvolvimento Normal
 Após clonar o projeto para a máquina executar ações na seguinte ordem:
 
 1. `npm install`
-2. Criar arquivo `.env.development.local` conforme orientado em [Variáveis de Ambiente](#gear-variáveis-de-ambiente)
+2. Criar arquivo `.env` conforme orientado em [Variáveis de Ambiente](#gear-variáveis-de-ambiente)
 3. Se tudo der certo `npm run dev` deve iniciar a aplicação
 
 > [!NOTE]
-> Esses comandos servem apenas para rodar o servidor, para configurar o Banco de Dados o script `init.sql` possue todas as configurações necessárias para as tabelas.
+> Esses comandos iniciam apenas o servidor de aplicação.
+> Para configurar o banco de dados localmente, utilize o script init.sql, que contém todas as instruções necessárias para criação das tabelas e estrutura inicial.
 ---
-## :gear: Variáveis de Ambiente
 
-### Produção
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-```
-NODE_ENV=prod
-PORT_APP_SERVER=8000
-DB_USER= <Usuario_do_db>
-DB_USER_PASS= <Senha_do_usario_db>
-DB_NAME= <Nome_do_DB>
-DB_IP= <Ip_do_DB>
-JWT_SECRET= <Crie_um_secret>
-JWT_SECRET_REFRESH = <Crie_um_secret>
-```
+### 🐳 Testando a aplicação com Docker
+
+Como alternativa ao ambiente local com Node.js, é possível testar a aplicação utilizando **Docker** e **Docker Compose**, o que garante um ambiente padronizado com o banco de dados configurado automaticamente.
+
+#### Passos:
+
+1. Certifique-se de que o Docker e o Docker Compose estão instalados.
+2. Execute o comando:
+
+   ```
+   npm run docker
+   ```
+
+Isso irá:
+
+- Construir a imagem Docker do backend;
+- Subir um container com o banco de dados PostgreSQL;
+- Executar a aplicação no ambiente de desenvolvimento (porta 8000, por padrão);
+
+Aplicar automaticamente o script init.sql com a estrutura inicial do banco de dados.
+
+## :gear: Variáveis de Ambiente
 
 ### Desenvolvimento 
 
-Crie um arquivo `.env.development.local` na raiz do projeto com as seguintes variáveis:
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 ```
 NODE_ENV=dev
-PORT_APP_SERVER=8000
 DB_USER= <Usuario_do_db>
 DB_USER_PASS= <Senha_do_usario_db>
-DB_NAME= <Nome_do_DB>
 DB_IP= <Ip_do_DB>
 JWT_SECRET= <Crie_um_secret>
 JWT_SECRET_REFRESH = <Crie_um_secret>
 ```
 > [!WARNING]
-> Não versionar arquivos `.env` ou `.env.development.local`
+> Não versionar arquivo `.env`

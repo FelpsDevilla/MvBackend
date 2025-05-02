@@ -1,11 +1,10 @@
-\set myUser `echo "$DB_USER"`
 \set secretPassword `echo "$POSTGRES_PASSWORD"`
 
-CREATE USER :myUser WITH PASSWORD :'secretPassword';
+CREATE USER "MvDB" WITH PASSWORD :'secretPassword';
 
 CREATE DATABASE MvDB
     WITH
-    OWNER = :myUser
+    OWNER = "MvDB"
     ENCODING = 'UTF8'
     LOCALE_PROVIDER = 'libc'
     CONNECTION LIMIT = -1
