@@ -8,7 +8,7 @@ services:
       - JWT_SECRET= MySuperSecret
       - JWT_SECRET_REFRESH= MySuperSecretRefresh
     depends_on:
-      mvdb:
+      mvdb_dev:
         condition: service_healthy
   mvdb_dev:
     image: postgres:latest
