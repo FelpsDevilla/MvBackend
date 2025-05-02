@@ -6,8 +6,12 @@ Este projeto foi desenvolvido em **Node.js** + **TypeScript**, utilizando arquit
 
 ### 🚀 Executando em Produção
 
-Para rodar o **MvBackend** em ambiente de produção, utilize a imagem publicada no Docker Hub. Certifique-se de alterar as variáveis de ambiente estejam corretamente definidas.
-Utilize esse Docker Compose [Docker Compose](docker-compose.yml)
+Para rodar o **MvBackend** em ambiente de produção, utilize a imagem publicada no Docker Hub.
+
+Utilize este Docker Compose [Docker Compose](docker-compose.yml)
+
+> [!WARNING]
+>  Certifique-se de alterar as variáveis de ambiente.
 
 ---
 
