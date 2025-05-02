@@ -48,7 +48,6 @@ Os seguintes scripts podem ser executados usando `npm run <comando>`:
 ## :technologist: Desenvolvimento
 Após clonar o projeto para a máquina executar ações na seguinte ordem:
 
-
 1. `npm install`
 2. Criar arquivo `.env.development.local` conforme orientado em [Variáveis de Ambiente](#gear-variáveis-de-ambiente)
 3. Se tudo der certo `npm run dev` deve iniciar a aplicação
@@ -68,6 +67,7 @@ DB_USER_PASS= <Senha_do_usario_db>
 DB_NAME= <Nome_do_DB>
 DB_IP= <Ip_do_DB>
 JWT_SECRET= <Crie_um_secret>
+JWT_SECRET_REFRESH = <Crie_um_secret>
 ```
 
 ### Desenvolvimento 
@@ -81,6 +81,7 @@ DB_USER_PASS= <Senha_do_usario_db>
 DB_NAME= <Nome_do_DB>
 DB_IP= <Ip_do_DB>
 JWT_SECRET= <Crie_um_secret>
+JWT_SECRET_REFRESH = <Crie_um_secret>
 ```
 > [!WARNING]
 > Não versionar arquivos `.env` ou `.env.development.local`
