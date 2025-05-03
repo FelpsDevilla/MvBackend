@@ -30,6 +30,11 @@ export class UserModel {
   static async getUserById(id: number): Promise<User> {
     const res = await dbPool.query(`SELECT * FROM ${this.table} WHERE ID = ${id}`);
     const user: User = plainToInstance(User, res.rows[0] as User);
+
+    if (!user) {
+      throw new Error("Usuário não encontrado");
+    }
+
     return user;
   }
 
@@ -42,6 +47,11 @@ export class UserModel {
 
     const res = await dbPool.query(query);
     const user: User = plainToInstance(User, res.rows[0] as User);
+
+    if (!user) {
+      throw new Error("Usuário não encontrado");
+    }
+    
     return user;
   }
 

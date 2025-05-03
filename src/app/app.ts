@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser"
 import acervoRouter from "@/routes/AcervoRoute.js";
 import authorRouter from "@/routes/AuthorRoute.js";
 import collectionRouter from "@/routes/CollectionsRoute.js";
@@ -10,6 +11,7 @@ import authRouter from "@/routes/AuthRoute";
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser())
 app.use(cors({
     origin: 'http://localhost:4200', // Allow only this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
