@@ -14,7 +14,7 @@ let Port = 80;
 
 if(process.env.NODE_ENV === undefined){
     dotenv.config();
-    Port = Number.parseInt(process.env.SERVER_IP as string);
+    Port = Number.parseInt(process.env.SERVER_PORT as string);
     dbConfig = {
         user: process.env.DB_USER as string,
         password: process.env.DB_USER_PASS,

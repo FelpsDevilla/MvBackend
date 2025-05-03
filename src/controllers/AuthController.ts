@@ -7,11 +7,13 @@ import jwt from "jsonwebtoken";
 
 export class AuthControler {
 
-    private static readonly ACCESS_SECRET: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
-    private static readonly REFRESH_SECRET: jwt.Secret = process.env.JWT_SECRET_REFRESH as jwt.Secret;
+    private static readonly ACCESS_EXPIRES_IN = '15m';
+    private static readonly REFRESH_EXPIRES_IN = '7d';
 
     static async login(req: Request, res: Response): Promise<void> {
         try {
+            const REFRESH_SECRET: jwt.Secret = process.env.JWT_SECRET_REFRESH as jwt.Secret;
+            const ACCESS_SECRET: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
             const userReq: User = plainToInstance(User, req.body as User);
             const userdb: User = await UserModel.getUserBycpf(userReq.cpf);
 
@@ -27,8 +29,8 @@ export class AuthControler {
                 return
             }
 
-            const accessToken = jwt.sign({ userId: userdb.id, isAdmin: userdb.isAdmin }, this.ACCESS_SECRET, { expiresIn: "15min" });
-            const refreshToken = jwt.sign({ userId: userdb.id, isAdmin: userdb.isAdmin }, this.REFRESH_SECRET, { expiresIn: "7d" });
+            const accessToken = jwt.sign({ userId: userdb.id, isAdmin: userdb.isAdmin }, ACCESS_SECRET, { expiresIn: this.ACCESS_EXPIRES_IN });
+            const refreshToken = jwt.sign({ userId: userdb.id, isAdmin: userdb.isAdmin }, REFRESH_SECRET, { expiresIn: this.REFRESH_EXPIRES_IN });
 
             res
                 .status(200)
@@ -38,7 +40,7 @@ export class AuthControler {
                     sameSite: 'strict',
                     maxAge: 7 * 24 * 60 * 60 * 1000,
                 })
-                .json({token: accessToken });
+                .json({ token: accessToken });
         } catch (error) {
             if (error instanceof Error) {
                 console.error(error);
@@ -47,34 +49,23 @@ export class AuthControler {
         }
     }
 
-    static async auth(req: Request, res: Response): Promise<void> {
+    static async refresh(req: Request, res: Response): Promise<void> {
         try {
-            const accessToken = req.headers["x-acess-token"] as string;
+            const ACCESS_SECRET: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
+            const REFRESH_SECRET: jwt.Secret = process.env.JWT_SECRET_REFRESH as jwt.Secret;
+            const token = req.cookies.refreshToken;
 
-            jwt.verify(accessToken, this.ACCESS_SECRET, (error, decoded) => {
-                if (error instanceof jwt.JsonWebTokenError && error.name === "TokenExpiredError") {
-                    const refreshToken = req.cookies.refreshToken;
+            const payload = jwt.verify(token, REFRESH_SECRET) as jwt.JwtPayload;
+            const newAccessToken = jwt.sign({ id: payload.id, name: payload.name }, ACCESS_SECRET, { expiresIn: this.ACCESS_EXPIRES_IN });
+            res.json({ accessToken: newAccessToken });
 
-                    const payload: jwt.JwtPayload = jwt.verify(refreshToken, this.REFRESH_SECRET) as jwt.JwtPayload;
-                    const newAcessToken = jwt.sign(payload, this.ACCESS_SECRET, { expiresIn: "15min" })
-                    res.status(200).json({token: newAcessToken })
-
-                }
-            });
         } catch (error) {
             if (error instanceof jwt.JsonWebTokenError) {
-                switch (error.name) {
-                    case "TokenExpiredError":
-                        res.status(401)
-                        break;
-
-                    case "JsonWebTokenError":
-                        res.status(400)
-                        break;
-                }
-                res.send(error).end()
+                res.status(401).json({ message: 'Token inválido ou expirado.' });
             }
-            res.status(500).send(error)
+            res.status(500).send('Erro inesperado na autenticação: ' + error);
         }
-    };
+
+
+    }
 }

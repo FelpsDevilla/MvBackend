@@ -1,13 +1,14 @@
-import { CollectionController } from "../controllers/CollectionController.js";
+import { AuthMiddleware } from "@/classes/AuthMiddleware.js";
+import { CollectionController } from "@/controllers/CollectionController.js";
 import  express, { Router }  from "express";
 
 const collectionRouter: Router = express.Router();
 const url: string = "/collection";
 
-collectionRouter.post(url, CollectionController.insertCollection);
-collectionRouter.get(url, CollectionController.getAllCollections)
-collectionRouter.get(`${url}/:id`, CollectionController.getCollectionById)
-collectionRouter.put(`${url}/:id`, CollectionController.updateCollection)
-collectionRouter.delete(`${url}/:id`, CollectionController.deleteCollection)
+collectionRouter.post(url, AuthMiddleware.auth, CollectionController.insertCollection);;
+collectionRouter.get(url, CollectionController.getAllCollections);
+collectionRouter.get(`${url}/:id`, AuthMiddleware.auth, CollectionController.getCollectionById);
+collectionRouter.put(`${url}/:id`, AuthMiddleware.auth, CollectionController.updateCollection);
+collectionRouter.delete(`${url}/:id`, AuthMiddleware.auth, CollectionController.deleteCollection);
 
-export default collectionRouter
+export default collectionRouter;
