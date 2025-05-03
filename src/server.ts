@@ -12,7 +12,7 @@ let dbConfig = {
 
 let Port = 80;
 
-if(process.env.NODE_ENV == "dev"){
+if(process.env.NODE_ENV === undefined){
     dotenv.config();
     Port = Number.parseInt(process.env.SERVER_IP as string);
     dbConfig = {
