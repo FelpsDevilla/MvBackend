@@ -7,8 +7,8 @@ const url: string = "/livraria";
 
 livrariaRouter.post(url, AuthMiddleware.auth,LivrariaController.insertItem);
 livrariaRouter.get(url, LivrariaController.getAllItens);
-livrariaRouter.get(`${url}/:id`, AuthMiddleware.auth,LivrariaController.getItemById);
-livrariaRouter.put(`${url}/:id`, AuthMiddleware.auth,LivrariaController.updateItem);
-livrariaRouter.delete(`${url}/:id`, AuthMiddleware.auth,LivrariaController.deleteItem);
+livrariaRouter.get(`${url}/:id`, AuthMiddleware.auth, LivrariaController.getItemById);
+livrariaRouter.put(`${url}/:id`, AuthMiddleware.auth, LivrariaController.updateItem);
+livrariaRouter.delete(`${url}/:id`, AuthMiddleware.auth, AuthMiddleware.onlyAdmins, LivrariaController.deleteItem);
 
 export default livrariaRouter;

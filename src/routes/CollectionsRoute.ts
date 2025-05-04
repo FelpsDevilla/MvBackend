@@ -9,6 +9,6 @@ collectionRouter.post(url, AuthMiddleware.auth, CollectionController.insertColle
 collectionRouter.get(url, CollectionController.getAllCollections);
 collectionRouter.get(`${url}/:id`, AuthMiddleware.auth, CollectionController.getCollectionById);
 collectionRouter.put(`${url}/:id`, AuthMiddleware.auth, CollectionController.updateCollection);
-collectionRouter.delete(`${url}/:id`, AuthMiddleware.auth, CollectionController.deleteCollection);
+collectionRouter.delete(`${url}/:id`, AuthMiddleware.auth, AuthMiddleware.onlyAdmins,CollectionController.deleteCollection);
 
 export default collectionRouter;

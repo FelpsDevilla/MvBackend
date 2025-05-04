@@ -6,38 +6,46 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export class AuthControler {
-
-    private static readonly ACCESS_EXPIRES_IN = '15m';
-    private static readonly REFRESH_EXPIRES_IN = '7d';
+    private static readonly ACCESS_EXPIRES_IN = "15m";
+    private static readonly REFRESH_EXPIRES_IN = "7d";
 
     static async login(req: Request, res: Response): Promise<void> {
         try {
             const REFRESH_SECRET: jwt.Secret = process.env.JWT_SECRET_REFRESH as jwt.Secret;
             const ACCESS_SECRET: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
             const userReq: User = plainToInstance(User, req.body as User);
-            const userdb: User = await UserModel.getUserBycpf(userReq.cpf);
+            const userDB: User = await UserModel.getUserBycpf(userReq.cpf);
 
-            const isPasswordValid: boolean = await bcrypt.compare(userReq.getPassword(), userdb.getPassword())
+            const isPasswordValid: boolean = await bcrypt.compare(
+                userReq.getPassword(),
+                userDB.getPassword()
+            );
 
             if (!isPasswordValid) {
-                res.status(401).json({ message: 'Credenciais inválidas' });
-                return
+                res.status(401).json({ message: "Credenciais inválidas" });
+                return;
             }
 
-            if (!userdb.isActive) {
-                res.status(401).json({ message: 'Usuário Inativo, favor entrar em contato com Administrador do Sistema' });
-                return
+            if (!userDB.isActive) {
+                res.status(401).json({ message: "Usuário Inativo, favor entrar em contato com Administrador do Sistema" });
+                return;
             }
 
-            const accessToken = jwt.sign({ userId: userdb.id, isAdmin: userdb.isAdmin }, ACCESS_SECRET, { expiresIn: this.ACCESS_EXPIRES_IN });
-            const refreshToken = jwt.sign({ userId: userdb.id, isAdmin: userdb.isAdmin }, REFRESH_SECRET, { expiresIn: this.REFRESH_EXPIRES_IN });
+            const accessToken = jwt.sign(
+                { userId: userDB.id, userCpf: userDB.cpf, userName: userDB.name, isAdmin: userDB.isAdmin },
+                ACCESS_SECRET,
+                { expiresIn: AuthControler.ACCESS_EXPIRES_IN }
+            );
+            const refreshToken = jwt.sign({ userId: userDB.id }, REFRESH_SECRET, {
+                expiresIn: AuthControler.REFRESH_EXPIRES_IN,
+            });
 
             res
                 .status(200)
                 .cookie("refreshToken", refreshToken, {
                     httpOnly: true,
                     secure: true,
-                    sameSite: 'strict',
+                    sameSite: "strict",
                     maxAge: 7 * 24 * 60 * 60 * 1000,
                 })
                 .json({ token: accessToken });
@@ -56,16 +64,19 @@ export class AuthControler {
             const token = req.cookies.refreshToken;
 
             const payload = jwt.verify(token, REFRESH_SECRET) as jwt.JwtPayload;
-            const newAccessToken = jwt.sign({ id: payload.id, name: payload.name }, ACCESS_SECRET, { expiresIn: this.ACCESS_EXPIRES_IN });
-            res.json({ accessToken: newAccessToken });
+            const userDB: User = await UserModel.getUserById(payload.userId);
 
+            const newAccessToken = jwt.sign(
+                { userId: userDB.id, userCpf: userDB.cpf, userName: userDB.name, isAdmin: userDB.isAdmin },
+                ACCESS_SECRET,
+                { expiresIn: AuthControler.ACCESS_EXPIRES_IN }
+            );
+            res.json({ accessToken: newAccessToken });
         } catch (error) {
             if (error instanceof jwt.JsonWebTokenError) {
-                res.status(401).json({ message: 'Token inválido ou expirado.' });
+                res.status(401).json({ message: "Token inválido ou expirado." });
             }
-            res.status(500).send('Erro inesperado na autenticação: ' + error);
+            res.status(500).send("Erro inesperado na autenticação: " + error);
         }
-
-
     }
 }
