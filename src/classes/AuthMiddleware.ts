@@ -12,8 +12,8 @@ export class AuthMiddleware {
         try {
             const ACCESS_SECRET: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
             const accessToken: string = req.headers[AuthMiddleware.headerToken] as string;
-          
-            if(accessToken == "" || accessToken == undefined){
+
+            if (accessToken == "" || accessToken == undefined) {
                 res.status(401).send('Token não informado');
                 return
             }
@@ -31,14 +31,19 @@ export class AuthMiddleware {
     }
 
     static async onlyAdmins(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const accessToken: string = req.headers[AuthMiddleware.headerToken] as string;
-        const payload: JwtPayload = jwt.decode(accessToken) as JwtPayload;
-        const user: User = await UserModel.getUserById(payload.userId);
+        try {
+            const accessToken: string = req.headers[AuthMiddleware.headerToken] as string;
+            const payload: JwtPayload = jwt.decode(accessToken) as JwtPayload;
+            const user: User = await UserModel.getUserById(payload.userId);
 
-        if(!user.isAdmin){
-            res.status(401).send('Usuário sem permissão')
-            return
+            if (!user.isAdmin) {
+                res.status(401).send('Usuário sem permissão');
+                return
+            }
+
+            next();
+        } catch (error) {
+            res.status(500).send("Erro de Middleware: " + error);
         }
-        next();
     }
 }
