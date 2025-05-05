@@ -1,8 +1,11 @@
 import app from "@/app/app.js";
 import { createDatabasePool } from "@/db/Database.js";
 import dotenv from "dotenv";
+import https from "https";
+import fs from "fs";
 import 'reflect-metadata';
 
+let Port = 80;
 let dbConfig = {
     user: "MvDB",
     password: process.env.DB_USER_PASS,
@@ -10,7 +13,6 @@ let dbConfig = {
     database: "MvDB", 
 };
 
-let Port = 80;
 
 if(process.env.NODE_ENV === undefined){
     dotenv.config();
@@ -25,8 +27,13 @@ if(process.env.NODE_ENV === undefined){
 
 const dbPool = createDatabasePool(dbConfig);
 
-app.listen(Port, () => {
-    console.log("server started at Port " + Port)
-})
+const httpsOptions = {
+    key: fs.readFileSync(process.env.SSL_KEY_PATH as string),
+    cert: fs.readFileSync(process.env.SSL_CERT_PATH as string),
+  };
+
+https.createServer(httpsOptions, app).listen(Port, () => {
+    console.log("Server started at Port " + Port)
+});
 
 export { dbPool }

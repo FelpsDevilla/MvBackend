@@ -11,7 +11,8 @@ import authRouter from "@/routes/AuthRoute";
 const app = express();
 
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
+
 app.use(cors({
     origin: 'http://localhost:4200', // Allow only this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
