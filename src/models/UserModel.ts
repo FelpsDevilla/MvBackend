@@ -1,6 +1,6 @@
 import { User } from "@/classes/User";
 import { Util } from "@/classes/Util";
-import { dbPool }  from "@/server.js";
+import { dbPool }  from "@/server/server.js";
 import { plainToInstance } from "class-transformer";
 
 export class UserModel {

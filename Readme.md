@@ -7,10 +7,12 @@ Este projeto foi desenvolvido em **Node.js** + **TypeScript**, utilizando arquit
 ## 🚀 Executando em Produção
 
 Para rodar o **MvBackend** com **PostgreSQL** em ambiente de produção, siga os passos abaixo:
+
 1. Copiar este [Docker Compose](docker-compose.yml)
-2. Gere certficado e uma chave SSL nomeando-os como `mv.crt` e `mv.key`
-3. Alterar o valor de `hostSSLPath` no **docker-compose.yml** para o diretório exato onde os arquivos do certificado estarão armazenados no host. Esse diretório será montado no container em `/etc/ssl/mvdb` com permissão de leitura e deve conter os arquivos gerados no passo anterior.
-4. Execute o Docker Compose. Se tudo estiver correto, o ambiente backend estará funcionando..
+2. Baixar este [Script sql](src/db/init.sql), colocar no mesmo diretório do Docker Compose.
+3. Gere um certficado e uma chave SSL nomeando-os como `mv.crt` e `mv.key`
+4. Alterar o valor de `hostSSLPath` no **docker-compose.yml** para o diretório exato onde os arquivos do certificado estarão armazenados no host. Esse diretório será montado no container em `/etc/ssl/mvdb` com permissão de leitura e deve conter os arquivos gerados no passo anterior.
+5. Execute o Docker Compose. Se tudo estiver correto, o ambiente backend estará funcionando..
 
 > [!WARNING]
 >  Certifique-se de alterar as variáveis de ambiente no Docker Compose.
