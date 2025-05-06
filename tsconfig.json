@@ -1,25 +1,27 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-      "target": "ES2022",
-      "module": "ESNext",
-      "strict": true,
-      "esModuleInterop": true,
-      "moduleResolution": "node",
-      "baseUrl": "./src",
-      "paths": {
-        "@/*": ["*", "dist/*"]
-      },
-      "outDir": "dist",
-      "noImplicitAny": true,
-      "noEmitOnError": true,
-      "sourceMap": true,
-      "skipLibCheck": true,
-      "resolveJsonModule": true,
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "strictPropertyInitialization": false
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
     },
-    "include": ["src/**/*"]
-  }
-  
+    "outDir": "dist",
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+  },
+  "include": ["src/**/*"]
+}
