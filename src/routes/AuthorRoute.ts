@@ -1,14 +1,12 @@
-import { AuthMiddleware } from "@/classes/AuthMiddleware.js";
-import { AuthorController } from "@/controllers/AuthorsController.js";
-import  express, { Router }  from "express";
+import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware.js";
+import { deleteAuthorRequest, getAllAuthorsRequest, getAuthorByIdRequest, insertAuthorRequest, updateAuthorRequest } from "@/controllers/AuthorsController.js";
+import express, { Router } from "express";
 
-const authorRouter: Router = express.Router();
-const url: string = "/authors";
+export const authorRouter: Router = express.Router();
+const url = "/authors";
 
-authorRouter.post(url, AuthMiddleware.auth, AuthorController.insertAuthor);
-authorRouter.get(url, AuthMiddleware.auth, AuthorController.getAllAuthors);
-authorRouter.get(`${url}/:id`, AuthMiddleware.auth, AuthorController.getAuthorById);
-authorRouter.put(`${url}/:id`, AuthMiddleware.auth, AuthorController.updateAuthor);
-authorRouter.delete(`${url}/:id`, AuthMiddleware.auth, AuthMiddleware.onlyAdmins,AuthorController.deleteAuthor);
-
-export default authorRouter;
+authorRouter.post(url, auth, insertAuthorRequest);
+authorRouter.get(url, auth, getAllAuthorsRequest);
+authorRouter.get(`${url}/:id`, auth, getAuthorByIdRequest);
+authorRouter.put(`${url}/:id`, auth, updateAuthorRequest);
+authorRouter.delete(`${url}/:id`, auth, onlyAdmins, deleteAuthorRequest);

@@ -1,9 +1,7 @@
-import { AuthControler } from "@/controllers/AuthController.js";
-import  express, { Router }  from "express";
+import { login, refresh } from "@/controllers/AuthController.js";
+import express, { Router } from "express";
 
-const authRouter: Router = express.Router();
+export const authRouter: Router = express.Router();
 
-authRouter.post("/login", AuthControler.login);
-authRouter.post("/refresh", AuthControler.refresh);
-
-export default authRouter;
+authRouter.post("/login", login);
+authRouter.post("/refresh", refresh);

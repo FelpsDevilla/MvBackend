@@ -1,14 +1,12 @@
-import { UserController } from "@/controllers/UserController.js";
+import { deleteUserRequest, getAllUsersRequest, getUserByIdRequest, insertUserRequest, updateUserRequest } from "@/controllers/UserController.js";
 import  express, { Router }  from "express";
-import { AuthMiddleware } from "@/classes/AuthMiddleware.js";
+import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware.js";
 
-const userRouter: Router = express.Router();
-const url: string = "/user";
+export const userRouter: Router = express.Router();
+const url = "/user";
 
-userRouter.post(url, AuthMiddleware.auth, AuthMiddleware.onlyAdmins, UserController.insertUser);
-userRouter.get(url, AuthMiddleware.auth, AuthMiddleware.onlyAdmins, UserController.getAllUsers);
-userRouter.get(`${url}/:id`, AuthMiddleware.auth, AuthMiddleware.onlyAdmins, UserController.getUserById);
-userRouter.put(`${url}/:id`, AuthMiddleware.auth, AuthMiddleware.onlyAdmins, UserController.updateUser);
-userRouter.delete(`${url}/:id`, AuthMiddleware.auth, AuthMiddleware.onlyAdmins, UserController.deleteUser);
-
-export default userRouter;
+userRouter.post(url, auth, onlyAdmins, insertUserRequest);
+userRouter.get(url, auth, onlyAdmins, getAllUsersRequest);
+userRouter.get(`${url}/:id`, auth, onlyAdmins, getUserByIdRequest);
+userRouter.put(`${url}/:id`, auth, onlyAdmins, updateUserRequest);
+userRouter.delete(`${url}/:id`, auth, onlyAdmins, deleteUserRequest);

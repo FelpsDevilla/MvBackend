@@ -1,6 +1,6 @@
 import https from "https";
 import fs from "fs";
-import config from "@/config";
+import { config } from "@/config";
 import app from "@/app/app";
 import { createDatabasePool } from "@/db/Database";
 

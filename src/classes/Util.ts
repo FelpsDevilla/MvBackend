@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt, { decode } from "jsonwebtoken";
 
 export class Util {
@@ -24,16 +24,8 @@ export class Util {
         return setClause;
     }
 
-    static getNonUndefinedEntries(obj: object): [string, any][] {
+    static getNonUndefinedEntries(obj: object): [string, string][] {
         const filteredEntries = Object.entries(obj).filter(([_, value]) => value != undefined || value != null);
         return filteredEntries
-    }
-
-    static async verifyJWT(req: Request, res: Response, next: Function){
-        const jwtSecret: string = process.env.JWT_SECRET as string;
-        const token: string = req.headers["x-acess-token"] as string;
-        const decoded = jwt.verify(token, jwtSecret)
-        
-        next();
     }
 }

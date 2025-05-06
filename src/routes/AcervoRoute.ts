@@ -1,20 +1,13 @@
-import { AuthMiddleware } from "@/classes/AuthMiddleware";
-import { AcervoController } from "@/controllers/AcervoController.js";
-import  express, { Router }  from "express";
-import multer from "multer"
-import fs from "fs";
+import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware";
+import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRequest, updateItemRequest, uploadImageRequest } from "@/controllers/AcervoController.js";
+import express, { Router } from "express";
+import { acervoUpload } from "@/middlewares/upload/acervoUpload";
 
-const acervoRouter: Router = express.Router();
-const storagePath: string = "public/data/uploads/acervo";
-const url: string = "/acervo";
+export const acervoRouter: Router = express.Router();
+const url = "/acervo";
 
-const upload: multer.Multer = multer({dest: storagePath});
-
-acervoRouter.post(url, AuthMiddleware.auth, AcervoController.insertItem);
-acervoRouter.post(`${url}/image`, AuthMiddleware.auth, upload.single("image"));
-acervoRouter.get(url, AcervoController.getAllItens);
-acervoRouter.get(`${url}/:id`, AuthMiddleware.auth, AcervoController.getItemById);
-acervoRouter.put(`${url}/:id`, AuthMiddleware.auth, AcervoController.updateItem);
-acervoRouter.delete(`${url}/:id`, AuthMiddleware.auth, AuthMiddleware.onlyAdmins, AcervoController.deleteItem);
-
-export default acervoRouter;
+acervoRouter.post(url,  acervoUpload.single("image"), insertItemRequest);
+acervoRouter.get(url, getAllItensRequest);
+acervoRouter.get(`${url}/:id`, auth, getItemByIdRequest);
+acervoRouter.put(`${url}/:id`, auth, updateItemRequest);
+acervoRouter.delete(`${url}/:id`, auth, onlyAdmins, deleteItemRequest);

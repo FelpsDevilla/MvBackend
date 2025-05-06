@@ -1,14 +1,12 @@
-import { AuthMiddleware } from "@/classes/AuthMiddleware.js";
-import { LivrariaController } from "@/controllers/LivrariaController.js";
+import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware.js";
+import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRequest, updateItemRequest } from "@/controllers/LivrariaController.js";
 import  express, { Router }  from "express";
 
-const livrariaRouter: Router = express.Router();
-const url: string = "/livraria";
+export const livrariaRouter: Router = express.Router();
+const url = "/livraria";
 
-livrariaRouter.post(url, AuthMiddleware.auth,LivrariaController.insertItem);
-livrariaRouter.get(url, LivrariaController.getAllItens);
-livrariaRouter.get(`${url}/:id`, AuthMiddleware.auth, LivrariaController.getItemById);
-livrariaRouter.put(`${url}/:id`, AuthMiddleware.auth, LivrariaController.updateItem);
-livrariaRouter.delete(`${url}/:id`, AuthMiddleware.auth, AuthMiddleware.onlyAdmins, LivrariaController.deleteItem);
-
-export default livrariaRouter;
+livrariaRouter.post(url, auth,insertItemRequest);
+livrariaRouter.get(url, getAllItensRequest);
+livrariaRouter.get(`${url}/:id`, auth, getItemByIdRequest);
+livrariaRouter.put(`${url}/:id`, auth, updateItemRequest);
+livrariaRouter.delete(`${url}/:id`, auth, onlyAdmins, deleteItemRequest);

@@ -1,67 +1,66 @@
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { AcervoItem } from "@/classes/AcervoItem.js";
-import { AcervoModel } from "@/models/AcervoModel.js";
+import { deleteItemById, getAllItens, getItemById, insertItem, updateItem } from "@/models/AcervoModel.js";
 
+export async function insertItemRequest(req: Request, res: Response): Promise<void> {
+  try {
+    const item: AcervoItem = plainToInstance(AcervoItem, req.body);
 
-export class AcervoController {
+    await insertItem(item);
 
-  static async insertItem(req: Request, res: Response): Promise<void> {
-    try {
-      const item: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem)
-      await AcervoModel.insertItem(item);
-
-      res.status(200).send("Adcionado!");
-    } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
-    }
+    res.status(200).send("Adcionado!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
   }
+}
 
-  static async getAllItens(req: Request, res: Response): Promise<void> {
-    try {
-      const items = await AcervoModel.getAllItens();
+export async function getAllItensRequest(_: Request, res: Response): Promise<void> {
+  try {
+    const items = await getAllItens();
 
-      res.status(200).json(items);
-    } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar itens" });
-    }
+    res.status(200).json(items);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao buscar itens" });
   }
+}
 
-  static async getItemById(req: Request, res: Response): Promise<void> {
-    try {
-      const id = Number(req.params.id);
-      const item = await AcervoModel.getItemById(id);
+export async function getItemByIdRequest(req: Request, res: Response): Promise<void> {
+  try {
+    const id = Number(req.params.id);
+    const item = await getItemById(id);
 
-      res.status(200).json(item);
-    } catch (error) {
-      res.status(500).json({ error: "Id incorreto" });
-    }
+    res.status(200).json(item);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Id incorreto" });
   }
+}
 
 
-  static async updateItem(req: Request, res: Response): Promise<void> {
-    try {
-      const updatedItem: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem);
-      const id = Number(req.params.id);
+export async function updateItemRequest(req: Request, res: Response): Promise<void> {
+  try {
+    const updatedItem: AcervoItem = plainToInstance(AcervoItem, req.body as AcervoItem);
+    const id = Number(req.params.id);
 
-      await AcervoModel.updateItem(id, updatedItem);
-      res.status(200).send("Alterado!");
-    } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
-    }
+    await updateItem(id, updatedItem);
+    res.status(200).send("Alterado!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
   }
+}
 
-  static async deleteItem(req: Request, res: Response): Promise<void> {
-    try {
-      const id = Number(req.params.id);
+export async function deleteItemRequest(req: Request, res: Response): Promise<void> {
+  try {
+    const id = Number(req.params.id);
 
-      await AcervoModel.deleteItemById(id);
-      res.status(200).send("Excluido!");
-    } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
-    }
+    await deleteItemById(id);
+    res.status(200).send("Excluido!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
   }
 }

@@ -1,7 +1,7 @@
 import pkg from "pg";
 const { Pool } = pkg;
 
-const createDatabasePool = (dbConfig: {
+export const createDatabasePool = (dbConfig: {
   user?: string;
   password?: string;
   host?: string;
@@ -10,5 +10,3 @@ const createDatabasePool = (dbConfig: {
   const dbPool = new Pool(dbConfig);
   return dbPool;
 };
-
-export { createDatabasePool };

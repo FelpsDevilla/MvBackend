@@ -2,51 +2,49 @@ import { Util } from "@/classes/Util.js";
 import { AcervoItem } from "@/classes/AcervoItem.js";
 import { dbPool }  from "@/server/server.js";
 
-export class AcervoModel {
-  private static table = "acervo";
+  const table = "acervo";
 
-  static async insertItem(item: AcervoItem): Promise<void> {
+  export async function insertItem(item: AcervoItem): Promise<void> {
     const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);
     const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
     const values: string[] = Util.objectValuestoDbValues(filtredEntries);
     const placeholders = Util.buildPlaceholders(values);
 
     const query: {text: string, values: string[]} = {
-      text: `INSERT INTO ${this.table} (${columns.toString()}) VALUES (${placeholders})`,
+      text: `INSERT INTO ${table} (${columns.toString()}) VALUES (${placeholders})`,
       values: values,
     };
     await dbPool.query(query);
   }
 
-  static async getAllItens(): Promise<any[]> {
-    const res = await dbPool.query(`SELECT * FROM ${this.table}`);
+  export async function getAllItens(): Promise<any[]> {
+    const res = await dbPool.query(`SELECT * FROM ${table}`);
     
     return res.rows;
   }
 
-  static async getItemById(id: number): Promise<any[]> {
-    const res = await dbPool.query(`SELECT * FROM ${this.table} WHERE ID = ${id}`);
+  export async function getItemById(id: number): Promise<any[]> {
+    const res = await dbPool.query(`SELECT * FROM ${table} WHERE ID = ${id}`);
     
     return res.rows;
   }
 
-  static async updateItem(id: number, updatedItem: AcervoItem): Promise<void> {
+  export async function updateItem(id: number, updatedItem: AcervoItem): Promise<void> {
     const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updatedItem);
     const setClause: string = Util.buildUpdateSetClause(filtredEntries);
     const values: string[] = Util.objectValuestoDbValues(filtredEntries);
 
     const query: {text: string, values: string[]} = {
-      text: `UPDATE ${this.table} SET ${setClause} WHERE ID = ${id}`,
+      text: `UPDATE ${table} SET ${setClause} WHERE ID = ${id}`,
       values: values
     };
     await dbPool.query(query);
   }
 
-  static async deleteItemById(id: number): Promise<void> {
+  export async function deleteItemById(id: number): Promise<void> {
     const query = {
-      text: `DELETE FROM ${this.table} WHERE ID = $1`,
+      text: `DELETE FROM ${table} WHERE ID = $1`,
       values: [id]
     }
     await dbPool.query(query);
   }
-}

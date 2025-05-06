@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 
-const isDev = process.env.NODE_ENV == undefined;
+const isDev: boolean = process.env.NODE_ENV == undefined;
 
 if (isDev) {
   console.log("Server running in Developer Mode");
   dotenv.config();
 }
 
-const config = {
+export const config = {
   port: isDev ? parseInt(process.env.SERVER_PORT || "443") : 443,
 
   db: {
@@ -22,5 +22,3 @@ const config = {
     certPath: isDev ? "./SSL/mv.crt" : "/etc/ssl/mv/mv.crt",
   },
 };
-
-export default config;

@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"
-import acervoRouter from "@/routes/AcervoRoute.js";
-import authorRouter from "@/routes/AuthorRoute.js";
-import collectionRouter from "@/routes/CollectionsRoute.js";
-import livrariaRouter from "@/routes/LivrariaRoute.js";
-import userRouter from "@/routes/UsersRoute.js";
-import authRouter from "@/routes/AuthRoute";
+import { acervoRouter } from "@/routes/AcervoRoute.js";
+import { authorRouter } from "@/routes/AuthorRoute.js";
+import { collectionRouter } from "@/routes/CollectionsRoute.js";
+import { livrariaRouter } from "@/routes/LivrariaRoute.js";
+import { userRouter } from "@/routes/UsersRoute.js";
+import { authRouter } from "@/routes/AuthRoute";
 
 const app = express();
 

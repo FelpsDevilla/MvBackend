@@ -1,65 +1,64 @@
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { LivrariaItem } from "@/classes/LivrariaItem.js";
-import { LivrariaModel } from "@/models/LivrariaModel.js";
+import { deleteItemById, getAllItens, getItemById, insertItem, updateItem } from "@/models/LivrariaModel.js";
 
-export class LivrariaController {
+export async function insertItemRequest(req: Request, res: Response): Promise<void> {
+  try {
+    const item: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem);
+    await insertItem(item);
 
-  static async insertItem(req: Request, res: Response): Promise<void> {
-    try {
-      const item: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem);
-      await LivrariaModel.insertItem(item);
-
-      res.status(201).send("Adcionado item!");
-    } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
-    }
+    res.status(201).send("Adcionado item!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
   }
+}
 
-  static async getAllItens(req: Request, res: Response): Promise<void> {
-    try {
-      const items = await LivrariaModel.getAllItens();
-      
-      res.status(200).json(items);
-    } catch (error) {
-      res.status(500).json({ error: "Erro ao buscar itens" });
-    }
+export async function getAllItensRequest(_: Request, res: Response): Promise<void> {
+  try {
+    const items = await getAllItens();
+
+    res.status(200).json(items);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao buscar itens" });
   }
+}
 
-  static async getItemById(req: Request, res: Response): Promise<void> {
-    try {
-      const id = Number(req.params.id);
-      const item = await LivrariaModel.getItemById(id);
+export async function getItemByIdRequest(req: Request, res: Response): Promise<void> {
+  try {
+    const id = Number(req.params.id);
+    const item = await getItemById(id);
 
-      res.status(200).json(item);
-    } catch (error) {
-      res.status(500).json({ error: "Id incorreto" });
-    }
+    res.status(200).json(item);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Id incorreto" });
   }
+}
 
 
-  static async updateItem(req: Request, res: Response): Promise<void> {
-    try {
-      const updatedItem: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem);
-      const id = Number(req.params.id);
+export async function updateItemRequest(req: Request, res: Response): Promise<void> {
+  try {
+    const updatedItem: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem);
+    const id = Number(req.params.id);
 
-      await LivrariaModel.updateItem(id, updatedItem);
-      res.status(200).send("Alterado Item id: " + id);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
-    }
+    await updateItem(id, updatedItem);
+    res.status(200).send("Alterado Item id: " + id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
   }
+}
 
-  static async deleteItem(req: Request, res: Response): Promise<void> {
-    try {
-      const id = Number(req.params.id);
-      await LivrariaModel.deleteItemById(id);
-      res.status(200).send("Item deletado!");
-    } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
-    }
+export async function deleteItemRequest(req: Request, res: Response): Promise<void> {
+  try {
+    const id = Number(req.params.id);
+    await deleteItemById(id);
+    res.status(200).send("Item deletado!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
   }
 }
