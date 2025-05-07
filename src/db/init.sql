@@ -2,7 +2,7 @@
 
 CREATE USER "MvDB" WITH PASSWORD :'secretPassword';
 
-CREATE DATABASE MvDB
+CREATE DATABASE "MvDB"
     WITH
     OWNER = "MvDB"
     ENCODING = 'UTF8'
@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS collections (
     name VARCHAR NOT NULL,
     author_id INT REFERENCES authors(id),
     description TEXT,
-    created_at DATE DEFAULT CURRENT_DATE,
-    updated_at DATE DEFAULT CURRENT_DATE
+    created_at DATE,
+    updated_at DATE
 );
 
 CREATE TABLE IF NOT EXISTS acervo (
@@ -32,15 +32,15 @@ CREATE TABLE IF NOT EXISTS acervo (
     legend TEXT,
     technique VARCHAR,
     material VARCHAR,
-    digitalized BOOLEAN,
+    is_digitalized BOOLEAN,
     state VARCHAR,
     author_id INT REFERENCES authors(id),
     collection_id INT REFERENCES collections(id),
     donor VARCHAR,
     context_history TEXT,
-    thumbnail_url VARCHAR,
-    created_at DATE DEFAULT CURRENT_DATE,
-    updated_at DATE DEFAULT CURRENT_DATE
+    image_path VARCHAR,
+    created_at DATE,
+    updated_at DATE
 );
 
 CREATE TABLE IF NOT EXISTS livraria (
@@ -55,9 +55,9 @@ CREATE TABLE IF NOT EXISTS livraria (
     collection_id INT REFERENCES collections(id),
     donor VARCHAR,
     context_history TEXT,
-    thumbnail_url VARCHAR,
-    created_at DATE DEFAULT CURRENT_DATE,
-    updated_at DATE DEFAULT CURRENT_DATE
+    image_path VARCHAR,
+    created_at DATE,
+    updated_at DATE
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -65,6 +65,6 @@ CREATE TABLE IF NOT EXISTS users (
     cpf VARCHAR(11) NOT NULL UNIQUE,
     name VARCHAR,
     password VARCHAR,
-    is_active BOOLEAN DEFAULT TRUE,
+    is_active BOOLEAN DEFAULT FALSE,
     is_admin BOOLEAN DEFAULT FALSE
 );

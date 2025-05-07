@@ -1,52 +1,69 @@
 import { Expose } from "class-transformer";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
 
-export class AcervoItem{
+@Entity({ name: 'acervo' })
+export class AcervoItem {
     @Expose()
+    @PrimaryGeneratedColumn()
     id: number;
-    
+
     @Expose()
+    @Column({ type: 'varchar' })
     city: string;
 
-    @Expose({ name: 'object_name' })
+    @Expose()
+    @Column({ name: 'object_name', type: 'varchar' })
     objectName: string;
-    
-    @Expose({ name: 'creation_date' })
+
+    @Expose()
+    @Column({ name: 'creation_date', type: 'date' })
     creationDate: Date;
 
     @Expose()
-    legend: string;
-    
-    @Expose({ name: 'thumbnail_url' })
-    thumbnailUrl: string;
-
-    @Expose()
-    state: string;
-
-    @Expose({ name: 'author_id' })
-    authorId: number;
-
-    @Expose({ name: 'collection_id' })
-    collectionId: number;
-
-    @Expose()
-    donor: string;
-
-    @Expose({ name: 'context_history' })
-    contextHistory: string;
-
-    @Expose({ name: 'created_at' })
-    createdAt: Date;
-
-    @Expose({ name: 'updated_at'})
-    updatedAt: Date;
-    
-    @Expose()
+    @Column({ type: 'varchar' })
     technique: string;
 
     @Expose()
+    @Column({ type: 'varchar' })
     material: string;
-    
+
     @Expose()
-    digitalized: boolean;
-    
+    @Column({ type: 'varchar' })
+    legend: string;
+
+    @Expose()
+    @Column({ name: 'is_digitalized', type: 'boolean' })
+    isDigitalized: boolean;
+
+    @Expose()
+    @Column({ name: 'image_path', type: 'varchar' })
+    imagePath: string;
+
+    @Expose()
+    @Column({ type: 'varchar' })
+    state: string;
+
+    @Expose()
+    @Column({ name: 'author_id', type: 'integer' })
+    authorId: number;
+
+    @Expose()
+    @Column({ name: 'collection_id', type: 'integer' })
+    collectionId: number;
+
+    @Expose()
+    @Column({ type: 'varchar' })
+    donor: string;
+
+    @Expose()
+    @Column({ name: 'context_history', type: 'varchar' })
+    contextHistory: string;
+
+    @Expose()
+    @Column({ name: 'created_at', type: 'date' })
+    createdAt: Date;
+
+    @Expose()
+    @Column({ name: 'updated_at', type: 'date' })
+    updatedAt: Date;
 }

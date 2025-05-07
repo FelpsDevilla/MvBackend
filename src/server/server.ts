@@ -2,9 +2,15 @@ import https from "https";
 import fs from "fs";
 import { config } from "@/config";
 import app from "@/app/app";
-import { createDatabasePool } from "@/db/Database";
+import { AppDataSource } from "@/db/data-source";
 
-export const dbPool = createDatabasePool(config.db);
+AppDataSource
+  .initialize()
+  .then(()=>{
+    console.log("Data Source has been initialized!")
+  }).catch((err) => {
+    console.error("Error during Data Source initialization:", err)
+})
 
 export function startServer() {
   const { keyPath, certPath } = config.ssl;

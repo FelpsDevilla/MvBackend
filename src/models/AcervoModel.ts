@@ -1,50 +1,40 @@
-import { Util } from "@/classes/Util.js";
 import { AcervoItem } from "@/classes/AcervoItem.js";
-import { dbPool }  from "@/server/server.js";
+import { AppDataSource } from "@/db/data-source";
 
-  const table = "acervo";
 
-  export async function insertItem(item: AcervoItem): Promise<void> {
-    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);
-    const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
-    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
-    const placeholders = Util.buildPlaceholders(values);
+export async function insertItem(item: AcervoItem): Promise<void> {
+  const itemDB = AppDataSource.getRepository(AcervoItem).create(item);
+  await AppDataSource.getRepository(AcervoItem).save(itemDB);
 
-    const query: {text: string, values: string[]} = {
-      text: `INSERT INTO ${table} (${columns.toString()}) VALUES (${placeholders})`,
-      values: values,
-    };
-    await dbPool.query(query);
+}
+
+export async function getAllItens(): Promise<AcervoItem[]> {
+  const itens: AcervoItem[] = await AppDataSource.getRepository(AcervoItem).find();
+  if (itens.length === 0) {
+    throw Error("Nenhum item encontrado");
+  }
+  return itens;
+}
+
+export async function getItemById(id: number): Promise<AcervoItem> {
+  const item: AcervoItem | null = await AppDataSource.getRepository(AcervoItem).findOneBy({ id: id });
+  if (!item) {
+    throw Error("Nenhum item encontrado");
+  }
+  return item;
+}
+
+export async function updateItem(id: number, updatedItem: AcervoItem): Promise<void> {
+  const itemDB = await AppDataSource.getRepository(AcervoItem).findOneBy({ id: id, });
+
+  if (!itemDB) {
+    throw Error("Nenhum item encontrado");
   }
 
-  export async function getAllItens(): Promise<any[]> {
-    const res = await dbPool.query(`SELECT * FROM ${table}`);
-    
-    return res.rows;
-  }
+  AppDataSource.getRepository(AcervoItem).merge(itemDB, updatedItem);
+  await AppDataSource.getRepository(AcervoItem).save(itemDB);
+}
 
-  export async function getItemById(id: number): Promise<any[]> {
-    const res = await dbPool.query(`SELECT * FROM ${table} WHERE ID = ${id}`);
-    
-    return res.rows;
-  }
-
-  export async function updateItem(id: number, updatedItem: AcervoItem): Promise<void> {
-    const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updatedItem);
-    const setClause: string = Util.buildUpdateSetClause(filtredEntries);
-    const values: string[] = Util.objectValuestoDbValues(filtredEntries);
-
-    const query: {text: string, values: string[]} = {
-      text: `UPDATE ${table} SET ${setClause} WHERE ID = ${id}`,
-      values: values
-    };
-    await dbPool.query(query);
-  }
-
-  export async function deleteItemById(id: number): Promise<void> {
-    const query = {
-      text: `DELETE FROM ${table} WHERE ID = $1`,
-      values: [id]
-    }
-    await dbPool.query(query);
-  }
+export async function deleteItemById(id: number): Promise<void> {
+  await AppDataSource.getRepository(AcervoItem).delete(id);
+}

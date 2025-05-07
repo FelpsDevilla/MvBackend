@@ -1,6 +1,4 @@
 import { Author } from "@/classes/Author.js";
-import { Util } from "@/classes/Util.js";
-import { dbPool } from "@/server/server.js";
 
 const table = "authors";
 

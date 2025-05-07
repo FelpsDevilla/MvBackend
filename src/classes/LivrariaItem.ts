@@ -1,46 +1,61 @@
 import { Expose } from "class-transformer";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class LivrariaItem {
-    @Expose()
-    id: number;
-    
-    @Expose()
-    city: string;
+  @Expose()
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Expose({ name: 'object_name' })
-    objectName: string;
-    
-    @Expose({ name: 'creation_date' })
-    creationDate: Date;
+  @Expose()
+  @Column({ type: 'varchar' })
+  city: string;
 
-    @Expose()
-    legend: string;
-    
-    @Expose({ name: 'thumbnail_url' })
-    thumbnailUrl: string;
+  @Expose()
+  @Column({ name: 'object_name', type: 'varchar' })
+  objectName: string;
 
-    @Expose()
-    state: string;
+  @Expose()
+  @Column({ name: 'creation_date', type: 'date' })
+  creationDate: Date;
 
-    @Expose({ name: 'author_id' })
-    authorId: number;
+  @Expose()
+  @Column({ type: 'varchar' })
+  legend: string;
 
-    @Expose({ name: 'collection_id' })
-    collectionId: number;
+  @Expose()
+  @Column({ name: 'image_path', type: 'varchar' })
+  imagePath: string;
 
-    @Expose()
-    donor: string;
+  @Expose()
+  @Column({ type: 'varchar' })
+  state: string;
 
-    @Expose({ name: 'context_history' })
-    contextHistory: string;
+  @Expose()
+  @Column({ name: 'author_id', type: 'integer' })
+  authorId: number;
 
-    @Expose({ name: 'created_at' })
-    createdAt: Date;
+  @Expose()
+  @Column({ name: 'collection_id', type: 'integer' })
+  collectionId: number;
 
-    @Expose({ name: 'updated_at'})
-    updatedAt: Date;
-    
-    @Expose({ name:'digitalization_technique'})
-    digitalizationTechnique: string
+  @Expose()
+  @Column({ type: 'varchar' })
+  donor: string;
 
+  @Expose()
+  @Column({ name: 'context_history', type: 'varchar' })
+  contextHistory: string;
+
+  @Expose()
+  @Column({ name: 'created_at', type: 'date' })
+  createdAt: Date;
+
+  @Expose()
+  @Column({ name: 'updated_at', type: 'date' })
+  updatedAt: Date;
+
+  @Expose()
+  @Column({ name: 'digitalization_technique', type: 'varchar' })
+  digitalizationTechnique: string;
 }

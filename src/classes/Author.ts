@@ -1,10 +1,13 @@
 import { Expose } from "class-transformer";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-export class Author{
+@Entity()
+export class Author {
+    @Expose()
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Expose()
-    id: number
-
-    @Expose()
-    name: string
+    @Column({type: 'varchar'})
+    name: string;
 }

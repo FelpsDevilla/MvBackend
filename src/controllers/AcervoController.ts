@@ -6,9 +6,9 @@ import { deleteItemById, getAllItens, getItemById, insertItem, updateItem } from
 export async function insertItemRequest(req: Request, res: Response): Promise<void> {
   try {
     const item: AcervoItem = plainToInstance(AcervoItem, req.body);
-
+    item.imagePath = req.file?.path as string;
+    
     await insertItem(item);
-
     res.status(200).send("Adcionado!");
   } catch (error) {
     console.error(error);
@@ -22,8 +22,9 @@ export async function getAllItensRequest(_: Request, res: Response): Promise<voi
 
     res.status(200).json(items);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao buscar itens" });
+    if(error instanceof Error){
+      res.status(500).json({ error: error.message });
+    }
   }
 }
 

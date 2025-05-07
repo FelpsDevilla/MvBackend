@@ -1,17 +1,29 @@
 import { Expose } from "class-transformer";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class Collection {
-    
     @Expose()
+    @PrimaryGeneratedColumn()
     readonly id: number;
+
     @Expose()
+    @Column({ type: 'varchar' })
     readonly name: string;
-    @Expose({ name:'author_id'})
-    readonly authorId: number;
+
     @Expose()
+    @Column({ name: 'author_id', type: 'integer' })
+    readonly authorId: number;
+
+    @Expose()
+    @Column({ type: 'varchar' })
     readonly description: string;
-    @Expose({ name:'created_at'})
+
+    @Expose()
+    @Column({ name: 'created_at', type: 'date' })
     readonly createdAt: Date;
-    @Expose({ name: 'updated_at' })
+
+    @Expose()
+    @Column({ name: 'updated_at', type: 'date'})
     readonly updatedAt: Date;
 }

@@ -1,4 +1,10 @@
+import { AcervoItem } from "@/classes/AcervoItem";
+import { Author } from "@/classes/Author";
+import { LivrariaItem } from "@/classes/LivrariaItem";
+import { User } from "@/classes/User";
 import dotenv from "dotenv";
+import 'reflect-metadata';
+import { Collection } from "typeorm";
 
 const isDev: boolean = process.env.NODE_ENV == undefined;
 
@@ -11,10 +17,17 @@ export const config = {
   port: isDev ? parseInt(process.env.SERVER_PORT || "443") : 443,
 
   db: {
-    user: isDev ? (process.env.DB_USER as string) : "MvDB",
-    password: process.env.DB_USER_PASS as string,
+    type: "postgres",
     host: isDev ? (process.env.DB_IP as string) : "mvdb",
+    port: 5432,
+    username: isDev ? (process.env.DB_USER as string) : "MvDB",
+    password: process.env.DB_USER_PASS as string,
     database: "MvDB",
+    synchronize: false,
+    logging: false,
+    entities: [AcervoItem, Author, Collection, User, LivrariaItem, "src/classes/*.js"],
+    subscribers: [],
+    migrations: [],
   },
 
   ssl: {
