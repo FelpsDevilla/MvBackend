@@ -1,53 +1,37 @@
 import { Collection } from "@/classes/Collection";
-
-const table = "collections";
+import { AppDataSource } from "@/db/data-source";
 
 export async function insertCollection(collection: Collection): Promise<void> {
+  const collectionDB = AppDataSource.getRepository(Collection).create(collection);
+  await AppDataSource.getRepository(Collection).save(collectionDB);
+};
 
-  const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(collection);
-  console.log(filtredEntries)
-  const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
-  const values: string[] = Util.objectValuestoDbValues(filtredEntries);
-  const placeholders = Util.buildPlaceholders(values);
-
-  const query: { text: string, values: string[] } = {
-    text: `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`,
-    values: values,
-  };
-
-  await dbPool.query(query);
+export async function getAllCollections(): Promise<Collection[]> {
+  const collections: Collection[] = await AppDataSource.getRepository(Collection).find();
+  if (collections.length === 0) {
+    throw Error("No collections found");
+  }
+  return collections;
 }
 
-export async function getAllCollections(): Promise<any[]> {
-  const res = await dbPool.query(`SELECT * FROM ${table}`);
-  return res.rows;
+export async function getCollectionById(id: number): Promise<Collection> {
+  const collection: Collection | null = await AppDataSource.getRepository(Collection).findOneBy({ id: id });
+  if (!collection) {
+    throw Error("No collection found");
+  }
+  return collection;
 }
 
-export async function getCollectionById(id: number): Promise<any[]> {
-  const res = await dbPool.query(`SELECT * FROM ${table} WHERE ID = ${id}`);
-  return res.rows;
-}
+export async function updateCollection(id: number, updateCollection: Collection): Promise<void> {
+  const collectionDb = await AppDataSource.getRepository(Collection).findOneBy({ id: id, });
+  if (!collectionDb) {
+    throw Error("Collection not found");
+  }
 
-export async function updateCollection(id: Number, updateCollection: Collection): Promise<void> {
-
-  const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updateCollection);
-  const setClause: string = Util.buildUpdateSetClause(filtredEntries);
-  const values: string[] = Util.objectValuestoDbValues(filtredEntries);
-
-  const query: { text: string, values: string[] } = {
-    text: `UPDATE ${table} SET ${setClause} WHERE ID = ${id}`,
-    values: values
-  };
-
-  await dbPool.query(query);
+  AppDataSource.getRepository(Collection).merge(collectionDb, updateCollection);
+  await AppDataSource.getRepository(Collection).save(collectionDb);
 }
 
 export async function deleteCollectionById(id: number): Promise<void> {
-
-  const query: { text: string, values: number[] } = {
-    text: `DELETE FROM ${table} WHERE id = $1`,
-    values: [id]
-  }
-
-  await dbPool.query(query);
+  await AppDataSource.getRepository(Collection).delete(id);
 }

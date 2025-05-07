@@ -9,7 +9,7 @@ export class User {
 
   @Expose()
   @Column({type: 'varchar', length: 11, unique: true})
-  readonly cpf: number;
+  readonly cpf: string;
 
   @Expose()
   @Column({type: 'varchar'})

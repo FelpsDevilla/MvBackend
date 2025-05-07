@@ -1,50 +1,39 @@
 import { LivrariaItem } from "@/classes/LivrariaItem.js";
-
-const table = "livraria";
+import { AppDataSource } from "@/db/data-source";
 
 export async function insertItem(item: LivrariaItem): Promise<void> {
+  const itemDb = AppDataSource.getRepository(LivrariaItem).create(item);
+  await AppDataSource.getRepository(LivrariaItem).save(itemDb);
+};
 
-  const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(item);
-  const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
-  const values: string[] = filtredEntries.map(([_, value]) => value);
-  const placeholders = Util.buildPlaceholders(values);
 
-  const query: { text: string, values: string[] } = {
-    text: `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`,
-    values: values,
-  };
-
-  await dbPool.query(query);
+export async function getAllItens(): Promise<LivrariaItem[]> {
+    const books: LivrariaItem[] = await AppDataSource.getRepository(LivrariaItem).find();
+    if (books.length === 0) {
+      throw Error("No items found");
+    }
+    return books;
 }
 
-export async function getAllItens(): Promise<any[]> {
-  const res = await dbPool.query(`SELECT * FROM ${table}`);
-  return res.rows;
-}
-
-export async function getItemById(id: number): Promise<any[]> {
-  const res = await dbPool.query(`SELECT * FROM ${table} WHERE ID = ${id}`);
-  return res.rows;
+export async function getItemById(id: number): Promise<LivrariaItem> {
+    const book: LivrariaItem | null = await AppDataSource.getRepository(LivrariaItem).findOneBy({ id: id });
+      if (!book) {
+        throw Error("No book found");
+      }
+      return book;
 }
 
 export async function updateItem(id: number, updatedItem: LivrariaItem): Promise<void> {
+  const bookDb = await AppDataSource.getRepository(LivrariaItem).findOneBy({ id: id, });
 
-  const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updatedItem);
-  const setClause: string = Util.buildUpdateSetClause(filtredEntries);
-  const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+  if (!bookDb) {
+    throw Error("No book found");
+  }
 
-  const query = {
-    text: `UPDATE ${table} SET ${setClause} WHERE ID = ${id}`,
-    values: values
-  };
-
-  await dbPool.query(query);
+  AppDataSource.getRepository(LivrariaItem).merge(bookDb, updatedItem);
+  await AppDataSource.getRepository(LivrariaItem).save(bookDb);
 }
 
 export async function deleteItemById(id: number): Promise<void> {
-  const query: { text: string, values: number[] } = {
-    text: `DELETE FROM ${table} WHERE id = $1`,
-    values: [id]
-  }
-  await dbPool.query(query);
+  await AppDataSource.getRepository(LivrariaItem).delete(id);
 }

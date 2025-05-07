@@ -1,74 +1,46 @@
 import { User } from "@/classes/User";
-import { plainToInstance } from "class-transformer";
-
-const table = "users";
+import { AppDataSource } from "@/db/data-source";
 
 export async function insertUser(user: User): Promise<void> {
-
-  const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(user);
-  const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
-  const values: string[] = filtredEntries.map(([_, value]) => value);
-  const placeholders = Util.buildPlaceholders(values);
-
-  const query: { text: string, values: string[] } = {
-    text: `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`,
-    values: values,
-  };
-
-  await dbPool.query(query);
-}
+  const userDb = AppDataSource.getRepository(User).create(user);
+  await AppDataSource.getRepository(User).save(userDb);
+};
 
 export async function getAllUsers(): Promise<User[]> {
-  const res = await dbPool.query(`SELECT * FROM ${table}`);
-  const users: User[] = plainToInstance(User, res.rows)
+  const users: User[] = await AppDataSource.getRepository(User).find();
+  if (users.length === 0) {
+    throw Error("No users found");
+  }
   return users;
 }
 
 export async function getUserById(id: number): Promise<User> {
-  const res = await dbPool.query(`SELECT * FROM ${table} WHERE ID = ${id}`);
-  const user: User = plainToInstance(User, res.rows[0] as User);
-
+  const user: User | null = await AppDataSource.getRepository(User).findOneBy({ id: id });
   if (!user) {
-    //throw new Error("Usuário não encontrado");
+    throw Error("No user found");
   }
-
   return user;
 }
 
-export async function getUserBycpf(cpf: number): Promise<User> {
-
-  const query: { text: string, values: Number[] } = {
-    text: 'SELECT * FROM users WHERE cpf = $1',
-    values: [cpf]
-  };
-
-  const res = await dbPool.query(query);
-  const user: User = plainToInstance(User, res.rows[0] as User);
-
+export async function getUserBycpf(cpf: string): Promise<User> {
+  const user: User | null = await AppDataSource.getRepository(User).findOneBy({ cpf: cpf });
   if (!user) {
-    throw new Error("Usuário não encontrado");
+    throw Error("No user found");
   }
-
   return user;
 }
 
 export async function updateUser(id: number, updatedUser: User): Promise<void> {
+  const userDb = await AppDataSource.getRepository(User).findOneBy({ id: id, });
 
-  const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updatedUser);
-  const setClause: string = Util.buildUpdateSetClause(filtredEntries);
-  const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+  if (!userDb) {
+    throw Error("No user found");
+  }
 
-  const query: { text: string, values: string[] } = {
-    text: `UPDATE ${table} SET ${setClause} WHERE ID = ${id}`,
-    values: values
-  };
-  await dbPool.query(query);
+  AppDataSource.getRepository(User).merge(userDb, updatedUser);
+  await AppDataSource.getRepository(User).save(userDb);
 }
 
 export async function deleteUserById(id: number): Promise<void> {
-  const query = {
-    text: `DELETE FROM ${table} WHERE id = $1`,
-    values: [id]
-  }
-  await dbPool.query(query);
+  await AppDataSource.getRepository(User).delete(id);
 }

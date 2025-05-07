@@ -1,53 +1,38 @@
 import { Author } from "@/classes/Author.js";
-
-const table = "authors";
+import { AppDataSource } from "@/db/data-source";
 
 export async function insertAuthor(author: Author): Promise<void> {
-
-  const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(author);
-  const columns: string[] = Util.objectKeysToDbColumns(filtredEntries);
-  const values: string[] = filtredEntries.map(([_, value]) => value);
-  const placeholders = Util.buildPlaceholders(values);
-
-  const query: { text: string, values: string[] } = {
-    text: `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`,
-    values: values,
-  };
-
-  await dbPool.query(query);
+  const authorDb = AppDataSource.getRepository(Author).create(author);
+  await AppDataSource.getRepository(Author).save(authorDb);
 }
 
-export async function getAllAuthors(): Promise<any[]> {
-  const res = await dbPool.query(`SELECT * FROM ${table}`);
-  return res.rows;
+export async function getAllAuthors(): Promise<Author[]> {
+    const authors: Author[] = await AppDataSource.getRepository(Author).find();
+    if (authors.length === 0) {
+      throw Error("No authors found");
+    }
+    return authors;
 }
 
-export async function getAuthorById(id: number): Promise<any[]> {
-  const res = await dbPool.query(`SELECT * FROM ${table} WHERE ID = ${id}`);
-
-  return res.rows;
+export async function getAuthorById(id: number): Promise<Author> {
+  const author: Author | null = await AppDataSource.getRepository(Author).findOneBy({ id: id });
+    if (!author) {
+      throw Error("No author found");
+    }
+    return author;
 }
 
-export async function updateAuthor(id: number, updatedAuthor: Author): Promise<void> {
+export async function updateAuthor(id: number, authorUpdated: Author): Promise<void> {
+  const authorDb = await AppDataSource.getRepository(Author).findOneBy({ id: id, });
 
-  const filtredEntries: [string, any][] = Util.getNonUndefinedEntries(updatedAuthor);
-  const setClause: string = Util.buildUpdateSetClause(filtredEntries);
-  const values: string[] = Util.objectValuestoDbValues(filtredEntries);
+  if (!authorDb) {
+    throw Error("No author found");
+  }
 
-  const query = {
-    text: `UPDATE ${table} SET ${setClause} WHERE ID = ${id}`,
-    values: values
-  };
-
-  await dbPool.query(query);
+  AppDataSource.getRepository(Author).merge(authorDb, authorUpdated);
+  await AppDataSource.getRepository(Author).save(authorDb);
 }
 
 export async function deleteAuthorById(id: number): Promise<void> {
-
-  const query: { text: string, values: number[] } = {
-    text: `DELETE FROM ${table} WHERE id = $1`,
-    values: [id]
-  }
-
-  await dbPool.query(query);
+  await AppDataSource.getRepository(Author).delete(id);
 }

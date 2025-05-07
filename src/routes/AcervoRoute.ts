@@ -1,5 +1,5 @@
 import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware";
-import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRequest, updateItemRequest, uploadImageRequest } from "@/controllers/AcervoController.js";
+import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRequest, updateItemRequest } from "@/controllers/AcervoController.js";
 import express, { Router } from "express";
 import { acervoUpload } from "@/middlewares/upload/acervoUpload";
 
