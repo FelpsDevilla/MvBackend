@@ -1,10 +1,10 @@
 import { AcervoItem } from "@/classes/AcervoItem";
 import { Author } from "@/classes/Author";
+import { Collection } from "@/classes/Collection";
 import { LivrariaItem } from "@/classes/LivrariaItem";
 import { User } from "@/classes/User";
 import dotenv from "dotenv";
 import 'reflect-metadata';
-import { Collection } from "typeorm";
 
 const isDev: boolean = process.env.NODE_ENV == undefined;
 

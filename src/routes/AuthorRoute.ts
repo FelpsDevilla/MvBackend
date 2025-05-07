@@ -5,8 +5,10 @@ import express, { Router } from "express";
 export const authorRouter: Router = express.Router();
 const url = "/authors";
 
-authorRouter.post(url, auth, insertAuthorRequest);
-authorRouter.get(url, auth, getAllAuthorsRequest);
-authorRouter.get(`${url}/:id`, auth, getAuthorByIdRequest);
-authorRouter.put(`${url}/:id`, auth, updateAuthorRequest);
-authorRouter.delete(`${url}/:id`, auth, onlyAdmins, deleteAuthorRequest);
+authorRouter.use(auth);
+
+authorRouter.post(url, insertAuthorRequest);
+authorRouter.get(url, getAllAuthorsRequest);
+authorRouter.get(`${url}/:id`, getAuthorByIdRequest);
+authorRouter.put(`${url}/:id`, updateAuthorRequest);
+authorRouter.delete(`${url}/:id`, onlyAdmins, deleteAuthorRequest);

@@ -5,6 +5,9 @@ import  express, { Router }  from "express";
 export const livrariaRouter: Router = express.Router();
 const url = "/livraria";
 
+livrariaRouter.use(`${url}/book` , express.static("public/data/uploads/livraria/booksPDF"));
+livrariaRouter.use(`${url}/images` , express.static("public/data/uploads/livraria/images"));
+
 livrariaRouter.post(url, auth,insertItemRequest);
 livrariaRouter.get(url, getAllItensRequest);
 livrariaRouter.get(`${url}/:id`, auth, getItemByIdRequest);
