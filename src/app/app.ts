@@ -17,11 +17,10 @@ app.use(cors({
     origin: 'http://localhost:4200', // Allow only this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
     credentials: true // Allow cookies and credentials
-}
+}));
 
-))
 const url = "/"
-
+app.use(url, express.static("public/"))
 app.use(url, authRouter)
 app.use(url, acervoRouter)
 app.use(url, authorRouter)
