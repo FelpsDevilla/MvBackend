@@ -2,6 +2,7 @@ import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { Author } from "@/classes/Author.js";
 import { deleteAuthorById, getAllAuthors, getAuthorById, insertAuthor, updateAuthor } from "@/models/AuthorModel.js";
+import { NotFoundError } from "@/Errors/NotFoundError";
 
 export async function insertAuthorRequest(req: Request, res: Response) {
   try {
@@ -21,8 +22,11 @@ export async function getAllAuthorsRequest(_: Request, res: Response): Promise<v
 
     res.status(200).json(Authors);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao buscar Autores" });
+    if(error instanceof NotFoundError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }
 
@@ -33,8 +37,11 @@ export async function getAuthorByIdRequest(req: Request, res: Response): Promise
 
     res.status(200).json(Author);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Id incorreto" });
+    if(error instanceof NotFoundError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }
 
@@ -44,10 +51,13 @@ export async function updateAuthorRequest(req: Request, res: Response): Promise<
     const id = Number(req.params.id);
 
     await updateAuthor(id, updatedAuthor);
-    res.status(200).send("Alterado Autor id: " + id);
+    res.status(200).send("Alterado Autor id " + id);
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    if(error instanceof NotFoundError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }
 
@@ -56,9 +66,12 @@ export async function deleteAuthorRequest(req: Request, res: Response): Promise<
     const id = Number(req.params.id);
     await deleteAuthorById(id);
 
-    res.status(200).send("Author deletado id" + id);
+    res.status(200).send("Author deletado id " + id);
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    if(error instanceof NotFoundError){
+          res.status(400).send(error.message);
+          return
+        }
+        res.status(500).send("Unknow Error");
   }
 }

@@ -1,7 +1,7 @@
 import { Expose } from "class-transformer";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity({ name: "livraria" })
 export class LivrariaItem {
   @Expose()
   @PrimaryGeneratedColumn()

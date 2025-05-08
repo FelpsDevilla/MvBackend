@@ -1,15 +1,24 @@
 import { User } from "@/classes/User";
 import { AppDataSource } from "@/db/data-source";
+import { NotFoundError } from "@/Errors/NotFoundError";
+import { UniqueConstraintError } from "@/Errors/UniqueConstraintError";
+import { QueryFailedError } from "typeorm";
 
 export async function insertUser(user: User): Promise<void> {
-  const userDb = AppDataSource.getRepository(User).create(user);
-  await AppDataSource.getRepository(User).save(userDb);
+  try {
+    const userDb = AppDataSource.getRepository(User).create(user);
+    await AppDataSource.getRepository(User).save(userDb);
+  } catch (error) {
+    if ((error instanceof QueryFailedError && error.driverError.constraint == "users_cpf_key")) {
+      throw new UniqueConstraintError(`Cpf already registered`)
+    }
+  }
 };
 
 export async function getAllUsers(): Promise<User[]> {
   const users: User[] = await AppDataSource.getRepository(User).find();
   if (users.length === 0) {
-    throw Error("No users found");
+    throw new NotFoundError("No users found");
   }
   return users;
 }
@@ -17,7 +26,7 @@ export async function getAllUsers(): Promise<User[]> {
 export async function getUserById(id: number): Promise<User> {
   const user: User | null = await AppDataSource.getRepository(User).findOneBy({ id: id });
   if (!user) {
-    throw Error("No user found");
+    throw new NotFoundError("No user found");
   }
   return user;
 }
@@ -25,7 +34,7 @@ export async function getUserById(id: number): Promise<User> {
 export async function getUserBycpf(cpf: string): Promise<User> {
   const user: User | null = await AppDataSource.getRepository(User).findOneBy({ cpf: cpf });
   if (!user) {
-    throw Error("No user found");
+    throw new NotFoundError("No user found");
   }
   return user;
 }
@@ -34,7 +43,7 @@ export async function updateUser(id: number, updatedUser: User): Promise<void> {
   const userDb = await AppDataSource.getRepository(User).findOneBy({ id: id, });
 
   if (!userDb) {
-    throw Error("No user found");
+    throw new NotFoundError("No user found");
   }
 
   AppDataSource.getRepository(User).merge(userDb, updatedUser);
@@ -42,5 +51,6 @@ export async function updateUser(id: number, updatedUser: User): Promise<void> {
 }
 
 export async function deleteUserById(id: number): Promise<void> {
+  await getUserById(id);
   await AppDataSource.getRepository(User).delete(id);
 }

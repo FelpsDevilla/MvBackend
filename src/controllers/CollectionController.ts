@@ -2,6 +2,7 @@ import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
 import { Collection } from "@/classes/Collection.js";
 import { deleteCollectionById, getAllCollections, getCollectionById, insertCollection, updateCollection } from "@/models/CollectionModel.js";
+import { NotFoundError } from "@/Errors/NotFoundError";
 
 export async function insertCollectionRequest(req: Request, res: Response): Promise<void> {
   try {
@@ -46,8 +47,11 @@ export async function updateCollectionRequest(req: Request, res: Response): Prom
 
     await updateCollection(id, updatedCollection);
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    if(error instanceof NotFoundError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }
 
@@ -55,8 +59,12 @@ export async function deleteCollectionRequest(req: Request, res: Response): Prom
   try {
     const id = Number(req.params.id);
     await deleteCollectionById(id);
+    res.status(200).send("Deleted!");
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    if(error instanceof NotFoundError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }

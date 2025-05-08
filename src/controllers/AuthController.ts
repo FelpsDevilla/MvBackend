@@ -4,6 +4,7 @@ import { plainToInstance } from "class-transformer";
 import { getUserBycpf, getUserById } from "@/models/UserModel";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { NotFoundError } from "@/Errors/NotFoundError";
 
 const ACCESS_EXPIRES_IN = "15m";
 const REFRESH_EXPIRES_IN = "7d";
@@ -47,12 +48,13 @@ export async function login(req: Request, res: Response): Promise<void> {
                 sameSite: "strict",
                 maxAge: 7 * 24 * 60 * 60 * 1000,
             })
-            .json({ token: accessToken });
+            .json({ accessToken: accessToken });
     } catch (error) {
-        if (error instanceof Error) {
-            console.error(error);
-            res.status(500).json({ error: "Erro de login", message: error.message });
-        }
+        if(error instanceof NotFoundError){
+              res.status(400).send("Invalid Credencials");
+              return
+            }
+            res.status(500).send("Unknow Error");
     }
 }
 

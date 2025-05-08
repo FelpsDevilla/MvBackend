@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { User } from "@/classes/User.js";
 import { deleteUserById, getAllUsers, getUserById, insertUser, updateUser } from "@/models/UserModel.js";
 import bcrypt from "bcryptjs";
+import { NotFoundError } from "@/Errors/NotFoundError";
+import { UniqueConstraintError } from "@/Errors/UniqueConstraintError";
 
 export async function insertUserRequest(req: Request, res: Response): Promise<void> {
   try {
@@ -15,8 +17,11 @@ export async function insertUserRequest(req: Request, res: Response): Promise<vo
 
     res.status(201).send("Adcionado ");
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao adicionar usuário" });
+    if(error instanceof UniqueConstraintError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }
 
@@ -26,8 +31,11 @@ export async function getAllUsersRequest(_: Request, res: Response): Promise<voi
 
     res.status(200).json(Users);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao buscar itens" });
+    if(error instanceof NotFoundError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }
 
@@ -38,8 +46,11 @@ export async function getUserByIdRequest(req: Request, res: Response): Promise<v
 
     res.status(200).json(User);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Id incorreto" });
+    if(error instanceof NotFoundError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }
 
@@ -48,12 +59,19 @@ export async function updateUserRequest(req: Request, res: Response): Promise<vo
   try {
     const updatedUser: User = plainToInstance(User, req.body as User);
     const id = Number(req.params.id);
+    
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(updatedUser.getPassword(), salt);
+    updatedUser.setPassword(hash);
 
     await updateUser(id, updatedUser);
     res.status(200).send("Alterado item id " + id);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao atualizar usuário" });
+    if(error instanceof NotFoundError){
+      res.status(400).send(error.message);
+      return
+    }
+    res.status(500).send("Unknow Error");
   }
 }
 
@@ -63,7 +81,10 @@ export async function deleteUserRequest(req: Request, res: Response): Promise<vo
     await deleteUserById(id);
     res.status(200).json({ message: "Usuário removido com sucesso id " + id });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao remover usuário" });
+    if(error instanceof NotFoundError){
+          res.status(400).send(error.message);
+          return
+        }
+        res.status(500).send("Unknow Error");
   }
 }

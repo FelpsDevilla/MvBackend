@@ -3,17 +3,16 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "@/classes/User";
 import { getUserById } from "@/models/UserModel";
 
-const headerToken = "x-access-token";
-
 export async function auth(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const ACCESS_SECRET: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
-        const accessToken: string = req.headers[headerToken] as string;
+        const authHeader: string | undefined = req.headers.authorization;
 
-        if (accessToken == "" || accessToken == undefined) {
-            res.status(401).send('Token não informado');
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            res.status(401).json({ message: 'Token ausente ou malformado' })
             return
         }
+        const accessToken = authHeader.split(' ')[1];
 
         jwt.verify(accessToken, ACCESS_SECRET);
         next();
@@ -29,7 +28,14 @@ export async function auth(req: Request, res: Response, next: NextFunction): Pro
 
 export async function onlyAdmins(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const accessToken: string = req.headers[headerToken] as string;
+        const authHeader: string | undefined = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            res.status(401).json({ message: 'Token ausente ou malformado' })
+            return
+        }
+        const accessToken = authHeader.split(' ')[1];
+
         const payload: JwtPayload = jwt.decode(accessToken) as JwtPayload;
         const user: User = await getUserById(payload.userId);
 
