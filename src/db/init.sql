@@ -73,5 +73,5 @@ CREATE TABLE IF NOT EXISTS gallery (
     id SERIAL PRIMARY KEY,
     name VARCHAR,
     creation_date DATE,
-    image_path VARCHAR,
+    image_path VARCHAR
 );
