@@ -1,20 +1,21 @@
 import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware.js";
 import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRequest, updateItemRequest } from "@/controllers/LivrariaController.js";
 import express, { Router } from "express";
-import { imageVerifyMiddleware } from "@/middlewares/uploads/imageVerifyMiddleware";
-import { pdfVerifyMiddleware } from "@/middlewares/uploads/pdfVerifyMiddleware";
-import { LivrariaUploadBook, LivrariaUploadImage } from "@/middlewares/uploads/livrariaUpload";
+import { imageVerifyMiddleware } from "@/middlewares/FileTypes/imageVerifyMiddleware";
+import { pdfVerifyMiddleware } from "@/middlewares/FileTypes/pdfVerifyMiddleware";
+import { livrariaUploadBook, livrariaUploadImage } from "@/middlewares/uploads/LivrariaUpload.js";
+import { config } from "@/config";
 
 export const livrariaRouter: Router = express.Router();
 const url = "/livraria";
 
-livrariaRouter.use(`${url}/book`, pdfVerifyMiddleware, express.static("public/data/uploads/livraria/booksPDF"));
-livrariaRouter.use(`${url}/images`, imageVerifyMiddleware, express.static("public/data/uploads/livraria/images"));
+livrariaRouter.use(`${url}/book`, pdfVerifyMiddleware, express.static(config.filesPath.LivrariaBooks));
+livrariaRouter.use(`${url}/images`, imageVerifyMiddleware, express.static(config.filesPath.LivrariaImages));
 
 livrariaRouter.post(
     url, auth,
-    LivrariaUploadImage.single("image"), imageVerifyMiddleware,
-    LivrariaUploadBook.single("book"), pdfVerifyMiddleware,
+    livrariaUploadImage.single("image"), imageVerifyMiddleware,
+    livrariaUploadBook.single("book"), pdfVerifyMiddleware,
     insertItemRequest
 );
 

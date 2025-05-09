@@ -68,3 +68,10 @@ CREATE TABLE IF NOT EXISTS users (
     is_active BOOLEAN DEFAULT FALSE,
     is_admin BOOLEAN DEFAULT FALSE
 );
+
+CREATE TABLE IF NOT EXISTS gallery (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR,
+    creation_date DATE,
+    image_path VARCHAR,
+);

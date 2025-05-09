@@ -34,4 +34,11 @@ export const config = {
     keyPath: isDev ? "./SSL/mv.key" : "/etc/ssl/mv/mv.key",
     certPath: isDev ? "./SSL/mv.crt" : "/etc/ssl/mv/mv.crt",
   },
+
+  filesPath:{
+    acervoImages: "public/data/uploads/acervo/images",
+    galleryImages: "public/data/uploads/gallery/images",
+    LivrariaImages: "public/data/uploads/livraria/images",
+    LivrariaBooks: "public/data/uploads/livraria/books"
+  }
 };

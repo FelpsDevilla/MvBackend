@@ -1,10 +1,9 @@
+import { config } from '@/config';
 import { Request } from 'express';
 import multer from 'multer';
 
-const basePath = "public/data/uploads/livraria";
-
 const storageImages = multer.diskStorage({
-  destination: `${basePath}/images`,
+  destination: config.filesPath.LivrariaImages,
   filename: (_: Request, file: Express.Multer.File, cb) => {
     const uniqueName = `${Date.now()}.${file.originalname}`;
     cb(null, uniqueName);
@@ -13,7 +12,7 @@ const storageImages = multer.diskStorage({
 );
 
 const storageBooks = multer.diskStorage({
-    destination: `${basePath}/books`,
+    destination: config.filesPath.LivrariaBooks,
     filename: (_: Request, file: Express.Multer.File, cb) => {
       const uniqueName = `${Date.now()}.${file.originalname}`;
       cb(null, uniqueName);
@@ -21,5 +20,5 @@ const storageBooks = multer.diskStorage({
   }
   );
 
-export const LivrariaUploadImage = multer({storage: storageImages});
-export const LivrariaUploadBook = multer({storage: storageBooks});
+export const livrariaUploadImage = multer({storage: storageImages});
+export const livrariaUploadBook = multer({storage: storageBooks});
