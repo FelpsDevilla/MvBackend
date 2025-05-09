@@ -11,6 +11,7 @@ services:
       - JWT_SECRET_REFRESH= MySuperSecretRefresh
     volumes:
       - ./SSL:/etc/ssl/mv:ro
+      - mvBackend_data:/app/public 
     depends_on:
       mvdb_dev:
         condition: service_healthy
@@ -30,4 +31,5 @@ services:
       timeout: 5s
       retries: 10
 volumes:
+  mvBackend_data:
   mvdb_data_dev:
