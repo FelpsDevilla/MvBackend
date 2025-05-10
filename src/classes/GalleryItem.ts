@@ -12,8 +12,8 @@ export class GalleryItem{
     name: string;
 
     @Expose()
-    @Column({ name:"creation_date", type: 'date' })
-    creationDate: Date;
+    @Column({ name:"original_date", type: 'date' })
+    original_date: Date;
 
     @Expose()
     @Column({ name:"image_path", type: 'varchar' })

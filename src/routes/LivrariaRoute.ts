@@ -3,7 +3,7 @@ import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRe
 import express, { Router } from "express";
 import { imageVerifyMiddleware } from "@/middlewares/FileTypes/imageVerifyMiddleware";
 import { pdfVerifyMiddleware } from "@/middlewares/FileTypes/pdfVerifyMiddleware";
-import { livrariaUploadBook, livrariaUploadImage } from "@/middlewares/uploads/LivrariaUpload.js";
+import { livrariaUploadBook, livrariaUploadImage } from "@/middlewares/uploads/LivrariaUpload";
 import { config } from "@/config";
 
 export const livrariaRouter: Router = express.Router();

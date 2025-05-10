@@ -1,5 +1,7 @@
 import { Expose } from "class-transformer";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm"
+import { Author } from "./Author";
+import { Collection } from "./Collection";
 
 @Entity({ name: 'acervo' })
 export class AcervoItem {
@@ -8,15 +10,15 @@ export class AcervoItem {
     id: number;
 
     @Expose()
-    @Column({ type: 'varchar' })
-    city: string;
-
-    @Expose()
     @Column({ name: 'object_name', type: 'varchar' })
     objectName: string;
 
     @Expose()
-    @Column({ name: 'creation_date', type: 'date' })
+    @Column({ type: 'varchar' })
+    city: string;
+
+    @Expose()
+    @Column({ name: 'original_date', type: 'date' })
     creationDate: Date;
 
     @Expose()
@@ -44,12 +46,12 @@ export class AcervoItem {
     state: string;
 
     @Expose()
-    @Column({ name: 'author_id', type: 'integer' })
-    authorId: number;
+    @ManyToOne(() => Author, (author) => author.items)
+    author: Author;
 
     @Expose()
-    @Column({ name: 'collection_id', type: 'integer' })
-    collectionId: number;
+    @ManyToOne(() => Collection, (collection) => collection.items)
+    collection: Collection;
 
     @Expose()
     @Column({ type: 'varchar' })

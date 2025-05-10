@@ -1,5 +1,7 @@
 import { Expose } from "class-transformer";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from "typeorm";
+import { Author } from "./Author";
+import { AcervoItem } from "./AcervoItem";
 
 @Entity({ name: 'collections' })
 export class Collection {
@@ -12,8 +14,11 @@ export class Collection {
     readonly name: string;
 
     @Expose()
-    @Column({ name: 'author_id', type: 'integer' })
-    readonly authorId: number;
+    @ManyToOne(() => Author, (author) => author.collections)
+    readonly author: Author;
+
+    @OneToMany(() => AcervoItem, (acervoItem) => acervoItem.collection)
+    items: AcervoItem[]
 
     @Expose()
     @Column({ type: 'varchar' })
