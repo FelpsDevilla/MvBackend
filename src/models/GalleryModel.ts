@@ -1,5 +1,5 @@
 import { GalleryItem } from "@/classes/GalleryItem.js";
-import { AppDataSource } from "@/db/data-source";
+import { AppDataSource } from "@/data-source";
 import { NotFoundError } from "@/Errors/NotFoundError";
 
 export async function insertItem(item: GalleryItem): Promise<void> {

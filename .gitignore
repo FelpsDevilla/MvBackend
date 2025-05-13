@@ -133,5 +133,4 @@ dist
 SSL
 
 # Store Medias
-/public/data/uploads/acervo/*
-/public/data/uploads/livros/*
+/public/data

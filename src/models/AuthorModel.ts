@@ -1,5 +1,5 @@
 import { Author } from "@/classes/Author.js";
-import { AppDataSource } from "@/db/data-source";
+import { AppDataSource } from "@/data-source";
 import { NotFoundError } from "@/Errors/NotFoundError";
 
 export async function insertAuthor(author: Author): Promise<void> {

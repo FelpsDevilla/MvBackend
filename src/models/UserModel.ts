@@ -1,5 +1,5 @@
 import { User } from "@/classes/User";
-import { AppDataSource } from "@/db/data-source";
+import { AppDataSource } from "@/data-source";
 import { NotFoundError } from "@/Errors/NotFoundError";
 import { UniqueConstraintError } from "@/Errors/UniqueConstraintError";
 import { QueryFailedError } from "typeorm";

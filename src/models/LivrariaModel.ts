@@ -1,5 +1,5 @@
 import { LivrariaItem } from "@/classes/LivrariaItem.js";
-import { AppDataSource } from "@/db/data-source";
+import { AppDataSource } from "@/data-source";
 import { NotFoundError } from "@/Errors/NotFoundError";
 
 export async function insertItem(item: LivrariaItem): Promise<void> {

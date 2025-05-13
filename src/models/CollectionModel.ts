@@ -1,5 +1,5 @@
 import { Collection } from "@/classes/Collection";
-import { AppDataSource } from "@/db/data-source";
+import { AppDataSource } from "@/data-source";
 import { NotFoundError } from "@/Errors/NotFoundError";
 
 export async function insertCollection(collection: Collection): Promise<void> {

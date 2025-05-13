@@ -1,5 +1,5 @@
 import { AcervoItem } from "@/classes/AcervoItem.js";
-import { AppDataSource } from "@/db/data-source";
+import { AppDataSource } from "@/data-source";
 import { ForeignKeyConstraintError } from "@/Errors/ForeignKeyConstraintError";
 import { NotFoundError } from "@/Errors/NotFoundError";
 import { QueryFailedError } from "typeorm";

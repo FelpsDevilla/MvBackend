@@ -2,7 +2,7 @@ import https from "https";
 import fs from "fs";
 import { config } from "@/config";
 import app from "@/app/app";
-import { AppDataSource } from "@/db/data-source";
+import { AppDataSource } from "@/data-source";
 
 AppDataSource
   .initialize()

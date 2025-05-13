@@ -21,7 +21,6 @@ export async function insertItemRequest(req: Request, res: Response): Promise<vo
 export async function getAllItensRequest(_: Request, res: Response): Promise<void> {
   try {
     const items = await getAllItens();
-    console.log(items)
     res.status(200).json(items);
   } catch (error) {
     if (error instanceof NotFoundError) {

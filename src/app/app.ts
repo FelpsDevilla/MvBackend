@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"
+import "reflect-metadata"
 import { acervoRouter } from "@/routes/AcervoRoute.js";
 import { authorRouter } from "@/routes/AuthorRoute.js";
 import { collectionRouter } from "@/routes/CollectionsRoute.js";
