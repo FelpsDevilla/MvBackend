@@ -19,7 +19,7 @@ export class AcervoItem {
 
     @Expose()
     @Column({ name: 'original_date', type: 'date' })
-    creationDate: Date;
+    original_date: Date;
 
     @Expose()
     @Column({ type: 'varchar' })

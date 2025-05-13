@@ -12,66 +12,68 @@ CREATE DATABASE "MvDB"
 
 CREATE TABLE IF NOT EXISTS authors (
     id SERIAL PRIMARY KEY,
-    name VARCHAR
+    name VARCHAR(255),
+    description VARCHAR(500)
 );
 
 CREATE TABLE IF NOT EXISTS collections (
     id SERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL,
+    name VARCHAR(255) NOT NULL,
     author_id INT REFERENCES authors(id),
-    description TEXT,
-    created_at DATE,
-    updated_at DATE
+    description TEXT NOT NULL,
+    created_at DATE DEFAULT CURRENT_DATE,
+    updated_at DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE IF NOT EXISTS acervo (
     id SERIAL PRIMARY KEY,
-    city VARCHAR,
-    object_name VARCHAR,
+    city VARCHAR(255),
+    object_name VARCHAR(255) NOT NULL,
     creation_date DATE,
-    legend TEXT,
-    technique VARCHAR,
-    material VARCHAR,
-    is_digitalized BOOLEAN,
-    state VARCHAR,
+    legend TEXT NOT NULL,
+    technique VARCHAR(255),
+    material VARCHAR(255),
+    is_digitalized BOOLEAN DEFAULT FALSE,
+    state VARCHAR(255),
     author_id INT REFERENCES authors(id),
     collection_id INT REFERENCES collections(id),
-    donor VARCHAR,
+    donor VARCHAR(255),
     context_history TEXT,
-    image_path VARCHAR,
-    created_at DATE,
-    updated_at DATE
+    image_path VARCHAR(500),
+    created_at DATE DEFAULT CURRENT_DATE,
+    updated_at DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE IF NOT EXISTS livraria (
     id SERIAL PRIMARY KEY,
-    city VARCHAR,
-    object_name VARCHAR,
-    creation_date DATE,
-    legend TEXT,
-    state VARCHAR,
+    city VARCHAR(255),
+    object_name VARCHAR(255) NOT NULL,
+    original_date DATE,
+    legend TEXT NOT NULL,
+    state VARCHAR(255),
     author_id INT REFERENCES authors(id),
-    digitalization_technique VARCHAR,
+    digitalization_technique VARCHAR(255),
     collection_id INT REFERENCES collections(id),
-    donor VARCHAR,
+    donor VARCHAR(255),
     context_history TEXT,
-    image_path VARCHAR,
-    created_at DATE,
-    updated_at DATE
+    image_path VARCHAR(500),
+    book_path VARCHAR(500),
+    created_at DATE DEFAULT CURRENT_DATE,
+    updated_at DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     cpf VARCHAR(11) NOT NULL UNIQUE,
-    name VARCHAR,
-    password VARCHAR,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     is_active BOOLEAN DEFAULT FALSE,
     is_admin BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS gallery (
     id SERIAL PRIMARY KEY,
-    name VARCHAR,
+    name VARCHAR(255) NOT NULL,
     creation_date DATE,
-    image_path VARCHAR
+    image_path VARCHAR(500)
 );

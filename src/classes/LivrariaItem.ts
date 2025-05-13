@@ -28,6 +28,10 @@ export class LivrariaItem {
   imagePath: string;
 
   @Expose()
+  @Column({ name: 'book_path', type: 'varchar' })
+  bookPath: string;
+
+  @Expose()
   @Column({ type: 'varchar' })
   state: string;
 

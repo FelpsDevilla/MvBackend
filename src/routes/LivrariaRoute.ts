@@ -3,7 +3,7 @@ import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRe
 import express, { Router } from "express";
 import { imageVerifyMiddleware } from "@/middlewares/FileTypes/imageVerifyMiddleware";
 import { pdfVerifyMiddleware } from "@/middlewares/FileTypes/pdfVerifyMiddleware";
-import { livrariaUploadBook, livrariaUploadImage } from "@/middlewares/uploads/LivrariaUpload";
+import { livrariaUploadBook, livrariaUploadImage } from "@/middlewares/uploads/livrariaUpload";
 import { config } from "@/config";
 
 export const livrariaRouter: Router = express.Router();
@@ -15,7 +15,7 @@ livrariaRouter.use(`${url}/images`, imageVerifyMiddleware, express.static(config
 livrariaRouter.post(
     url, auth,
     livrariaUploadImage.single("image"), imageVerifyMiddleware,
-    livrariaUploadBook.single("book"), pdfVerifyMiddleware,
+    // livrariaUploadBook.single("book"), pdfVerifyMiddleware,
     insertItemRequest
 );
 

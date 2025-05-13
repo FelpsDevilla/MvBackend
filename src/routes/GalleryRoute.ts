@@ -6,7 +6,7 @@ import { config } from "@/config";
 import { galleryUploadImages } from "@/middlewares/uploads/GalleryUpload";
 
 export const GalleryRouter: Router = express.Router();
-const url = "/livraria";
+const url = "/gallery";
 
 GalleryRouter.use(`${url}/images`, imageVerifyMiddleware, express.static(config.filesPath.galleryImages));
 

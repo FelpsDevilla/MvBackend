@@ -1,7 +1,7 @@
 import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware";
 import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRequest, updateItemRequest } from "@/controllers/AcervoController.js";
 import express, { Router } from "express";
-import { acervoUploadImages } from "@/middlewares/uploads/AcervoUpload.js";
+import { acervoUploadImages } from "@/middlewares/uploads/acervoUpload";
 import { imageVerifyMiddleware } from "@/middlewares/FileTypes/imageVerifyMiddleware";
 import { config } from "@/config";
 

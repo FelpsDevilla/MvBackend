@@ -9,7 +9,7 @@ export async function insertCollectionRequest(req: Request, res: Response): Prom
     const collection: Collection = plainToInstance(Collection, req.body as Collection);
     await insertCollection(collection);
 
-    res.status(201).send("Adcionado ");
+    res.status(201).send("Adcionado");
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
@@ -46,6 +46,7 @@ export async function updateCollectionRequest(req: Request, res: Response): Prom
     const id = Number(req.params.id);
 
     await updateCollection(id, updatedCollection);
+    res.status(200).send("Alterado");
   } catch (error) {
     if(error instanceof NotFoundError){
       res.status(400).send(error.message);

@@ -5,6 +5,7 @@ import { LivrariaItem } from "@/classes/LivrariaItem";
 import { User } from "@/classes/User";
 import dotenv from "dotenv";
 import 'reflect-metadata';
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 const isDev: boolean = process.env.NODE_ENV == undefined;
 
@@ -24,10 +25,11 @@ export const config = {
     password: process.env.DB_USER_PASS as string,
     database: "MvDB",
     synchronize: false,
-    logging: false,
+    logging: true,
     entities: [AcervoItem, Author, Collection, User, LivrariaItem, "src/classes/*.js"],
     subscribers: [],
     migrations: [],
+    namingStrategy: new SnakeNamingStrategy(),
   },
 
   ssl: {

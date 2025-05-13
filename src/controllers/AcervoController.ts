@@ -8,8 +8,7 @@ import { NotFoundError } from "@/Errors/NotFoundError";
 export async function insertItemRequest(req: Request, res: Response): Promise<void> {
   try {
     const item: AcervoItem = plainToInstance(AcervoItem, req.body);
-    item.imagePath = req.file?.path as string;
-
+    item.imagePath = req.file?.filename as string;
     await insertItem(item);
     res.status(200).send("Adcionado!");
   } catch (error) {
@@ -22,7 +21,7 @@ export async function insertItemRequest(req: Request, res: Response): Promise<vo
 export async function getAllItensRequest(_: Request, res: Response): Promise<void> {
   try {
     const items = await getAllItens();
-
+    console.log(items)
     res.status(200).json(items);
   } catch (error) {
     if (error instanceof NotFoundError) {

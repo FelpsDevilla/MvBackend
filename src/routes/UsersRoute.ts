@@ -5,11 +5,8 @@ import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware.js";
 export const userRouter: Router = express.Router();
 const url = "/user";
 
-userRouter.use(auth);
-userRouter.use(onlyAdmins);
-
-userRouter.post(url, insertUserRequest);
-userRouter.get(url, getAllUsersRequest);
-userRouter.get(`${url}/:id`, getUserByIdRequest);
-userRouter.put(`${url}/:id`, updateUserRequest);
-userRouter.delete(`${url}/:id`, deleteUserRequest);
+userRouter.post(url, auth, onlyAdmins, insertUserRequest);
+userRouter.get(url, auth, onlyAdmins, getAllUsersRequest);
+userRouter.get(`${url}/:id`, auth, onlyAdmins, getUserByIdRequest);
+userRouter.put(`${url}/:id`, auth, onlyAdmins, updateUserRequest);
+userRouter.delete(`${url}/:id`, auth, onlyAdmins, deleteUserRequest);

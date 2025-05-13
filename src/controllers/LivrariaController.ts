@@ -7,6 +7,9 @@ import { NotFoundError } from "@/Errors/NotFoundError";
 export async function insertItemRequest(req: Request, res: Response): Promise<void> {
   try {
     const item: LivrariaItem = plainToInstance(LivrariaItem, req.body as LivrariaItem);
+    console.log(req.files)
+    // item.imagePath = req.file?.filename as string;
+    // item.bookPath = req.file?.fieldname as string;
     await insertItem(item);
 
     res.status(201).send("Adcionado item!");
