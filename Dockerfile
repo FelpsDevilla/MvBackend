@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN npm migrations:run
 RUN npm run build
 
 # Stage 2: Cria a imagem final
