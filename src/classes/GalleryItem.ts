@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { Author } from "./Author";
+import { Author } from "./Author.js";
 
 @Entity({ name: "gallery" })
 export class GalleryItem {

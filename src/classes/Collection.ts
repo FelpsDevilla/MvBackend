@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer";
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, Relation } from "typeorm";
 import { Author } from "./Author.js";
 import { ArchiveItem } from "./ArchiveItem.js";
 
@@ -15,10 +15,12 @@ export class Collection {
 
     @Expose()
     @ManyToOne(() => Author, (author) => author.collections)
-    author: Author;
+    @JoinColumn()
+    author: Relation<Author>;
 
     @OneToMany(() => ArchiveItem, (archiveItem) => archiveItem.collection)
-    items: ArchiveItem[]
+    @JoinColumn()
+    items: Relation<ArchiveItem[]>
 
     @Expose()
     @Column({ type: 'varchar' })
