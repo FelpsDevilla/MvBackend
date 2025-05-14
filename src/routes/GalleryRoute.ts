@@ -1,5 +1,5 @@
 import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware.js";
-import { deleteItemRequest, getAllItensRequest, getItemByIdRequest, insertItemRequest, updateItemRequest } from "@/controllers/LivrariaController.js";
+import { deleteItemRequest, getAllItemsRequest, getItemByIdRequest, insertItemRequest, updateItemRequest } from "@/controllers/LibraryController.js";
 import express, { Router } from "express";
 import { imageVerifyMiddleware } from "@/middlewares/FileTypes/imageVerifyMiddleware";
 import { config } from "@/config";
@@ -16,7 +16,7 @@ GalleryRouter.post(
     insertItemRequest
 );
 
-GalleryRouter.get(url, getAllItensRequest);
+GalleryRouter.get(url, getAllItemsRequest);
 GalleryRouter.get(`${url}/:id`, auth, getItemByIdRequest);
 GalleryRouter.put(`${url}/:id`, auth, updateItemRequest);
 GalleryRouter.delete(`${url}/:id`, auth, onlyAdmins, deleteItemRequest);

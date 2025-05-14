@@ -20,5 +20,5 @@ const storageBooks = multer.diskStorage({
   }
   );
 
-export const livrariaUploadImage = multer({storage: storageImages});
-export const livrariaUploadBook = multer({storage: storageBooks});
+export const libraryUploadImage = multer({storage: storageImages});
+export const libraryUploadBook = multer({storage: storageBooks});

@@ -1,33 +1,33 @@
 import { Expose } from "class-transformer";
-import { Collection } from "./Collection";
+import { Collection } from "./Collection.js";
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { AcervoItem } from "./AcervoItem";
+import { ArchiveItem } from "./ArchiveItem.js";
 
 @Entity({ name: 'authors' })
 export class Author {
     @Expose()
     @PrimaryGeneratedColumn()
-    readonly id: number;
+    id: number;
 
     @Expose()
-    @Column({type: 'varchar'})
-    readonly name: string;
+    @Column()
+    name: string;
 
     @Expose()
-    @Column({type: 'varchar'})
-    readonly description: string;
+    @Column()
+    description: string;
 
     @OneToMany(() => Collection, (collection) => collection.author)
     collections: Collection[]
 
-    @OneToMany(() => AcervoItem, (acervoItem) => acervoItem.author)
-    items: AcervoItem[]
+    @OneToMany(() => ArchiveItem, (archiveItem) => archiveItem.author)
+    items: ArchiveItem[]
 
     @Expose()
-    @Column({ name: 'created_at', type: 'date' })
-    readonly createdAt: Date;
+    @Column()
+    createdAt: Date;
 
     @Expose()
-    @Column({ name: 'updated_at', type: 'date'})
-    readonly updatedAt: Date;
+    @Column()
+    updatedAt: Date;
 }

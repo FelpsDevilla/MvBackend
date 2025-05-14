@@ -8,22 +8,22 @@ export class User {
   readonly id: number;
 
   @Expose()
-  @Column({type: 'varchar', length: 11, unique: true})
+  @Column()
   readonly cpf: string;
 
   @Expose()
-  @Column({type: 'varchar'})
+  @Column()
   readonly name: string;
 
-  @Column({type: 'varchar'})
+  @Column()
   private password: string;
 
   @Expose()
-  @Column({ name: 'is_active', type: 'boolean' })
+  @Column()
   readonly isActive: boolean;
 
   @Expose()
-  @Column({ name: 'is_admin', type: 'boolean' })
+  @Column()
   readonly isAdmin: boolean;
 
   public setPassword(newPassword: string): void {

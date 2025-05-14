@@ -1,6 +1,13 @@
+import dotenv from "dotenv";
 import { DataSource } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
-import { isDev } from "./config";
+
+const isDev: boolean = process.env.NODE_ENV == undefined;
+
+if (isDev) {
+  console.log("Running Migrations on Developer Mode");
+  dotenv.config();
+}
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -10,9 +17,9 @@ export const AppDataSource = new DataSource({
     password: process.env.DB_USER_PASS as string,
     database: "MvDB",
     synchronize: false,
-    logging: true,
+    logging: false,
     entities: ["src/classes/*.ts"],
-    migrations: ["src/migration/**/*.ts"],
+    migrations: ["src/migrations/**/*.ts"],
     subscribers: [],
     namingStrategy: new SnakeNamingStrategy(),
   })

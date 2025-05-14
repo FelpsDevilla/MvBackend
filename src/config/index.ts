@@ -16,9 +16,9 @@ export const config = {
   },
 
   filesPath:{
-    acervoImages: "public/data/uploads/acervo/images",
+    archiveImages: "public/data/uploads/archive/images",
     galleryImages: "public/data/uploads/gallery/images",
-    LivrariaImages: "public/data/uploads/livraria/images",
-    LivrariaBooks: "public/data/uploads/livraria/books"
+    libraryImages: "public/data/uploads/library/images",
+    libraryBooks: "public/data/uploads/library/books"
   }
 };

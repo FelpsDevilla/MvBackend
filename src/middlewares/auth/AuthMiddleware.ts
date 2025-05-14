@@ -9,8 +9,8 @@ export async function auth(req: Request, res: Response, next: NextFunction): Pro
         const authHeader: string | undefined = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            res.status(401).json({ message: 'Token ausente ou malformado' })
-            return
+            res.status(401).json({ message: 'Token missing or malformed' });
+            return;
         }
         const accessToken = authHeader.split(' ')[1];
 
@@ -18,11 +18,12 @@ export async function auth(req: Request, res: Response, next: NextFunction): Pro
         next();
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
-            res.status(401).send('Token inválido ou expirado.');
-            return
+            res.status(401).json({ message: 'Invalid or expired token.' });
+            return;
         }
-        res.status(500).send('Erro inesperado na autenticação: ' + error);
-        return
+        console.error("Authentication Error:", error);
+        res.status(500).json({ message: 'Unexpected authentication error: ' + error });
+        return;
     }
 }
 
@@ -31,21 +32,22 @@ export async function onlyAdmins(req: Request, res: Response, next: NextFunction
         const authHeader: string | undefined = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            res.status(401).json({ message: 'Token ausente ou malformado' })
-            return
+            res.status(401).json({ message: 'Token missing or malformed' });
+            return;
         }
         const accessToken = authHeader.split(' ')[1];
 
         const payload: JwtPayload = jwt.decode(accessToken) as JwtPayload;
         const user: User = await getUserById(payload.userId);
 
-        if (!user.isAdmin) {
-            res.status(401).send('Usuário sem permissão');
-            return
+        if (!user?.isAdmin) {
+            res.status(401).json({ message: 'User does not have permission.' });
+            return;
         }
 
         next();
     } catch (error) {
-        res.status(500).send("Erro de Middleware: " + error);
+        console.error("Admin Authorization Error:", error);
+        res.status(500).json({ message: "Unexpected error while verifying permissions." });
     }
 }

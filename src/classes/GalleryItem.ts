@@ -1,8 +1,9 @@
 import { Expose } from "class-transformer";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Author } from "./Author";
 
 @Entity({ name: "gallery" })
-export class GalleryItem{
+export class GalleryItem {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -12,10 +13,14 @@ export class GalleryItem{
     name: string;
 
     @Expose()
-    @Column({ name:"original_date", type: 'date' })
+    @ManyToOne(() => Author, (author) => author.collections)
+    author: Author;
+
+    @Expose()
+    @Column({ name: "original_date", type: 'date' })
     original_date: Date;
 
     @Expose()
-    @Column({ name:"image_path", type: 'varchar' })
+    @Column({ name: "image_path", type: 'varchar' })
     imagePath: string;
 }

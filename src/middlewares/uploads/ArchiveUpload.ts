@@ -11,4 +11,4 @@ const storageImages = multer.diskStorage({
 }
 );
 
-export const acervoUploadImages = multer({storage: storageImages});
+export const archiveUploadImages = multer({storage: storageImages});

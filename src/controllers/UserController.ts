@@ -8,70 +8,67 @@ import { UniqueConstraintError } from "@/Errors/UniqueConstraintError";
 
 export async function insertUserRequest(req: Request, res: Response): Promise<void> {
   try {
-    const user = plainToInstance(User, req.body as User);
+    const user: User = plainToInstance(User, req.body as User);
 
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(user.getPassword(), salt);
     user.setPassword(hash);
     await insertUser(user);
 
-    res.status(201).send("Adcionado ");
+    res.status(201).json({ message: "User created successfully." });
   } catch (error) {
-    if(error instanceof UniqueConstraintError){
-      res.status(400).send(error.message);
-      return
+    if (error instanceof UniqueConstraintError) {
+      res.status(409).json({ message: error.message });
+      return;
     }
-    res.status(500).send("Unknow Error");
+    console.error("Insert User Error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
   }
 }
 
 export async function getAllUsersRequest(_: Request, res: Response): Promise<void> {
   try {
-    const Users = await getAllUsers();
-
-    res.status(200).json(Users);
+    const users = await getAllUsers();
+    res.status(200).json(users);
   } catch (error) {
-    if(error instanceof NotFoundError){
-      res.status(400).send(error.message);
-      return
-    }
-    res.status(500).send("Unknow Error");
+    console.error("Get All Users Error:", error);
+    res.status(500).json({ message: "Failed to fetch users." });
   }
 }
 
 export async function getUserByIdRequest(req: Request, res: Response): Promise<void> {
   try {
     const id = Number(req.params.id);
-    const User = await getUserById(id);
-
-    res.status(200).json(User);
+    const user = await getUserById(id);
+    res.status(200).json(user);
   } catch (error) {
-    if(error instanceof NotFoundError){
-      res.status(400).send(error.message);
-      return
+    if (error instanceof NotFoundError) {
+      res.status(404).json({ message: error.message });
+      return;
     }
-    res.status(500).send("Unknow Error");
+    console.error("Get User By ID Error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
   }
 }
-
 
 export async function updateUserRequest(req: Request, res: Response): Promise<void> {
   try {
     const updatedUser: User = plainToInstance(User, req.body as User);
     const id = Number(req.params.id);
-    
+
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(updatedUser.getPassword(), salt);
     updatedUser.setPassword(hash);
 
     await updateUser(id, updatedUser);
-    res.status(200).send("Alterado item id " + id);
+    res.status(200).json({ message: `User with ID ${id} updated successfully.` });
   } catch (error) {
-    if(error instanceof NotFoundError){
-      res.status(400).send(error.message);
-      return
+    if (error instanceof NotFoundError) {
+      res.status(404).json({ message: error.message });
+      return;
     }
-    res.status(500).send("Unknow Error");
+    console.error("Update User Error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
   }
 }
 
@@ -79,12 +76,13 @@ export async function deleteUserRequest(req: Request, res: Response): Promise<vo
   try {
     const id = Number(req.params.id);
     await deleteUserById(id);
-    res.status(200).json({ message: "Usuário removido com sucesso id " + id });
+    res.status(200).json({ message: `User with ID ${id} deleted successfully.` });
   } catch (error) {
-    if(error instanceof NotFoundError){
-          res.status(400).send(error.message);
-          return
-        }
-        res.status(500).send("Unknow Error");
+    if (error instanceof NotFoundError) {
+      res.status(404).json({ message: error.message });
+      return;
+    }
+    console.error("Delete User Error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
   }
 }

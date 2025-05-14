@@ -3,7 +3,7 @@ import  express, { Router }  from "express";
 import { auth, onlyAdmins } from "@/middlewares/auth/AuthMiddleware.js";
 
 export const userRouter: Router = express.Router();
-const url = "/user";
+const url = "/users";
 
 userRouter.post(url, auth, onlyAdmins, insertUserRequest);
 userRouter.get(url, auth, onlyAdmins, getAllUsersRequest);

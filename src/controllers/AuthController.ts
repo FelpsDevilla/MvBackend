@@ -13,6 +13,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     try {
         const REFRESH_SECRET: jwt.Secret = process.env.JWT_SECRET_REFRESH as jwt.Secret;
         const ACCESS_SECRET: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
+
         const userReq: User = plainToInstance(User, req.body as User);
         const userDB: User = await getUserBycpf(userReq.cpf);
 
@@ -22,12 +23,12 @@ export async function login(req: Request, res: Response): Promise<void> {
         );
 
         if (!isPasswordValid) {
-            res.status(401).json({ message: "Credenciais inválidas" });
+            res.status(401).json({ message: "Invalid credentials" });
             return;
         }
 
         if (!userDB.isActive) {
-            res.status(401).json({ message: "Usuário Inativo, favor entrar em contato com Administrador do Sistema" });
+            res.status(403).json({ message: "Inactive user. Please contact the system administrator." });
             return;
         }
 
@@ -36,6 +37,7 @@ export async function login(req: Request, res: Response): Promise<void> {
             ACCESS_SECRET,
             { expiresIn: ACCESS_EXPIRES_IN }
         );
+
         const refreshToken = jwt.sign({ userId: userDB.id }, REFRESH_SECRET, {
             expiresIn: REFRESH_EXPIRES_IN,
         });
@@ -48,13 +50,14 @@ export async function login(req: Request, res: Response): Promise<void> {
                 sameSite: "strict",
                 maxAge: 7 * 24 * 60 * 60 * 1000,
             })
-            .json({ accessToken: accessToken });
+            .json({ accessToken });
     } catch (error) {
-        if(error instanceof NotFoundError){
-              res.status(400).send("Invalid Credencials");
-              return
-            }
-            res.status(500).send("Unknow Error");
+        if (error instanceof NotFoundError) {
+            res.status(401).json({ message: "Invalid credentials" });
+            return;
+        }
+        console.error(error);
+        res.status(500).json({ message: "Unexpected server error" });
     }
 }
 
@@ -72,11 +75,14 @@ export async function refresh(req: Request, res: Response): Promise<void> {
             ACCESS_SECRET,
             { expiresIn: ACCESS_EXPIRES_IN }
         );
-        res.json({ accessToken: newAccessToken });
+
+        res.status(200).json({ accessToken: newAccessToken });
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError) {
-            res.status(401).json({ message: "Token inválido ou expirado." });
+            res.status(401).json({ message: "Invalid or expired token" });
+            return;
         }
-        res.status(500).send("Erro inesperado na autenticação: " + error);
+        console.error(error);
+        res.status(500).json({ message: "Unexpected server error" });
     }
 }

@@ -9,21 +9,20 @@ export async function insertCollectionRequest(req: Request, res: Response): Prom
     const collection: Collection = plainToInstance(Collection, req.body as Collection);
     await insertCollection(collection);
 
-    res.status(201).send("Adcionado");
+    res.status(201).json({ message: "Collection created successfully." });
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    console.error("Insert Collection Error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
   }
 }
 
 export async function getAllCollectionsRequest(_: Request, res: Response): Promise<void> {
   try {
     const items = await getAllCollections();
-
     res.status(200).json(items);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erro ao buscar itens" });
+    console.error("Get All Collections Error:", error);
+    res.status(500).json({ message: "Failed to fetch collections." });
   }
 }
 
@@ -31,14 +30,16 @@ export async function getCollectionByIdRequest(req: Request, res: Response): Pro
   try {
     const id = Number(req.params.id);
     const item = await getCollectionById(id);
-
     res.status(200).json(item);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Id incorreto" });
+    if (error instanceof NotFoundError) {
+      res.status(404).json({ message: error.message });
+      return;
+    }
+    console.error("Get Collection By ID Error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
   }
 }
-
 
 export async function updateCollectionRequest(req: Request, res: Response): Promise<void> {
   try {
@@ -46,13 +47,14 @@ export async function updateCollectionRequest(req: Request, res: Response): Prom
     const id = Number(req.params.id);
 
     await updateCollection(id, updatedCollection);
-    res.status(200).send("Alterado");
+    res.status(200).json({ message: `Collection with ID ${id} updated successfully.` });
   } catch (error) {
-    if(error instanceof NotFoundError){
-      res.status(400).send(error.message);
-      return
+    if (error instanceof NotFoundError) {
+      res.status(404).json({ message: error.message });
+      return;
     }
-    res.status(500).send("Unknow Error");
+    console.error("Update Collection Error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
   }
 }
 
@@ -60,12 +62,13 @@ export async function deleteCollectionRequest(req: Request, res: Response): Prom
   try {
     const id = Number(req.params.id);
     await deleteCollectionById(id);
-    res.status(200).send("Deleted!");
+    res.status(200).json({ message: `Collection with ID ${id} deleted successfully.` });
   } catch (error) {
-    if(error instanceof NotFoundError){
-      res.status(400).send(error.message);
-      return
+    if (error instanceof NotFoundError) {
+      res.status(404).json({ message: error.message });
+      return;
     }
-    res.status(500).send("Unknow Error");
+    console.error("Delete Collection Error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
   }
 }

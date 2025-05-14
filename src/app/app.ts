@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"
 import "reflect-metadata"
-import { acervoRouter } from "@/routes/AcervoRoute.js";
+import { archiveRouter } from "@/routes/ArchiveRoute.js";
 import { authorRouter } from "@/routes/AuthorRoute.js";
 import { collectionRouter } from "@/routes/CollectionsRoute.js";
-import { livrariaRouter } from "@/routes/LivrariaRoute.js";
+import { libraryRouter } from "@/routes/LibraryRoute.js";
 import { userRouter } from "@/routes/UsersRoute.js";
 import { authRouter } from "@/routes/AuthRoute";
 
@@ -23,10 +23,10 @@ app.use(cors({
 const url = "/"
 app.use(url, express.static("public/"))
 app.use(url, authRouter)
-app.use(url, acervoRouter)
+app.use(url, archiveRouter)
 app.use(url, authorRouter)
 app.use(url, collectionRouter)
-app.use(url, livrariaRouter)
+app.use(url, libraryRouter)
 app.use(url, userRouter)
 
 export default app
