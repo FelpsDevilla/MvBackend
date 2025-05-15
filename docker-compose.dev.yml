@@ -2,6 +2,7 @@ services:
   mvbackend_dev:
     build: .
     restart: always
+    command: ["npm", "run", "migrations:run"]
     ports:
       - "8000:443"
     environment:

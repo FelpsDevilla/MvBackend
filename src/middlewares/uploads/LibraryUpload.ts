@@ -3,7 +3,7 @@ import { Request } from 'express';
 import multer from 'multer';
 
 const storageImages = multer.diskStorage({
-  destination: config.filesPath.LivrariaImages,
+  destination: config.filesPath.libraryImages,
   filename: (_: Request, file: Express.Multer.File, cb) => {
     const uniqueName = `${Date.now()}.${file.originalname}`;
     cb(null, uniqueName);
@@ -12,7 +12,7 @@ const storageImages = multer.diskStorage({
 );
 
 const storageBooks = multer.diskStorage({
-    destination: config.filesPath.LivrariaBooks,
+    destination: config.filesPath.libraryBooks,
     filename: (_: Request, file: Express.Multer.File, cb) => {
       const uniqueName = `${Date.now()}.${file.originalname}`;
       cb(null, uniqueName);

@@ -11,8 +11,8 @@ export async function insertUserRequest(req: Request, res: Response): Promise<vo
     const user: User = plainToInstance(User, req.body as User);
 
     const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(user.getPassword(), salt);
-    user.setPassword(hash);
+    const hash = await bcrypt.hash(user.password, salt);
+    user.password = hash;
     await insertUser(user);
 
     res.status(201).json({ message: "User created successfully." });
@@ -57,8 +57,8 @@ export async function updateUserRequest(req: Request, res: Response): Promise<vo
     const id = Number(req.params.id);
 
     const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(updatedUser.getPassword(), salt);
-    updatedUser.setPassword(hash);
+    const hash = await bcrypt.hash(updatedUser.password, salt);
+    updatedUser.password = hash;
 
     await updateUser(id, updatedUser);
     res.status(200).json({ message: `User with ID ${id} updated successfully.` });

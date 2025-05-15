@@ -18,8 +18,8 @@ export async function login(req: Request, res: Response): Promise<void> {
         const userDB: User = await getUserBycpf(userReq.cpf);
 
         const isPasswordValid: boolean = await bcrypt.compare(
-            userReq.getPassword(),
-            userDB.getPassword()
+            userReq.password,
+            userDB.password
         );
 
         if (!isPasswordValid) {

@@ -2,6 +2,7 @@ services:
   mvbackend:
     image: felpsdevilla/mvbackend:latest
     restart: always
+    command: ["npm", "run", "migrations:run"]
     ports:
       - "8001:443"
     environment:
