@@ -11,11 +11,11 @@ export class Author extends EntityInfo {
     id: number;
 
     @Expose()
-    @Column()
+    @Column({ type: 'varchar', nullable: false })
     name: string;
 
     @Expose()
-    @Column()
+    @Column({ type: 'varchar', nullable: false })
     description: string;
 
     @OneToMany(() => Collection, (collection) => collection.author)
