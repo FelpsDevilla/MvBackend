@@ -1,36 +1,31 @@
 import { Expose } from "class-transformer";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { EntityInfo } from "./EntityInfo.js";
 
 @Entity({ name: 'users' })
-export class User {
+export class User extends EntityInfo {
+
   @Expose()
   @PrimaryGeneratedColumn()
-  readonly id: number;
+  id: number;
 
   @Expose()
-  @Column()
-  readonly cpf: string;
+  @Column({ type: "varchar", length: 11, unique: true, nullable: false })
+  cpf: string;
 
   @Expose()
-  @Column()
-  readonly name: string;
+  @Column({ type: "varchar", nullable: false })
+  name: string;
 
-  @Column()
-  private password: string;
-
-  @Expose()
-  @Column()
-  readonly isActive: boolean;
+  @Column({ type: "varchar", nullable: false })
+  password: string;
 
   @Expose()
-  @Column()
-  readonly isAdmin: boolean;
+  @Column({ type: "boolean", default: "false", nullable: false })
+  isActive: boolean;
 
-  public setPassword(newPassword: string): void {
-    this.password = newPassword;
-  }
+  @Expose()
+  @Column({ type: "boolean", default: "false", nullable: false })
+  isAdmin: boolean;
 
-  public getPassword(): string {
-    return this.password;
-  }
 }

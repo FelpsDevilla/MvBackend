@@ -1,10 +1,11 @@
 import { Expose } from "class-transformer";
 import { Collection } from "./Collection.js";
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from "typeorm";
 import { ArchiveItem } from "./ArchiveItem.js";
+import { EntityInfo } from "./EntityInfo.js";
 
 @Entity({ name: 'authors' })
-export class Author {
+export class Author extends EntityInfo {
     @Expose()
     @PrimaryGeneratedColumn()
     id: number;
@@ -18,16 +19,8 @@ export class Author {
     description: string;
 
     @OneToMany(() => Collection, (collection) => collection.author)
-    collections: Collection[]
+    collections: Relation<Collection[]>
 
     @OneToMany(() => ArchiveItem, (archiveItem) => archiveItem.author)
-    items: ArchiveItem[]
-
-    @Expose()
-    @Column()
-    createdAt: Date;
-
-    @Expose()
-    @Column()
-    updatedAt: Date;
+    archiveItems: Relation<ArchiveItem[]>
 }

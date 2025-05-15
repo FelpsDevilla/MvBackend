@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import dotenv from "dotenv";
 
 export const isDev: boolean = process.env.NODE_ENV == undefined;

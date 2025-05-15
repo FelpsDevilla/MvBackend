@@ -1,26 +1,27 @@
 import { Expose } from "class-transformer";
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, Relation, JoinColumn } from "typeorm";
 import { Author } from "./Author.js";
+import { EntityInfo } from "./EntityInfo.js";
 
 @Entity({ name: "gallery" })
-export class GalleryItem {
-
+export class GalleryItem extends EntityInfo {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Expose()
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar', nullable: false })
     name: string;
 
     @Expose()
-    @ManyToOne(() => Author, (author) => author.collections)
-    author: Author;
+    @ManyToOne(() => Author, (author) => author.collections, { nullable: false })
+    @JoinColumn()
+    author: Relation<Author>
 
     @Expose()
-    @Column({ name: "original_date", type: 'date' })
-    original_date: Date;
+    @Column({ type: 'date', nullable: true })
+    originalDate: Date;
 
     @Expose()
-    @Column({ name: "image_path", type: 'varchar' })
+    @Column({ type: 'varchar', nullable: false })
     imagePath: string;
 }

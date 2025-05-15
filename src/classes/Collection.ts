@@ -2,35 +2,31 @@ import { Expose } from "class-transformer";
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, Relation } from "typeorm";
 import { Author } from "./Author.js";
 import { ArchiveItem } from "./ArchiveItem.js";
+import { LibraryItem } from "./LibraryItem.js";
+import { EntityInfo } from "./EntityInfo.js";
 
 @Entity({ name: 'collections' })
-export class Collection {
+export class Collection extends EntityInfo {
     @Expose()
     @PrimaryGeneratedColumn()
     id: number;
 
     @Expose()
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar', nullable: false })
     name: string;
 
     @Expose()
-    @ManyToOne(() => Author, (author) => author.collections)
+    @ManyToOne(() => Author, (author) => author.collections, { nullable: false })
     @JoinColumn()
-    author: Relation<Author>;
+    author: Relation<Author>
 
     @OneToMany(() => ArchiveItem, (archiveItem) => archiveItem.collection)
-    @JoinColumn()
-    items: Relation<ArchiveItem[]>
+    archiveItems: Relation<ArchiveItem[]>
+
+    @OneToMany(() => LibraryItem, (libaryItem) => libaryItem.collection)
+    libraryeItems: Relation<ArchiveItem[]>
 
     @Expose()
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar', nullable: false })
     description: string;
-
-    @Expose()
-    @Column({ name: 'created_at', type: 'date' })
-    createdAt: Date;
-
-    @Expose()
-    @Column({ name: 'updated_at', type: 'date' })
-    updatedAt: Date;
 }

@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"
-import "reflect-metadata"
 import { archiveRouter } from "@/routes/ArchiveRoute.js";
 import { authorRouter } from "@/routes/AuthorRoute.js";
 import { collectionRouter } from "@/routes/CollectionsRoute.js";
