@@ -2,7 +2,8 @@ import "reflect-metadata";
 import dotenv from "dotenv";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
-export const isDev: boolean = process.env.NODE_ENV == undefined;
+const isDev: boolean = process.env.NODE_ENV == undefined;
+const isTest: boolean = process.env.NODE_ENV == "test";
 
 if (isDev) {
   console.log("Server running in Developer Mode");
@@ -14,10 +15,10 @@ export const config = {
 
   db: {
     type: "postgres",
-    host: isDev ? (process.env.DB_IP as string) : "mvdb",
+    host: isDev ? (process.env.DB_IP as string) : (isTest? "mvdb_test" : "mvdb"),
     port: 5432,
-    username: isDev ? (process.env.DB_USER as string) : "MvDB",
-    password: process.env.DB_USER_PASS as string,
+    username: process.env.DB_USER as string,
+    password: process.env.DB_PASS as string,
     database: "MvDB",
     synchronize: false,
     logging: false,

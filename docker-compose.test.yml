@@ -1,22 +1,22 @@
 services:
-  mvbackend:
-    image: felpsdevilla/mvbackend:latest
+  mvbackend_test:
+    build: .
     restart: always
     ports:
-      - "8001:443"
+      - "8000:443"
     environment:
-      NODE_ENV: "prod"
+      NODE_ENV: "test"
       DB_USER: "MvDB"
-      DB_USER_PASS: "MySecretPassword"
+      DB_PASS:  "MvDB"
       JWT_SECRET: "MySuperSecret"
       JWT_SECRET_REFRESH: "MySuperSecretRefresh"
     volumes:
-      - hostSSLPath:/etc/ssl/mvdb:ro
-      - mvBackend_media:/app/public 
+      - ./SSL:/etc/ssl/mv:ro
+      - mvBackend_media_test:/app/public 
     depends_on:
-      mvdb:
+      mvdb_test:
         condition: service_healthy
-  mvdb:
+  mvdb_test:
     image: postgres:latest
     restart: always
     ports:
@@ -24,14 +24,14 @@ services:
     environment:
       POSTGRES_DB: "MvDB"
       POSTGRES_USER: "MvDB"
-      POSTGRES_PASSWORD: "MySecretPassword"
+      POSTGRES_PASSWORD: "MvDB"
     volumes:
-    - mvdb_data:/var/lib/postgresql/data
+    - mvdb_data_test:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
       timeout: 5s
       retries: 10
 volumes:
-  mvBackend_media:
-  mvdb_data:
+  mvBackend_media_test:
+  mvdb_data_test:

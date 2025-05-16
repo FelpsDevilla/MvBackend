@@ -14,13 +14,13 @@ Para rodar o **MvBackend** com **PostgreSQL** em ambiente de produção, siga os
 4. Execute o Docker Compose. Se tudo estiver correto, o ambiente backend estará funcionando..
 
 > [!WARNING]
->  Certifique-se de alterar as variáveis de ambiente no Docker Compose.
+> Certifique-se de alterar as variáveis de ambiente no Docker Compose.
 
 ## :toolbox: Tecnologias Utilizadas
 
 - **Node.js** v22
-- **TypeScript** 
-- **Express** 
+- **TypeScript**
+- **Express**
 - **tsx**
 - **tsconfig-paths**
 - **Docker**
@@ -29,10 +29,13 @@ Para rodar o **MvBackend** com **PostgreSQL** em ambiente de produção, siga os
 - **jsonwebtoken**
 - **bcryptjs**
 - **typeORM**
+
 ---
+
 ## :technologist: Desenvolvimento
 
 ### Desenvolvimento Normal
+
 Após clonar o repositório, siga os passos abaixo:
 
 1. `npm install`
@@ -47,8 +50,9 @@ Após clonar o repositório, siga os passos abaixo:
 
 > [!WARNING]
 > Não versionar pasta `SSL` e `.env`
-> 
+>
 > O servidor inicia apenas em modo HTTPS. Sem a pasta SSL com o certificado e a chave, a aplicação não será iniciada.
+
 ---
 
 ### 🐳 Testando a aplicação com Docker
@@ -79,16 +83,16 @@ Isso irá:
 
 Os seguintes scripts podem ser executados usando `npm run <comando>`:
 
-| Comando               | Descrição                                                                                           |
-|----------------------|-----------------------------------------------------------------------------------------------------|
-| `dev`                | Inicia o servidor em modo de desenvolvimento com recarregamento automático usando **tsx** e **nodemon**. |
-| `build`              | Compila o código TypeScript para JavaScript e resolve os caminhos, gerando os arquivos em `dist`.   |
-| `start`              | Executa a aplicação a partir dos arquivos JavaScript compilados em `dist`.                          |
-| `docker`             | Builda e executa os containers da aplicação e do banco de dados usando **Docker Compose**.          |
-| `typeorm`            | Executa o CLI do TypeORM com suporte a ES Modules.                                                  |
-| `migrations:generate`| Gera uma nova migration baseada nas alterações detectadas nas entidades.                           |
-| `createDB`           | Gera uma migration inicial chamada `createDB` e a executa em seguida.                               |
-| `migrations:run`     | Executa todas as migrations pendentes.                                                              |
-| `migrations:revert`  | Reverte a última migration executada.                                                               |
-| `lint`               | Executa o **ESLint** para análise de código.                                                        |
-| `lint:fix`           | Executa o **ESLint** e corrige automaticamente os problemas encontrados.                            |
+| Comando               | Descrição                                                                                                |
+| --------------------- | -------------------------------------------------------------------------------------------------------- |
+| `dev`                 | Inicia o servidor em modo de desenvolvimento com recarregamento automático usando **tsx** e **nodemon**. |
+| `build`               | Compila o código TypeScript para JavaScript e resolve os caminhos, gerando os arquivos em `dist`.        |
+| `start`               | Roda as migrations e executa a aplicação a partir dos arquivos JavaScript compilados em `dist`.          |
+| `docker`              | Builda e executa os containers da aplicação e do banco de dados usando **Docker Compose**.               |
+| `typeorm`             | Executa o CLI do TypeORM com suporte a ES Modules.                                                       |
+| `migrations:generate` | Gera uma nova migration baseada nas alterações detectadas nas entidades.                                 |
+| `createDB`            | Gera uma migration inicial chamada `createDB` e a executa em seguida.                                    |
+| `migrations:run`      | Executa todas as migrations pendentes.                                                                   |
+| `migrations:revert`   | Reverte a última migration executada.                                                                    |
+| `lint`                | Executa o **ESLint** para análise de código.                                                             |
+| `lint:fix`            | Executa o **ESLint** e corrige automaticamente os problemas encontrados.                                 |
